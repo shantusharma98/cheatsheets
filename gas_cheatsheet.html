@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google Apps Script — Complete Cheat Sheet</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Syne:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg: #0d0f14;
+    --bg2: #161820;
+    --bg3: #1e2028;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.13);
+    --text: #e8eaf0;
+    --muted: #8890a4;
+    --accent: #4ade80;
+    --accent2: #60a5fa;
+    --accent3: #f59e0b;
+    --accent4: #e879f9;
+    --red: #f87171;
+    --code-bg: #111318;
+    --js: #f59e0b;
+    --py: #4ade80;
+    --ai: #e879f9;
+    --tag-bg: rgba(96,165,250,0.12);
+    --tag-text: #93c5fd;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+
+  /* TOP BAR */
+  .topbar {
+    background: var(--bg2);
+    border-bottom: 1px solid var(--border2);
+    padding: 0 32px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .topbar-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 16px 24px 16px 0;
+    border-right: 1px solid var(--border);
+    margin-right: 8px;
+    white-space: nowrap;
+  }
+  .nav-tabs {
+    display: flex;
+    gap: 2px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 8px 0;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 7px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s;
+  }
+  .tab-btn:hover { background: var(--bg3); color: var(--text); }
+  .tab-btn.active { background: var(--bg3); color: var(--accent); }
+
+  /* SECTIONS */
+  .section { display: none; padding: 40px 32px; max-width: 1200px; margin: 0 auto; }
+  .section.active { display: block; }
+
+  /* HERO */
+  .hero {
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    padding: 36px 40px;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    background: radial-gradient(circle, rgba(74,222,128,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero h1 { font-size: 28px; font-weight: 700; margin-bottom: 10px; line-height: 1.3; }
+  .hero h1 span { color: var(--accent); }
+  .hero p { color: var(--muted); font-size: 15px; max-width: 680px; line-height: 1.7; }
+
+  /* GRID CARDS */
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-bottom: 32px; }
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    transition: border-color 0.15s;
+  }
+  .card:hover { border-color: var(--border2); }
+  .card-icon { font-size: 22px; margin-bottom: 12px; }
+  .card h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+  .card p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .card .tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    color: var(--tag-text);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-top: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .card .tag.green { background: rgba(74,222,128,0.12); color: #86efac; }
+  .card .tag.amber { background: rgba(245,158,11,0.12); color: #fcd34d; }
+  .card .tag.pink { background: rgba(232,121,249,0.12); color: #f0abfc; }
+
+  /* SECTION HEADINGS */
+  .sec-head {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 16px;
+    margin-top: 32px;
+  }
+  .sec-head:first-child { margin-top: 0; }
+
+  /* CODE COMPARISON */
+  .compare-block {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .compare-header {
+    display: flex;
+    align-items: center;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    gap: 12px;
+  }
+  .compare-title { font-size: 14px; font-weight: 600; flex: 1; }
+  .badge {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .badge.js { background: rgba(245,158,11,0.15); color: var(--js); }
+  .badge.py { background: rgba(74,222,128,0.15); color: var(--py); }
+  .badge.ai { background: rgba(232,121,249,0.15); color: var(--ai); }
+
+  .code-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .code-col {
+    padding: 0;
+    position: relative;
+  }
+  .code-col:first-child { border-right: 1px solid var(--border); }
+  .code-lang {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .code-lang.js-lang { color: var(--js); background: rgba(245,158,11,0.05); }
+  .code-lang.py-lang { color: var(--py); background: rgba(74,222,128,0.05); }
+  pre {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.7;
+    padding: 16px;
+    overflow-x: auto;
+    background: transparent;
+    color: var(--text);
+    tab-size: 2;
+  }
+  .c-kw { color: #c084fc; }
+  .c-fn { color: #60a5fa; }
+  .c-str { color: #86efac; }
+  .c-num { color: #fb923c; }
+  .c-cmt { color: #4b5563; font-style: italic; }
+  .c-obj { color: #f59e0b; }
+  .c-var { color: #e2e8f0; }
+
+  /* TASK ROW (real world) */
+  .task-row {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .task-header {
+    display: flex;
+    align-items: center;
+    padding: 16px 20px;
+    gap: 14px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .task-header:hover { background: var(--bg3); }
+  .task-num {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+  .task-info { flex: 1; }
+  .task-info h4 { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+  .task-info p { font-size: 12px; color: var(--muted); }
+  .task-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .task-tag {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .task-body {
+    padding: 0 20px 20px;
+    border-top: 1px solid var(--border);
+    display: none;
+  }
+  .task-body.open { display: block; }
+  .task-body ul {
+    margin: 14px 0;
+    padding-left: 18px;
+  }
+  .task-body li {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    line-height: 1.6;
+  }
+  .task-body li span { color: var(--text); }
+  .task-body code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    padding: 2px 7px;
+    border-radius: 4px;
+    color: var(--accent2);
+  }
+  .chevron { font-size: 12px; color: var(--muted); transition: transform 0.2s; }
+  .chevron.open { transform: rotate(180deg); }
+
+  /* AI SECTION */
+  .ai-tool {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px;
+    margin-bottom: 14px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: start;
+    gap: 16px;
+  }
+  .ai-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .ai-tool-info h4 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+  .ai-tool-info p { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 10px; }
+  .ai-tool-info ul { padding-left: 16px; }
+  .ai-tool-info li { font-size: 13px; color: var(--muted); margin-bottom: 4px; }
+  .ai-tool-info li strong { color: var(--text); }
+  .ai-badge {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+  .free { background: rgba(74,222,128,0.12); color: #86efac; }
+  .paid { background: rgba(245,158,11,0.12); color: #fcd34d; }
+
+  .prompt-box {
+    background: var(--code-bg);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 12px 0;
+    position: relative;
+  }
+  .prompt-box::before {
+    content: 'PROMPT TEMPLATE';
+    position: absolute;
+    top: -10px;
+    left: 14px;
+    background: var(--code-bg);
+    padding: 0 8px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--ai);
+  }
+  .prompt-box p { font-size: 13px; color: var(--text); font-family: 'JetBrains Mono', monospace; line-height: 1.8; }
+  .prompt-box em { color: var(--accent3); font-style: normal; }
+
+  .warn-box {
+    background: rgba(245,158,11,0.07);
+    border: 1px solid rgba(245,158,11,0.2);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-top: 16px;
+    font-size: 13px;
+    color: #fcd34d;
+  }
+  .warn-box strong { color: var(--accent3); }
+
+  .tip-box {
+    background: rgba(74,222,128,0.06);
+    border: 1px solid rgba(74,222,128,0.18);
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-top: 12px;
+    font-size: 13px;
+    color: #86efac;
+  }
+  .tip-box strong { color: var(--accent); }
+
+  /* WORKFLOW DIAGRAM */
+  .flow {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    margin: 24px 0;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .flow-step {
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 8px;
+    padding: 12px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    text-align: center;
+    min-width: 110px;
+  }
+  .flow-step span { display: block; font-size: 11px; font-weight: 400; color: var(--muted); margin-top: 3px; }
+  .flow-arrow { color: var(--muted); font-size: 18px; padding: 0 8px; }
+
+  .divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 32px 0;
+  }
+
+  /* QUICK REF TABLE */
+  table.ref { width: 100%; border-collapse: collapse; }
+  table.ref th {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--muted);
+    padding: 10px 16px;
+    text-align: left;
+    border-bottom: 1px solid var(--border2);
+  }
+  table.ref td {
+    padding: 10px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  table.ref tr:last-child td { border-bottom: none; }
+  table.ref td code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    background: var(--code-bg);
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: var(--accent2);
+  }
+  table.ref td .py-code {
+    color: var(--py);
+    margin-left: 4px;
+  }
+  table.ref td .muted { color: var(--muted); font-size: 12px; display: block; margin-top: 3px; }
+  table.ref tbody tr:hover { background: var(--bg3); }
+
+  @media (max-width: 700px) {
+    .code-cols { grid-template-columns: 1fr; }
+    .code-col:first-child { border-right: none; border-bottom: 1px solid var(--border); }
+    .section { padding: 24px 16px; }
+    .topbar { padding: 0 16px; }
+    .ai-tool { grid-template-columns: auto 1fr; }
+    .ai-badge { grid-column: 2; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">⚡ GAS Cheatsheet</div>
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="showTab('overview', this)">Overview</button>
+    <button class="tab-btn" onclick="showTab('tasks', this)">Real-World Tasks</button>
+    <button class="tab-btn" onclick="showTab('cheatsheet', this)">JS vs Python</button>
+    <button class="tab-btn" onclick="showTab('quickref', this)">Quick Reference</button>
+    <button class="tab-btn" onclick="showTab('ai', this)">🤖 Use AI Instead</button>
+  </div>
+</div>
+
+<!-- ═══════════════ OVERVIEW ═══════════════ -->
+<div class="section active" id="overview">
+
+  <div class="hero">
+    <h1>Google Apps Script <span>= JS that controls all of Google Workspace</span></h1>
+    <p>Think of it as a remote control for Google Sheets, Gmail, Drive, Forms, Calendar, and Docs. It runs in the cloud on Google's servers, requires zero setup, and triggers automatically. If you know Python, you already understand 90% of the logic.</p>
+  </div>
+
+  <div class="sec-head">The 3 things to understand about GAS</div>
+  <div class="card-grid">
+    <div class="card">
+      <div class="card-icon">☁️</div>
+      <h3>It runs on Google's servers</h3>
+      <p>No local installation. No pip. No virtual environments. You write code inside a browser, hit Run, and Google executes it. Like a Python script but hosted permanently for free.</p>
+      <span class="tag green">Cloud-native</span>
+    </div>
+    <div class="card">
+      <div class="card-icon">🧩</div>
+      <h3>It speaks "Google Workspace"</h3>
+      <p>Every Google app is a built-in library. <code style="font-family:monospace;font-size:12px;background:#111318;padding:2px 6px;border-radius:4px;color:#60a5fa">SpreadsheetApp</code>, <code style="font-family:monospace;font-size:12px;background:#111318;padding:2px 6px;border-radius:4px;color:#60a5fa">GmailApp</code>, <code style="font-family:monospace;font-size:12px;background:#111318;padding:2px 6px;border-radius:4px;color:#60a5fa">DriveApp</code> — these are equivalent to Python's <code style="font-family:monospace;font-size:12px;background:#111318;padding:2px 6px;border-radius:4px;color:#4ade80">gspread</code>, <code style="font-family:monospace;font-size:12px;background:#111318;padding:2px 6px;border-radius:4px;color:#4ade80">smtplib</code>, etc. but built-in with no authentication setup.</p>
+      <span class="tag">JS-based</span>
+    </div>
+    <div class="card">
+      <div class="card-icon">⏰</div>
+      <h3>Triggers = cron jobs</h3>
+      <p>Run functions automatically on a schedule (daily, hourly), on a form submission, when a sheet is edited, or when a file opens. Exactly like Python cron jobs or Windows Task Scheduler but configured inside Google.</p>
+      <span class="tag amber">Event-driven</span>
+    </div>
+  </div>
+
+  <div class="sec-head">How GAS compares to what you know</div>
+  <div class="compare-block">
+    <div class="compare-header">
+      <div class="compare-title">Mental Model: GAS vs Python</div>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="ref">
+        <thead>
+          <tr><th>Concept</th><th>Google Apps Script (JS)</th><th>Python equivalent</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Read a spreadsheet</td><td><code>SpreadsheetApp.getActiveSheet()</code></td><td><code>gspread</code> / <code>openpyxl</code> / <code>pandas</code></td></tr>
+          <tr><td>Send email</td><td><code>GmailApp.sendEmail()</code></td><td><code>smtplib</code> / <code>yagmail</code></td></tr>
+          <tr><td>Read emails</td><td><code>GmailApp.search()</code></td><td>Gmail API + <code>google-auth</code></td></tr>
+          <tr><td>Create a folder in Drive</td><td><code>DriveApp.createFolder()</code></td><td>Google Drive API + auth</td></tr>
+          <tr><td>HTTP GET/POST request</td><td><code>UrlFetchApp.fetch()</code></td><td><code>requests.get()</code></td></tr>
+          <tr><td>Create calendar event</td><td><code>CalendarApp.createEvent()</code></td><td>Google Calendar API + auth</td></tr>
+          <tr><td>Scheduled run (daily 9am)</td><td>ScriptApp Trigger → Time-driven</td><td><code>crontab</code> or <code>schedule</code> library</td></tr>
+          <tr><td>On sheet edit → run code</td><td><code>onEdit(e)</code> trigger</td><td>No direct equivalent (needs polling)</td></tr>
+          <tr><td>Run on form submit</td><td><code>onFormSubmit(e)</code></td><td>Google Forms API (complex)</td></tr>
+          <tr><td>Pause execution</td><td><code>Utilities.sleep(2000)</code></td><td><code>time.sleep(2)</code></td></tr>
+          <tr><td>Parse JSON</td><td><code>JSON.parse(text)</code></td><td><code>json.loads(text)</code></td></tr>
+          <tr><td>Format date</td><td><code>Utilities.formatDate()</code></td><td><code>datetime.strftime()</code></td></tr>
+          <tr><td>Log output (print)</td><td><code>Logger.log("hello")</code></td><td><code>print("hello")</code></td></tr>
+          <tr><td>Store data between runs</td><td><code>PropertiesService</code></td><td>env vars / JSON file / DB</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <strong>Key insight:</strong> GAS has a massive advantage over Python for Google tasks — zero OAuth setup. In Python you need service accounts, JSON key files, and complex auth flows. In GAS you just call <code style="font-size:11px;background:rgba(0,0,0,0.3);padding:2px 7px;border-radius:4px">GmailApp.sendEmail()</code> and it works because it's already inside your Google account.
+  </div>
+
+  <hr class="divider">
+
+  <div class="sec-head">Where to write GAS code</div>
+  <div class="flow">
+    <div class="flow-step">Open any Google Sheet / Doc / Form <span>or go to script.google.com</span></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Extensions → Apps Script <span>opens code editor</span></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Write your function <span>JavaScript syntax</span></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Click ▶ Run <span>or set a trigger</span></div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">Check Execution Log <span>= your console / terminal</span></div>
+  </div>
+
+</div>
+
+<!-- ═══════════════ REAL WORLD TASKS ═══════════════ -->
+<div class="section" id="tasks">
+
+  <div class="hero">
+    <h1>What does GAS <span>actually do</span> at work?</h1>
+    <p>As an Automation Executive, these are the exact categories of tasks you'll be asked to build. Click each to see what it covers and which GAS commands are involved.</p>
+  </div>
+
+  <div class="task-row">
+    <div class="task-header" onclick="toggleTask(this)">
+      <div class="task-num">1</div>
+      <div class="task-info">
+        <h4>📊 Google Sheets Automation</h4>
+        <p>The most common task — 60% of real GAS work happens here</p>
+      </div>
+      <div class="task-tags">
+        <span class="task-tag" style="background:rgba(74,222,128,0.12);color:#86efac">High priority</span>
+      </div>
+      <div class="chevron">▼</div>
+    </div>
+    <div class="task-body">
+      <ul>
+        <li><span>Auto-format reports</span> — apply colors, fonts, borders when data meets conditions</li>
+        <li><span>Pull data from APIs into sheets</span> — fetch weather, stock prices, any REST API</li>
+        <li><span>Generate reports automatically</span> — summarize raw data, create pivot-like summaries</li>
+        <li><span>Data validation &amp; cleaning</span> — remove duplicates, fix blanks, standardize formats</li>
+        <li><span>Create new sheets from templates</span> — copy a master template for each client/project</li>
+        <li><span>Protected ranges</span> — lock cells so only certain people can edit</li>
+      </ul>
+      <p style="font-size:13px;color:var(--muted);margin-top:10px;">Key commands: <code>getActiveSpreadsheet()</code> · <code>getSheetByName()</code> · <code>getRange()</code> · <code>getValues()</code> · <code>setValues()</code> · <code>clearContents()</code> · <code>appendRow()</code></p>
+    </div>
+  </div>
+
+  <div class="task-row">
+    <div class="task-header" onclick="toggleTask(this)">
+      <div class="task-num">2</div>
+      <div class="task-info">
+        <h4>📧 Gmail Automation</h4>
+        <p>Send bulk emails, parse incoming emails, create drafts automatically</p>
+      </div>
+      <div class="task-tags">
+        <span class="task-tag" style="background:rgba(96,165,250,0.12);color:#93c5fd">Very common</span>
+      </div>
+      <div class="chevron">▼</div>
+    </div>
+    <div class="task-body">
+      <ul>
+        <li><span>Mail merge</span> — send personalized emails to 1000 leads from a Sheet</li>
+        <li><span>Automated follow-ups</span> — if no reply in 3 days, send reminder automatically</li>
+        <li><span>Parse inbound emails</span> — extract invoice data from vendor emails into a Sheet</li>
+        <li><span>Auto-label &amp; archive emails</span> — sort by keyword, sender, or subject</li>
+        <li><span>Send alerts</span> — "Revenue dropped below ₹50K today" email sent at 9am daily</li>
+        <li><span>Invoice / report emailer</span> — generate PDF, attach it, send to client</li>
+      </ul>
+      <p style="font-size:13px;color:var(--muted);margin-top:10px;">Key commands: <code>GmailApp.sendEmail()</code> · <code>GmailApp.search()</code> · <code>getMessage().getBody()</code> · <code>createDraft()</code> · <code>addLabel()</code></p>
+    </div>
+  </div>
+
+  <div class="task-row">
+    <div class="task-header" onclick="toggleTask(this)">
+      <div class="task-num">3</div>
+      <div class="task-info">
+        <h4>📋 Google Forms → Sheets Pipeline</h4>
+        <p>Process form submissions automatically — the backbone of intake workflows</p>
+      </div>
+      <div class="task-tags">
+        <span class="task-tag" style="background:rgba(245,158,11,0.12);color:#fcd34d">Trigger-based</span>
+      </div>
+      <div class="chevron">▼</div>
+    </div>
+    <div class="task-body">
+      <ul>
+        <li><span>Auto-acknowledge</span> — send confirmation email the moment someone submits a form</li>
+        <li><span>Route submissions</span> — "if budget &gt; ₹10L, email the senior team"</li>
+        <li><span>Create tasks in Sheets</span> — each submission becomes a row with assigned owner + due date</li>
+        <li><span>Validation</span> — check if submitted data is complete, flag if not</li>
+        <li><span>Notify Slack / Teams</span> — post a message when new form response comes in</li>
+      </ul>
+      <p style="font-size:13px;color:var(--muted);margin-top:10px;">Key commands: <code>onFormSubmit(e)</code> trigger · <code>e.values</code> · <code>e.namedValues</code> · <code>FormApp.getActiveForm()</code></p>
+    </div>
+  </div>
+
+  <div class="task-row">
+    <div class="task-header" onclick="toggleTask(this)">
+      <div class="task-num">4</div>
+      <div class="task-info">
+        <h4>📁 Google Drive Automation</h4>
+        <p>File management, folder structures, PDF generation, sharing permissions</p>
+      </div>
+      <div class="task-tags">
+        <span class="task-tag" style="background:rgba(232,121,249,0.12);color:#f0abfc">Admin tasks</span>
+      </div>
+      <div class="chevron">▼</div>
+    </div>
+    <div class="task-body">
+      <ul>
+        <li><span>Auto-create client folders</span> — new client added to Sheet → folder created in Drive instantly</li>
+        <li><span>Convert Docs to PDF</span> — generate invoice as PDF and save to Drive</li>
+        <li><span>Move &amp; organize files</span> — sort files older than 30 days into an archive folder</li>
+        <li><span>Share files programmatically</span> — add specific emails as editors/viewers</li>
+        <li><span>File inventory</span> — scan a folder and list all files into a Sheet</li>
+      </ul>
+      <p style="font-size:13px;color:var(--muted);margin-top:10px;">Key commands: <code>DriveApp.createFolder()</code> · <code>getFileById()</code> · <code>moveTo()</code> · <code>addEditor()</code> · <code>getAs('application/pdf')</code></p>
+    </div>
+  </div>
+
+  <div class="task-row">
+    <div class="task-header" onclick="toggleTask(this)">
+      <div class="task-num">5</div>
+      <div class="task-info">
+        <h4>🌐 API Calls &amp; External Data</h4>
+        <p>Connect Google Workspace to any external service — the superpower of GAS</p>
+      </div>
+      <div class="task-tags">
+        <span class="task-tag" style="background:rgba(74,222,128,0.12);color:#86efac">Advanced</span>
+      </div>
+      <div class="chevron">▼</div>
+    </div>
+    <div class="task-body">
+      <ul>
+        <li><span>Pull data from any REST API</span> — currency rates, weather, stock prices into Sheets</li>
+        <li><span>Post to Slack / Teams webhook</span> — send automated notifications to team channels</li>
+        <li><span>Sync with CRMs</span> — push Sheet data to HubSpot, Salesforce, or Zoho via their APIs</li>
+        <li><span>Webhook receiver</span> — GAS can act as a server to receive POST requests (doPost)</li>
+        <li><span>AI integration</span> — call OpenAI / Claude API, get AI responses inside Sheets</li>
+      </ul>
+      <p style="font-size:13px;color:var(--muted);margin-top:10px;">Key commands: <code>UrlFetchApp.fetch(url, options)</code> · <code>JSON.parse(response.getContentText())</code> · <code>doGet(e)</code> · <code>doPost(e)</code></p>
+    </div>
+  </div>
+
+  <div class="task-row">
+    <div class="task-header" onclick="toggleTask(this)">
+      <div class="task-num">6</div>
+      <div class="task-info">
+        <h4>⏰ Scheduled Automation (Triggers)</h4>
+        <p>Set it and forget it — run any script automatically without human intervention</p>
+      </div>
+      <div class="task-tags">
+        <span class="task-tag" style="background:rgba(96,165,250,0.12);color:#93c5fd">Cron-like</span>
+      </div>
+      <div class="chevron">▼</div>
+    </div>
+    <div class="task-body">
+      <ul>
+        <li><span>Daily 8am report email</span> — generate yesterday's numbers, email to leadership</li>
+        <li><span>Weekly data backup</span> — copy active sheet to a new tab every Sunday</li>
+        <li><span>Hourly API sync</span> — pull latest data from external system every hour</li>
+        <li><span>onEdit trigger</span> — runs code the moment someone changes a cell value</li>
+        <li><span>onOpen trigger</span> — run setup code when the spreadsheet is opened</li>
+        <li><span>onFormSubmit</span> — run code the moment a Google Form is submitted</li>
+      </ul>
+      <p style="font-size:13px;color:var(--muted);margin-top:10px;">Set up via: Extensions → Apps Script → ⏰ Triggers → Add Trigger (GUI) or <code>ScriptApp.newTrigger('myFunction').timeBased().everyDays(1).atHour(8).create()</code></p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════ CHEAT SHEET: JS vs Python ═══════════════ -->
+<div class="section" id="cheatsheet">
+
+  <div class="hero">
+    <h1>JS (GAS) vs <span>Python</span> — Side by Side</h1>
+    <p>Every code block shows the exact GAS JavaScript and the Python equivalent so you understand what's actually happening. Focus on reading the JS; writing it comes with practice (or just use AI).</p>
+  </div>
+
+  <!-- 1: READ SHEET DATA -->
+  <div class="sec-head">Sheets — Read &amp; Write</div>
+
+  <div class="compare-block">
+    <div class="compare-header">
+      <div class="compare-title">Read all data from a sheet</div>
+      <span class="badge js">GAS JS</span>
+      <span class="badge py">Python</span>
+    </div>
+    <div class="code-cols">
+      <div class="code-col">
+        <div class="code-lang js-lang">⬡ Google Apps Script</div>
+        <pre><span class="c-kw">function</span> <span class="c-fn">readSheet</span>() {
+  <span class="c-kw">const</span> <span class="c-var">ss</span> = <span class="c-obj">SpreadsheetApp</span>
+    .<span class="c-fn">getActiveSpreadsheet</span>();
+  <span class="c-kw">const</span> <span class="c-var">sheet</span> = <span class="c-var">ss</span>.<span class="c-fn">getSheetByName</span>(<span class="c-str">"Sheet1"</span>);
+  <span class="c-kw">const</span> <span class="c-var">data</span> = <span class="c-var">sheet</span>.<span class="c-fn">getDataRange</span>().<span class="c-fn">getValues</span>();
+  <span class="c-cmt">// data is a 2D array: [[row1col1, row1col2],[row2col1...]]</span>
+  <span class="c-var">data</span>.<span class="c-fn">forEach</span>(<span class="c-var">row</span> => {
+    <span class="c-obj">Logger</span>.<span class="c-fn">log</span>(<span class="c-var">row</span>[<span class="c-num">0</span>] + <span class="c-str">" - "</span> + <span class="c-var">row</span>[<span class="c-num">1</span>]);
+  });
+}</pre>
+      </div>
+      <div class="code-col">
+        <div class="code-lang py-lang">🐍 Python equivalent</div>
+        <pre><span class="c-kw">import</span> <span class="c-obj">gspread</span>
+<span class="c-kw">from</span> <span class="c-obj">google.oauth2</span> <span class="c-kw">import</span> <span class="c-var">service_account</span>
+
+<span class="c-cmt"># Need auth setup (GAS handles this automatically)</span>
+<span class="c-var">gc</span> = <span class="c-obj">gspread</span>.<span class="c-fn">service_account</span>(<span class="c-str">"key.json"</span>)
+<span class="c-var">sh</span> = <span class="c-var">gc</span>.<span class="c-fn">open</span>(<span class="c-str">"My Spreadsheet"</span>)
+<span class="c-var">sheet</span> = <span class="c-var">sh</span>.<span class="c-fn">worksheet</span>(<span class="c-str">"Sheet1"</span>)
+<span class="c-var">data</span> = <span class="c-var">sheet</span>.<span class="c-fn">get_all_values</span>()
+<span class="c-cmt"># data is also a 2D list</span>
+<span class="c-kw">for</span> <span class="c-var">row</span> <span class="c-kw">in</span> <span class="c-var">data</span>:
+    <span class="c-fn">print</span>(<span class="c-var">row</span>[<span class="c-num">0</span>], <span class="c-str">"-"</span>, <span class="c-var">row</span>[<span class="c-num">1</span>])</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="compare-block">
+    <div class="compare-header">
+      <div class="compare-title">Write / update data in a sheet</div>
+      <span class="badge js">GAS JS</span>
+      <span class="badge py">Python</span>
+    </div>
+    <div class="code-cols">
+      <div class="code-col">
+        <div class="code-lang js-lang">⬡ Google Apps Script</div>
+        <pre><span class="c-kw">function</span> <span class="c-fn">writeData</span>() {
+  <span class="c-kw">const</span> <span class="c-var">sheet</span> = <span class="c-obj">SpreadsheetApp</span>
+    .<span class="c-fn">getActiveSheet</span>();
+
+  <span class="c-cmt">// Write a single cell (row 1, col 1)</span>
+  <span class="c-var">sheet</span>.<span class="c-fn">getRange</span>(<span class="c-num">1</span>, <span class="c-num">1</span>).<span class="c-fn">setValue</span>(<span class="c-str">"Hello"</span>);
+
+  <span class="c-cmt">// Write multiple rows at once</span>
+  <span class="c-kw">const</span> <span class="c-var">newData</span> = [[<span class="c-str">"Alice"</span>, <span class="c-num">90</span>], [<span class="c-str">"Bob"</span>, <span class="c-num">85</span>]];
+  <span class="c-var">sheet</span>.<span class="c-fn">getRange</span>(<span class="c-num">2</span>, <span class="c-num">1</span>, <span class="c-num">2</span>, <span class="c-num">2</span>).<span class="c-fn">setValues</span>(<span class="c-var">newData</span>);
+
+  <span class="c-cmt">// Append a new row at the bottom</span>
+  <span class="c-var">sheet</span>.<span class="c-fn">appendRow</span>([<span class="c-str">"Charlie"</span>, <span class="c-num">77</span>, <span class="c-kw">new</span> <span class="c-obj">Date</span>()]);
+}</pre>
+      </div>
+      <div class="code-col">
+        <div class="code-lang py-lang">🐍 Python equivalent</div>
+        <pre><span class="c-cmt"># Using gspread</span>
+
+<span class="c-cmt"># Write a single cell</span>
+<span class="c-var">sheet</span>.<span class="c-fn">update_cell</span>(<span class="c-num">1</span>, <span class="c-num">1</span>, <span class="c-str">"Hello"</span>)
+
+<span class="c-cmt"># Write multiple rows at once</span>
+<span class="c-var">new_data</span> = [[<span class="c-str">"Alice"</span>, <span class="c-num">90</span>], [<span class="c-str">"Bob"</span>, <span class="c-num">85</span>]]
+<span class="c-var">sheet</span>.<span class="c-fn">update</span>(<span class="c-str">"A2"</span>, <span class="c-var">new_data</span>)
+
+<span class="c-cmt"># Append a row at the bottom</span>
+<span class="c-kw">from</span> <span class="c-obj">datetime</span> <span class="c-kw">import</span> <span class="c-var">datetime</span>
+<span class="c-var">sheet</span>.<span class="c-fn">append_row</span>([<span class="c-str">"Charlie"</span>, <span class="c-num">77</span>,
+  <span class="c-var">datetime</span>.<span class="c-fn">now</span>().<span class="c-fn">isoformat</span>()])</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2: GMAIL -->
+  <div class="sec-head">Gmail Automation</div>
+
+  <div class="compare-block">
+    <div class="compare-header">
+      <div class="compare-title">Send an email</div>
+      <span class="badge js">GAS JS</span>
+      <span class="badge py">Python</span>
+    </div>
+    <div class="code-cols">
+      <div class="code-col">
+        <div class="code-lang js-lang">⬡ Google Apps Script</div>
+        <pre><span class="c-kw">function</span> <span class="c-fn">sendEmail</span>() {
+  <span class="c-obj">GmailApp</span>.<span class="c-fn">sendEmail</span>(
+    <span class="c-str">"recipient@example.com"</span>,
+    <span class="c-str">"Subject: Weekly Report"</span>,
+    <span class="c-str">"Hi, please find this week's data."</span>,
+    {
+      htmlBody: <span class="c-str">"&lt;b&gt;Hi&lt;/b&gt;, report attached."</span>,
+      attachments: [<span class="c-var">pdfBlob</span>] <span class="c-cmt">// optional</span>
+    }
+  );
+}</pre>
+      </div>
+      <div class="code-col">
+        <div class="code-lang py-lang">🐍 Python equivalent</div>
+        <pre><span class="c-kw">import</span> <span class="c-obj">yagmail</span>
+
+<span class="c-var">yag</span> = <span class="c-obj">yagmail</span>.<span class="c-obj">SMTP</span>(<span class="c-str">"you@gmail.com"</span>,
+                  <span class="c-str">"your_password"</span>)
+<span class="c-var">yag</span>.<span class="c-fn">send</span>(
+  <span class="c-var">to</span>=<span class="c-str">"recipient@example.com"</span>,
+  <span class="c-var">subject</span>=<span class="c-str">"Subject: Weekly Report"</span>,
+  <span class="c-var">contents</span>=<span class="c-str">"Hi, please find this week's data."</span>,
+  <span class="c-var">attachments</span>=<span class="c-str">"report.pdf"</span>
+)</pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="compare-block">
+    <div class="compare-header">
+      <div class="compare-title">Mail merge — send personalised emails from a sheet</div>
+      <span class="badge js">GAS JS</span>
+      <span class="badge py">Python</span>
+    </div>
+    <div class="code-cols">
+      <div class="code-col">
+        <div class="code-lang js-lang">⬡ Google Apps Script</div>
+        <pre><span class="c-kw">function</span> <span class="c-fn">mailMerge</span>() {
+  <span class="c-kw">const</span> <span class="c-var">sheet</span> = <span class="c-obj">SpreadsheetApp</span>
+    .<span class="c-fn">getActiveSheet</span>();
+  <span class="c-kw">const</span> <span class="c-var">rows</span> = <span class="c-var">sheet</span>.<span class="c-fn">getDataRange</span>().<span class="c-fn">getValues</span>();
+
+  <span class="c-kw">for</span> (<span class="c-kw">let</span> <span class="c-var">i</span> = <span class="c-num">1</span>; <span class="c-var">i</span> &lt; <span class="c-var">rows</span>.length; <span class="c-var">i</span>++) {
+    <span class="c-kw">const</span> [<span class="c-var">name</span>, <span class="c-var">email</span>, <span class="c-var">company</span>] = <span class="c-var">rows</span>[<span class="c-var">i</span>];
+    <span class="c-obj">GmailApp</span>.<span class="c-fn">sendEmail</span>(<span class="c-var">email</span>,
+      <span class="c-str">`Hello ${</span><span class="c-var">name</span><span class="c-str">}`</span>,
+      <span class="c-str">`Hi ${</span><span class="c-var">name</span><span class="c-str">}, welcome from ${</span><span class="c-var">company</span><span class="c-str">}!`</span>
+    );
+  }
+}</pre>
+      </div>
+      <div class="code-col">
+        <div class="code-lang py-lang">🐍 Python equivalent</div>
+        <pre><span class="c-kw">import</span> <span class="c-obj">pandas</span> <span class="c-kw">as</span> <span class="c-var">pd</span>
+<span class="c-kw">import</span> <span class="c-obj">yagmail</span>
+
+<span class="c-var">df</span> = <span class="c-obj">pd</span>.<span class="c-fn">read_excel</span>(<span class="c-str">"contacts.xlsx"</span>)
+<span class="c-var">yag</span> = <span class="c-obj">yagmail</span>.<span class="c-obj">SMTP</span>(<span class="c-str">"you@gmail.com"</span>)
+
+<span class="c-kw">for</span> <span class="c-var">_</span>, <span class="c-var">row</span> <span class="c-kw">in</span> <span class="c-var">df</span>.<span class="c-fn">iterrows</span>():
+  <span class="c-var">yag</span>.<span class="c-fn">send</span>(
+    <span class="c-var">to</span>=<span class="c-var">row</span>[<span class="c-str">"email"</span>],
+    <span class="c-var">subject</span>=<span class="c-str">f"Hello {row['name']}"</span>,
+    <span class="c-var">contents</span>=<span class="c-str">f"Hi {row['name']}, welcome!"</span>
+  )</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3: API CALLS -->
+  <div class="sec-head">API Calls (HTTP Requests)</div>
+
+  <div class="compare-block">
+    <div class="compare-header">
+      <div class="compare-title">Fetch data from an external API</div>
+      <span class="badge js">GAS JS</span>
+      <span class="badge py">Python</span>
+    </div>
+    <div class="code-cols">
+      <div class="code-col">
+        <div class="code-lang js-lang">⬡ Google Apps Script</div>
+        <pre><span class="c-kw">function</span> <span class="c-fn">getExchangeRate</span>() {
+  <span class="c-kw">const</span> <span class="c-var">url</span> = <span class="c-str">"https://api.exchangerate.host/latest?base=USD"</span>;
+  <span class="c-kw">const</span> <span class="c-var">response</span> = <span class="c-obj">UrlFetchApp</span>.<span class="c-fn">fetch</span>(<span class="c-var">url</span>);
+  <span class="c-kw">const</span> <span class="c-var">data</span> = <span class="c-obj">JSON</span>.<span class="c-fn">parse</span>(<span class="c-var">response</span>.<span class="c-fn">getContentText</span>());
+  <span class="c-kw">const</span> <span class="c-var">inrRate</span> = <span class="c-var">data</span>.rates.INR;
+
+  <span class="c-cmt">// Write the rate into cell A1</span>
+  <span class="c-obj">SpreadsheetApp</span>.<span class="c-fn">getActiveSheet</span>()
+    .<span class="c-fn">getRange</span>(<span class="c-str">"A1"</span>).<span class="c-fn">setValue</span>(<span class="c-var">inrRate</span>);
+}</pre>
+      </div>
+      <div class="code-col">
+        <div class="code-lang py-lang">🐍 Python equivalent</div>
+        <pre><span class="c-kw">import</span> <span class="c-obj">requests</span>
+
+<span class="c-var">url</span> = <span class="c-str">"https://api.exchangerate.host/latest?base=USD"</span>
+<span class="c-var">response</span> = <span class="c-obj">requests</span>.<span class="c-fn">get</span>(<span class="c-var">url</span>)
+<span class="c-var">data</span> = <span class="c-var">response</span>.<span class="c-fn">json</span>()
+<span class="c-var">inr_rate</span> = <span class="c-var">data</span>[<span class="c-str">"rates"</span>][<span class="c-str">"INR"</span>]
+
+<span class="c-fn">print</span>(<span class="c-str">f"USD to INR: {inr_rate}"</span>)
+
+<span class="c-cmt"># To write to sheet, use gspread:</span>
+<span class="c-cmt"># sheet.update_cell(1, 1, inr_rate)</span></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4: TRIGGERS -->
+  <div class="sec-head">Triggers (Automation Scheduling)</div>
+
+  <div class="compare-block">
+    <div class="compare-header">
+      <div class="compare-title">onEdit — run when cell value changes</div>
+      <span class="badge js">GAS JS</span>
+      <span class="badge py">Python</span>
+    </div>
+    <div class="code-cols">
+      <div class="code-col">
+        <div class="code-lang js-lang">⬡ Google Apps Script</div>
+        <pre><span class="c-cmt">// Just name this function "onEdit" — GAS calls it automatically</span>
+<span class="c-kw">function</span> <span class="c-fn">onEdit</span>(<span class="c-var">e</span>) {
+  <span class="c-kw">const</span> <span class="c-var">cell</span> = <span class="c-var">e</span>.range;
+  <span class="c-kw">const</span> <span class="c-var">newValue</span> = <span class="c-var">e</span>.value;
+  <span class="c-kw">const</span> <span class="c-var">row</span> = <span class="c-var">cell</span>.<span class="c-fn">getRow</span>();
+  <span class="c-kw">const</span> <span class="c-var">col</span> = <span class="c-var">cell</span>.<span class="c-fn">getColumn</span>();
+
+  <span class="c-kw">if</span> (<span class="c-var">col</span> === <span class="c-num">3</span> &amp;&amp; <span class="c-var">newValue</span> === <span class="c-str">"Done"</span>) {
+    <span class="c-cmt">// Col C changed to "Done" → highlight green</span>
+    <span class="c-var">cell</span>.<span class="c-fn">setBackground</span>(<span class="c-str">"#00ff00"</span>);
+  }
+}</pre>
+      </div>
+      <div class="code-col">
+        <div class="code-lang py-lang">🐍 Python equivalent</div>
+        <pre><span class="c-cmt"># Python has no direct "onEdit" equivalent</span>
+<span class="c-cmt"># You'd have to poll the sheet repeatedly:</span>
+
+<span class="c-kw">import</span> <span class="c-obj">time</span>
+
+<span class="c-var">last_val</span> = <span class="c-kw">None</span>
+<span class="c-kw">while</span> <span class="c-kw">True</span>:
+  <span class="c-var">current</span> = <span class="c-var">sheet</span>.<span class="c-fn">cell</span>(<span class="c-num">1</span>, <span class="c-num">3</span>).<span class="c-var">value</span>
+  <span class="c-kw">if</span> <span class="c-var">current</span> != <span class="c-var">last_val</span>:
+    <span class="c-fn">print</span>(<span class="c-str">f"Changed to: {current}"</span>)
+    <span class="c-var">last_val</span> = <span class="c-var">current</span>
+  <span class="c-obj">time</span>.<span class="c-fn">sleep</span>(<span class="c-num">30</span>) <span class="c-cmt"># wasteful, GAS is better here</span></pre>
+      </div>
+    </div>
+  </div>
+
+  <div class="compare-block">
+    <div class="compare-header">
+      <div class="compare-title">Time-based trigger — run daily at 9am</div>
+      <span class="badge js">GAS JS</span>
+      <span class="badge py">Python</span>
+    </div>
+    <div class="code-cols">
+      <div class="code-col">
+        <div class="code-lang js-lang">⬡ Google Apps Script</div>
+        <pre><span class="c-cmt">// Run this ONCE to set up the daily trigger</span>
+<span class="c-kw">function</span> <span class="c-fn">createDailyTrigger</span>() {
+  <span class="c-obj">ScriptApp</span>.<span class="c-fn">newTrigger</span>(<span class="c-str">"sendDailyReport"</span>)
+    .<span class="c-fn">timeBased</span>()
+    .<span class="c-fn">everyDays</span>(<span class="c-num">1</span>)
+    .<span class="c-fn">atHour</span>(<span class="c-num">9</span>)
+    .<span class="c-fn">create</span>();
+}
+
+<span class="c-kw">function</span> <span class="c-fn">sendDailyReport</span>() {
+  <span class="c-cmt">// This runs automatically at 9am every day</span>
+  <span class="c-obj">GmailApp</span>.<span class="c-fn">sendEmail</span>(<span class="c-str">"boss@co.com"</span>,
+    <span class="c-str">"Daily Report"</span>, <span class="c-str">"Here's today's summary."</span>);
+}</pre>
+      </div>
+      <div class="code-col">
+        <div class="code-lang py-lang">🐍 Python equivalent</div>
+        <pre><span class="c-cmt"># Option 1: Linux cron job</span>
+<span class="c-cmt"># 0 9 * * * python3 /path/to/script.py</span>
+
+<span class="c-cmt"># Option 2: Python schedule library</span>
+<span class="c-kw">import</span> <span class="c-obj">schedule</span>
+<span class="c-kw">import</span> <span class="c-obj">time</span>
+
+<span class="c-kw">def</span> <span class="c-fn">send_daily_report</span>():
+  <span class="c-fn">print</span>(<span class="c-str">"Sending report..."</span>)
+  <span class="c-cmt"># yag.send(...)</span>
+
+<span class="c-obj">schedule</span>.<span class="c-fn">every</span>().<span class="c-fn">day</span>.<span class="c-fn">at</span>(<span class="c-str">"09:00"</span>).<span class="c-fn">do</span>(<span class="c-var">send_daily_report</span>)
+<span class="c-kw">while</span> <span class="c-kw">True</span>:
+  <span class="c-obj">schedule</span>.<span class="c-fn">run_pending</span>()
+  <span class="c-obj">time</span>.<span class="c-fn">sleep</span>(<span class="c-num">60</span>)</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5: DRIVE -->
+  <div class="sec-head">Google Drive &amp; Docs</div>
+
+  <div class="compare-block">
+    <div class="compare-header">
+      <div class="compare-title">Create a folder + save a file to it</div>
+      <span class="badge js">GAS JS</span>
+      <span class="badge py">Python</span>
+    </div>
+    <div class="code-cols">
+      <div class="code-col">
+        <div class="code-lang js-lang">⬡ Google Apps Script</div>
+        <pre><span class="c-kw">function</span> <span class="c-fn">createClientFolder</span>(<span class="c-var">clientName</span>) {
+  <span class="c-kw">const</span> <span class="c-var">rootFolder</span> = <span class="c-obj">DriveApp</span>.<span class="c-fn">getRootFolder</span>();
+  <span class="c-kw">const</span> <span class="c-var">newFolder</span> = <span class="c-var">rootFolder</span>
+    .<span class="c-fn">createFolder</span>(<span class="c-var">clientName</span>);
+
+  <span class="c-cmt">// Create a blank doc inside it</span>
+  <span class="c-kw">const</span> <span class="c-var">doc</span> = <span class="c-obj">DocumentApp</span>
+    .<span class="c-fn">create</span>(<span class="c-str">`${</span><span class="c-var">clientName</span><span class="c-str">} Onboarding`</span>);
+  <span class="c-kw">const</span> <span class="c-var">docFile</span> = <span class="c-obj">DriveApp</span>
+    .<span class="c-fn">getFileById</span>(<span class="c-var">doc</span>.<span class="c-fn">getId</span>());
+  <span class="c-var">docFile</span>.<span class="c-fn">moveTo</span>(<span class="c-var">newFolder</span>);
+  <span class="c-obj">Logger</span>.<span class="c-fn">log</span>(<span class="c-str">"Folder URL: "</span> + <span class="c-var">newFolder</span>.<span class="c-fn">getUrl</span>());
+}</pre>
+      </div>
+      <div class="code-col">
+        <div class="code-lang py-lang">🐍 Python equivalent</div>
+        <pre><span class="c-kw">from</span> <span class="c-obj">googleapiclient.discovery</span> <span class="c-kw">import</span> <span class="c-var">build</span>
+<span class="c-cmt"># requires service account + google-api-python-client</span>
+
+<span class="c-var">drive</span> = <span class="c-fn">build</span>(<span class="c-str">"drive"</span>, <span class="c-str">"v3"</span>, <span class="c-var">credentials</span>=<span class="c-var">creds</span>)
+
+<span class="c-var">folder_meta</span> = {
+  <span class="c-str">"name"</span>: <span class="c-var">client_name</span>,
+  <span class="c-str">"mimeType"</span>: <span class="c-str">"application/vnd.google-apps.folder"</span>
+}
+<span class="c-var">folder</span> = <span class="c-var">drive</span>.<span class="c-fn">files</span>().<span class="c-fn">create</span>(
+  <span class="c-var">body</span>=<span class="c-var">folder_meta</span>, <span class="c-var">fields</span>=<span class="c-str">"id"</span>
+).<span class="c-fn">execute</span>()</pre>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════ QUICK REFERENCE ═══════════════ -->
+<div class="section" id="quickref">
+
+  <div class="hero">
+    <h1>Quick Reference <span>— Commands you'll use daily</span></h1>
+    <p>Bookmark this. These are the 30 most-used GAS commands with their Python equivalent on one page.</p>
+  </div>
+
+  <div class="sec-head">Sheets</div>
+  <div class="compare-block" style="margin-bottom:20px">
+    <table class="ref">
+      <thead><tr><th>What you want</th><th>GAS JavaScript</th><th>Python (gspread/pandas)</th></tr></thead>
+      <tbody>
+        <tr><td>Get active sheet</td><td><code>SpreadsheetApp.getActiveSheet()</code></td><td><code>sh.sheet1</code> <span class="muted">or sh.worksheet("name")</span></td></tr>
+        <tr><td>Get sheet by name</td><td><code>ss.getSheetByName("Sales")</code></td><td><code>sh.worksheet("Sales")</code></td></tr>
+        <tr><td>Read a range (A1:C10)</td><td><code>sheet.getRange("A1:C10").getValues()</code></td><td><code>sheet.get("A1:C10")</code></td></tr>
+        <tr><td>Read all data</td><td><code>sheet.getDataRange().getValues()</code></td><td><code>sheet.get_all_values()</code></td></tr>
+        <tr><td>Write to a cell</td><td><code>sheet.getRange(1,1).setValue("x")</code></td><td><code>sheet.update_cell(1,1,"x")</code></td></tr>
+        <tr><td>Write 2D array</td><td><code>range.setValues([[...],[...]])</code></td><td><code>sheet.update("A1", data)</code></td></tr>
+        <tr><td>Add new row</td><td><code>sheet.appendRow([a, b, c])</code></td><td><code>sheet.append_row([a, b, c])</code></td></tr>
+        <tr><td>Clear a range</td><td><code>sheet.getRange("A1:Z100").clearContents()</code></td><td><code>sheet.batch_clear(["A1:Z100"])</code></td></tr>
+        <tr><td>Count rows</td><td><code>sheet.getLastRow()</code></td><td><code>len(sheet.get_all_values())</code></td></tr>
+        <tr><td>Sort data</td><td><code>sheet.sort(1, true)</code> <span style="color:var(--muted);font-size:12px">(col 1, ascending)</span></td><td><code>df.sort_values("col")</code></td></tr>
+        <tr><td>Apply background color</td><td><code>range.setBackground("#ff0000")</code></td><td><code>gspread_formatting</code> library</td></tr>
+        <tr><td>Create new sheet tab</td><td><code>ss.insertSheet("NewTab")</code></td><td><code>sh.add_worksheet("NewTab", 100, 20)</code></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sec-head">Gmail</div>
+  <div class="compare-block" style="margin-bottom:20px">
+    <table class="ref">
+      <thead><tr><th>What you want</th><th>GAS JavaScript</th><th>Python equivalent</th></tr></thead>
+      <tbody>
+        <tr><td>Send plain email</td><td><code>GmailApp.sendEmail(to, subj, body)</code></td><td><code>yag.send(to, subject, body)</code></td></tr>
+        <tr><td>Send HTML email</td><td><code>GmailApp.sendEmail(to,s,b,{htmlBody:h})</code></td><td><code>yag.send(to, s, [body, html])</code></td></tr>
+        <tr><td>Search emails</td><td><code>GmailApp.search("from:boss@co.com")</code></td><td>Gmail API with query param</td></tr>
+        <tr><td>Get email body</td><td><code>thread.getMessages()[0].getBody()</code></td><td><code>msg.payload decode</code></td></tr>
+        <tr><td>Create draft</td><td><code>GmailApp.createDraft(to, subj, body)</code></td><td>Gmail API drafts.create</td></tr>
+        <tr><td>Mark as read</td><td><code>message.markRead()</code></td><td>Gmail API modify labels</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="sec-head">Drive &amp; Utilities</div>
+  <div class="compare-block" style="margin-bottom:20px">
+    <table class="ref">
+      <thead><tr><th>What you want</th><th>GAS JavaScript</th><th>Python equivalent</th></tr></thead>
+      <tbody>
+        <tr><td>Create folder</td><td><code>DriveApp.createFolder("name")</code></td><td>Drive API files().create()</td></tr>
+        <tr><td>Get file by ID</td><td><code>DriveApp.getFileById(id)</code></td><td><code>drive.files().get(fileId=id)</code></td></tr>
+        <tr><td>Move file</td><td><code>file.moveTo(folder)</code></td><td>Drive API files().update()</td></tr>
+        <tr><td>Share file</td><td><code>file.addEditor("email")</code></td><td>Drive API permissions().create()</td></tr>
+        <tr><td>Export as PDF</td><td><code>doc.getAs("application/pdf")</code></td><td>Drive API export</td></tr>
+        <tr><td>Make HTTP GET request</td><td><code>UrlFetchApp.fetch(url)</code></td><td><code>requests.get(url)</code></td></tr>
+        <tr><td>Make HTTP POST request</td><td><code>UrlFetchApp.fetch(url, {method:"post",payload:JSON.stringify(d)})</code></td><td><code>requests.post(url, json=d)</code></td></tr>
+        <tr><td>Parse JSON</td><td><code>JSON.parse(string)</code></td><td><code>json.loads(string)</code></td></tr>
+        <tr><td>Convert to JSON string</td><td><code>JSON.stringify(obj)</code></td><td><code>json.dumps(obj)</code></td></tr>
+        <tr><td>Sleep / wait</td><td><code>Utilities.sleep(2000)</code> (ms)</td><td><code>time.sleep(2)</code> (s)</td></tr>
+        <tr><td>Format a date</td><td><code>Utilities.formatDate(date, tz, "MM/dd/yyyy")</code></td><td><code>dt.strftime("%m/%d/%Y")</code></td></tr>
+        <tr><td>Log to console</td><td><code>Logger.log("message")</code></td><td><code>print("message")</code></td></tr>
+        <tr><td>Store a value permanently</td><td><code>PropertiesService.getScriptProperties().setProperty("key","val")</code></td><td>Write to file / env var / DB</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- ═══════════════ AI TOOLS ═══════════════ -->
+<div class="section" id="ai">
+
+  <div class="hero" style="border-color:rgba(232,121,249,0.25)">
+    <h1>Use AI to <span style="color:var(--ai)">skip writing code entirely</span></h1>
+    <p>Here's the honest strategy: use AI to generate 90% of your GAS code, use no-code tools for standard workflows, and only touch code when you absolutely must. This is the actual workflow of smart automation professionals.</p>
+  </div>
+
+  <div class="sec-head">Strategy 1 — AI Code Generator (Claude / ChatGPT)</div>
+
+  <div class="ai-tool">
+    <div class="ai-icon" style="background:rgba(232,121,249,0.1)">🤖</div>
+    <div class="ai-tool-info">
+      <h4>Claude or ChatGPT → Paste into GAS Editor</h4>
+      <p>Describe what you want in plain English. The AI writes the complete working GAS script. You paste it. Done. No understanding required for standard tasks.</p>
+      <ul>
+        <li><strong>Best for:</strong> generating new scripts, debugging error messages, explaining what existing code does</li>
+        <li><strong>Workflow:</strong> Describe task in English → Copy code → Paste in Extensions → Apps Script → Click Run</li>
+        <li><strong>Works for 95%</strong> of tasks an Automation Executive handles</li>
+      </ul>
+    </div>
+    <span class="ai-badge free">Free</span>
+  </div>
+
+  <div class="prompt-box">
+    <p>
+      Write a <em>Google Apps Script</em> function that reads a Google Sheet called "<em>Leads</em>"
+      which has columns: Name, Email, Company, Status. For every row where Status is "<em>New</em>",
+      send a personalized email to that person using GmailApp with subject "<em>Welcome to [Company]</em>"
+      and body "<em>Hi [Name], we received your inquiry...</em>". After sending, update the Status
+      column to "<em>Emailed</em>" so it doesn't send twice. Add comments explaining each line.
+    </p>
+  </div>
+
+  <div class="tip-box">
+    <strong>Pro tip:</strong> Always paste the error message into Claude and ask "fix this GAS error". You'll solve 99% of issues without understanding the code at all.
+  </div>
+
+  <hr class="divider">
+  <div class="sec-head">Strategy 2 — No-Code Automation (Zero JS required)</div>
+
+  <div class="ai-tool">
+    <div class="ai-icon" style="background:rgba(96,165,250,0.1)">⚡</div>
+    <div class="ai-tool-info">
+      <h4>Make.com (formerly Integromat)</h4>
+      <p>Visual drag-and-drop automation. Connect Google Sheets → Gmail → Slack → anything. You build workflows by dragging boxes, not writing code. Replaces 80% of GAS use cases.</p>
+      <ul>
+        <li><strong>Example:</strong> New row in Google Sheets → auto-send email → post to Slack → create a Notion task</li>
+        <li><strong>Has AI step:</strong> call Claude/OpenAI inside workflows</li>
+        <li><strong>URL:</strong> make.com</li>
+      </ul>
+    </div>
+    <span class="ai-badge free">Free tier</span>
+  </div>
+
+  <div class="ai-tool">
+    <div class="ai-icon" style="background:rgba(245,158,11,0.1)">🔗</div>
+    <div class="ai-tool-info">
+      <h4>Zapier</h4>
+      <p>The industry standard no-code automation. 6000+ app integrations. If your company uses standard tools (HubSpot, Salesforce, Slack, Gmail, Sheets), Zapier connects them without a single line of code.</p>
+      <ul>
+        <li><strong>Example:</strong> Form submission → add to Sheets → send welcome email → add contact to CRM</li>
+        <li><strong>Zapier AI Actions:</strong> describe automation in plain English, Zapier builds it</li>
+        <li><strong>URL:</strong> zapier.com</li>
+      </ul>
+    </div>
+    <span class="ai-badge paid">Paid</span>
+  </div>
+
+  <div class="ai-tool">
+    <div class="ai-icon" style="background:rgba(74,222,128,0.1)">✨</div>
+    <div class="ai-tool-info">
+      <h4>Google Workspace Duet AI / Gemini</h4>
+      <p>Built directly inside Google Sheets and Gmail. Ask "create a formula that...", "write a script that...", "summarize this email thread". Gemini can write GAS code directly inside the Apps Script editor.</p>
+      <ul>
+        <li><strong>In Sheets:</strong> sidebar AI that writes formulas and scripts for your specific sheet</li>
+        <li><strong>In Gmail:</strong> draft replies, summarize threads, extract data</li>
+        <li><strong>In Apps Script editor:</strong> Gemini sidebar → describe what you want → generates the code</li>
+      </ul>
+    </div>
+    <span class="ai-badge paid">Workspace plan</span>
+  </div>
+
+  <div class="ai-tool">
+    <div class="ai-icon" style="background:rgba(232,121,249,0.1)">🎯</div>
+    <div class="ai-tool-info">
+      <h4>Bardeen.ai</h4>
+      <p>Chrome extension that automates browser tasks + integrates with Google Workspace. Describe what you want to automate, it builds it. Great for scraping + Sheets workflows.</p>
+      <ul>
+        <li><strong>Example:</strong> scrape LinkedIn profiles → dump into Google Sheets → send intro emails</li>
+        <li><strong>Magic Box:</strong> describe automation in English, Bardeen builds the playbook</li>
+        <li><strong>URL:</strong> bardeen.ai</li>
+      </ul>
+    </div>
+    <span class="ai-badge free">Free tier</span>
+  </div>
+
+  <hr class="divider">
+  <div class="sec-head">The Smart Automation Executive Playbook</div>
+
+  <div class="flow" style="flex-direction:column;align-items:stretch;gap:12px">
+    <div style="display:flex;gap:12px;align-items:stretch;flex-wrap:wrap">
+      <div class="flow-step" style="flex:1;min-width:160px;border-color:rgba(74,222,128,0.3);text-align:left;padding:16px 20px">
+        <strong style="color:var(--accent);font-size:13px">Step 1 — Understand the ask</strong>
+        <span>Read the task. Identify: what's the trigger? what's the action? what data is involved?</span>
+      </div>
+      <div class="flow-step" style="flex:1;min-width:160px;border-color:rgba(96,165,250,0.3);text-align:left;padding:16px 20px">
+        <strong style="color:var(--accent2);font-size:13px">Step 2 — Can Make/Zapier do it?</strong>
+        <span>If it's connecting two apps with standard actions, use no-code tools. Faster, more reliable, easier to maintain.</span>
+      </div>
+      <div class="flow-step" style="flex:1;min-width:160px;border-color:rgba(245,158,11,0.3);text-align:left;padding:16px 20px">
+        <strong style="color:var(--accent3);font-size:13px">Step 3 — Need GAS? Use AI</strong>
+        <span>If it needs GAS (custom logic, complex Sheets manipulation), describe it to Claude and paste the output.</span>
+      </div>
+      <div class="flow-step" style="flex:1;min-width:160px;border-color:rgba(232,121,249,0.3);text-align:left;padding:16px 20px">
+        <strong style="color:var(--ai);font-size:13px">Step 4 — Test + explain</strong>
+        <span>Run it, verify output, ask AI to add comments so you can explain it in meetings. You're the orchestrator, not the coder.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="warn-box" style="margin-top:24px">
+    <strong>Interview tip:</strong> When they ask "can you write GAS code?" — the honest senior answer is "I know the architecture and I use AI tools to write and debug scripts rapidly, which lets me deliver 10x faster than hand-coding. Here's what I built last week..." — this is what good automation executives actually do.
+  </div>
+
+  <hr class="divider">
+  <div class="sec-head">Sample prompt templates to use at work</div>
+
+  <div class="prompt-box" style="margin-bottom:16px">
+    <p>
+      I have a Google Sheet with columns: [<em>list your columns</em>]. Write a Google Apps Script that
+      [<em>describe the logic</em>]. Trigger it [<em>when? on edit / daily at 9am / on form submit</em>].
+      Make sure it doesn't process the same row twice. Add a "Processed" column and mark "Yes" when done.
+    </p>
+  </div>
+
+  <div class="prompt-box" style="margin-bottom:16px">
+    <p>
+      This GAS script is throwing an error: "<em>[paste error message]</em>". Here is the code: "<em>[paste code]</em>".
+      Explain what's wrong and give me the fixed version with comments.
+    </p>
+  </div>
+
+  <div class="prompt-box">
+    <p>
+      Explain this Google Apps Script to me in plain English, step by step.
+      I need to explain it to my manager: "<em>[paste code]</em>"
+    </p>
+  </div>
+
+</div>
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function toggleTask(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.chevron');
+  const isOpen = body.classList.contains('open');
+  document.querySelectorAll('.task-body.open').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.chevron.open').forEach(c => c.classList.remove('open'));
+  if (!isOpen) {
+    body.classList.add('open');
+    chevron.classList.add('open');
+  }
+}
+</script>
+
+</body>
+</html>

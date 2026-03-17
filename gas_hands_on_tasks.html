@@ -1,0 +1,1659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GAS Hands-On Tasks — Real World Simulation</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,400;0,500;1,400&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg: #f5f3ee;
+  --bg2: #ffffff;
+  --bg3: #ede9e1;
+  --border: rgba(0,0,0,0.08);
+  --border2: rgba(0,0,0,0.14);
+  --text: #1a1814;
+  --muted: #6b6660;
+  --muted2: #9a9590;
+  --green: #1a7a4a;
+  --green-bg: #e8f5ee;
+  --green-border: #a8d5b8;
+  --amber: #92540a;
+  --amber-bg: #fef3e2;
+  --amber-border: #f0c07a;
+  --blue: #1a4a8a;
+  --blue-bg: #e8f0fc;
+  --blue-border: #a8c0e8;
+  --red: #8a1a1a;
+  --red-bg: #fce8e8;
+  --red-border: #e8a8a8;
+  --purple: #5a1a8a;
+  --purple-bg: #f0e8fc;
+  --purple-border: #c8a8e8;
+  --code-bg: #1e1c18;
+  --code-text: #e8e4d8;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* NAV */
+.topnav {
+  background: var(--bg2);
+  border-bottom: 1px solid var(--border2);
+  padding: 0 28px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.topnav::-webkit-scrollbar { display: none; }
+.nav-logo {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--green);
+  padding: 14px 16px 14px 0;
+  border-right: 1px solid var(--border);
+  margin-right: 8px;
+  white-space: nowrap;
+  letter-spacing: 0.03em;
+}
+.nav-btn {
+  background: none;
+  border: none;
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+}
+.nav-btn:hover { background: var(--bg3); color: var(--text); }
+.nav-btn.active { background: var(--text); color: var(--bg); }
+
+/* PAGE */
+.page { display: none; max-width: 960px; margin: 0 auto; padding: 44px 28px; }
+.page.active { display: block; }
+
+/* HERO */
+.hero {
+  background: var(--text);
+  color: #f5f3ee;
+  border-radius: 14px;
+  padding: 40px 44px;
+  margin-bottom: 36px;
+  position: relative;
+  overflow: hidden;
+}
+.hero::after {
+  content: 'GAS';
+  position: absolute;
+  right: -20px;
+  bottom: -40px;
+  font-size: 160px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.03);
+  pointer-events: none;
+  line-height: 1;
+}
+.hero h1 { font-size: 26px; font-weight: 700; margin-bottom: 10px; line-height: 1.3; }
+.hero h1 em { color: #a8d5b8; font-style: normal; }
+.hero p { font-size: 14px; color: rgba(245,243,238,0.65); max-width: 580px; line-height: 1.75; }
+
+/* SECTION LABEL */
+.slabel {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted2);
+  margin: 36px 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.slabel::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* CARDS GRID */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 22px;
+}
+.card h4 { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+.card p { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+/* STEP INSTRUCTIONS */
+.instruction-block {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+.instr-head {
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.instr-num {
+  width: 30px;
+  height: 30px;
+  background: var(--text);
+  color: var(--bg);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.instr-head h3 { font-size: 15px; font-weight: 600; }
+.instr-head p { font-size: 12px; color: var(--muted); margin-top: 2px; }
+.instr-body { padding: 20px 22px; }
+
+/* MENU PATH */
+.menu-path {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: 14px 0;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+.menu-item {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: 5px;
+  padding: 4px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+}
+.menu-arrow { color: var(--muted2); font-size: 14px; }
+.menu-final {
+  background: var(--green-bg);
+  border: 1px solid var(--green-border);
+  border-radius: 5px;
+  padding: 4px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--green);
+  white-space: nowrap;
+}
+
+/* SCREENSHOT SIM */
+.screen-sim {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 0;
+  overflow: hidden;
+  margin: 14px 0;
+}
+.screen-bar {
+  background: #e8e3d8;
+  border-bottom: 1px solid var(--border);
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.screen-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.screen-bar span {
+  font-size: 11px;
+  color: var(--muted);
+  margin-left: 8px;
+  font-family: 'DM Mono', monospace;
+}
+.screen-content { padding: 16px; }
+
+/* NOTE / TIP / WARN boxes */
+.note {
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 13px;
+  margin: 12px 0;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  line-height: 1.6;
+}
+.note-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+.note.green { background: var(--green-bg); border: 1px solid var(--green-border); color: var(--green); }
+.note.amber { background: var(--amber-bg); border: 1px solid var(--amber-border); color: var(--amber); }
+.note.blue { background: var(--blue-bg); border: 1px solid var(--blue-border); color: var(--blue); }
+.note.red { background: var(--red-bg); border: 1px solid var(--red-border); color: var(--red); }
+.note strong { font-weight: 600; }
+
+/* CODE BLOCK */
+.code-wrap {
+  background: var(--code-bg);
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 14px 0;
+}
+.code-header {
+  background: #2a2820;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.code-header span { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+.code-header .lang { color: #f0c07a; }
+.copy-btn {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.6);
+  font-size: 11px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.copy-btn:hover { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.9); }
+.copy-btn.copied { color: #a8d5b8; border-color: rgba(168,213,184,0.4); }
+pre.code {
+  font-family: 'DM Mono', monospace;
+  font-size: 12.5px;
+  line-height: 1.75;
+  padding: 18px 20px;
+  overflow-x: auto;
+  color: var(--code-text);
+  tab-size: 2;
+}
+.k { color: #e879a0; }
+.f { color: #79b8ff; }
+.s { color: #a8d5b8; }
+.n { color: #f0c07a; }
+.c { color: #5a5650; font-style: italic; }
+.o { color: #c8b8f8; }
+.v { color: var(--code-text); }
+
+/* TASK CARDS (task list page) */
+.task-card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0;
+  overflow: hidden;
+  margin-bottom: 14px;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.task-card:hover { border-color: var(--border2); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+.task-card-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 22px;
+}
+.task-num-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.task-card-info { flex: 1; }
+.task-card-info h3 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
+.task-card-info p { font-size: 12px; color: var(--muted); }
+.task-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.pill {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+.pill.green { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+.pill.amber { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+.pill.blue { background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-border); }
+.pill.purple { background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-border); }
+.chevron-icon { color: var(--muted2); font-size: 12px; transition: transform 0.2s; }
+.task-body-detail {
+  border-top: 1px solid var(--border);
+  padding: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.2s;
+}
+.task-body-detail.open { max-height: 4000px; padding: 24px 22px; }
+
+/* TABLE SETUP */
+.setup-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin: 12px 0;
+}
+.setup-table th {
+  background: var(--bg3);
+  padding: 8px 14px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+.setup-table td {
+  padding: 8px 14px;
+  border: 1px solid var(--border);
+  color: var(--text);
+  background: var(--bg2);
+}
+.setup-table .header-row td {
+  font-weight: 700;
+  background: var(--bg3);
+  color: var(--text);
+}
+.setup-table .data-row td { color: var(--muted); }
+
+/* STEP LIST */
+.step-list { list-style: none; padding: 0; margin: 14px 0; }
+.step-list li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 12px;
+  font-size: 13px;
+  line-height: 1.65;
+}
+.step-list .sn {
+  width: 22px;
+  height: 22px;
+  background: var(--text);
+  color: var(--bg);
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.step-list li span { color: var(--text); }
+.step-list li .mtext { color: var(--muted); }
+kbd {
+  background: var(--bg3);
+  border: 1px solid var(--border2);
+  border-bottom: 2px solid var(--border2);
+  border-radius: 4px;
+  padding: 1px 7px;
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  color: var(--text);
+}
+.hl { background: rgba(168,213,184,0.25); padding: 1px 5px; border-radius: 3px; font-weight: 600; color: var(--green); }
+code.inline {
+  font-family: 'DM Mono', monospace;
+  font-size: 11.5px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  padding: 1px 7px;
+  border-radius: 4px;
+  color: var(--blue);
+}
+
+/* EXPECTED OUTPUT */
+.output-box {
+  background: var(--green-bg);
+  border: 1px solid var(--green-border);
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 12px 0;
+}
+.output-box .out-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--green);
+  margin-bottom: 8px;
+}
+.output-box p { font-size: 13px; color: var(--green); line-height: 1.7; }
+.output-box ul { padding-left: 16px; margin-top: 6px; }
+.output-box li { font-size: 13px; color: var(--green); margin-bottom: 4px; }
+
+/* DIVIDER */
+hr.div { border: none; border-top: 1px solid var(--border); margin: 28px 0; }
+
+/* MOBILE */
+@media (max-width: 700px) {
+  .grid2, .grid3 { grid-template-columns: 1fr; }
+  .page { padding: 28px 16px; }
+  .topnav { padding: 0 12px; }
+  .hero { padding: 28px 24px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="nav-logo">📋 GAS Field Guide</div>
+  <button class="nav-btn active" onclick="showPage('start',this)">Start Here</button>
+  <button class="nav-btn" onclick="showPage('access',this)">How to Access</button>
+  <button class="nav-btn" onclick="showPage('task1',this)">Task 1</button>
+  <button class="nav-btn" onclick="showPage('task2',this)">Task 2</button>
+  <button class="nav-btn" onclick="showPage('task3',this)">Task 3</button>
+  <button class="nav-btn" onclick="showPage('task4',this)">Task 4</button>
+  <button class="nav-btn" onclick="showPage('task5',this)">Task 5</button>
+  <button class="nav-btn" onclick="showPage('task6',this)">Task 6</button>
+  <button class="nav-btn" onclick="showPage('task7',this)">Task 7</button>
+  <button class="nav-btn" onclick="showPage('task8',this)">Task 8</button>
+</nav>
+
+<!-- ===================== START HERE ===================== -->
+<div class="page active" id="start">
+  <div class="hero">
+    <h1>Hands-On GAS Training<br><em>Real tasks. Exact menu steps. Working code.</em></h1>
+    <p>This file simulates what an Automation Executive actually does at work. Each task gives you sample data to set up, exact clicks to reach the code editor, and complete working code. Do these 8 tasks and you'll be job-ready.</p>
+  </div>
+
+  <div class="slabel">8 real-world simulation tasks</div>
+
+  <div class="task-card" onclick="goTask('task1','Task 1')">
+    <div class="task-card-head">
+      <div class="task-num-badge" style="background:var(--green-bg);color:var(--green)">1</div>
+      <div class="task-card-info">
+        <h3>Auto-Format a Sales Report</h3>
+        <p>Read a raw sheet → highlight rows → mark overdue deals → runs on demand</p>
+      </div>
+      <div class="task-meta">
+        <span class="pill green">Sheets</span>
+        <span class="pill green">Beginner</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="task-card" onclick="goTask('task2','Task 2')">
+    <div class="task-card-head">
+      <div class="task-num-badge" style="background:var(--blue-bg);color:var(--blue)">2</div>
+      <div class="task-card-info">
+        <h3>Mail Merge — Send Personalised Emails from a Sheet</h3>
+        <p>Read leads sheet → send customised email to each person → mark "Sent"</p>
+      </div>
+      <div class="task-meta">
+        <span class="pill blue">Gmail</span>
+        <span class="pill green">Beginner</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="task-card" onclick="goTask('task3','Task 3')">
+    <div class="task-card-head">
+      <div class="task-num-badge" style="background:var(--amber-bg);color:var(--amber)">3</div>
+      <div class="task-card-info">
+        <h3>Auto-Acknowledge Form Submissions</h3>
+        <p>Runs the instant someone submits a Google Form → sends them a thank-you email automatically</p>
+      </div>
+      <div class="task-meta">
+        <span class="pill amber">Forms + Gmail</span>
+        <span class="pill amber">Trigger</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="task-card" onclick="goTask('task4','Task 4')">
+    <div class="task-card-head">
+      <div class="task-num-badge" style="background:var(--purple-bg);color:var(--purple)">4</div>
+      <div class="task-card-info">
+        <h3>Daily Report Email — Scheduled at 9am</h3>
+        <p>Every morning, GAS reads your sheet, calculates KPIs and emails a summary to the team</p>
+      </div>
+      <div class="task-meta">
+        <span class="pill purple">Sheets + Gmail</span>
+        <span class="pill amber">Scheduled</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="task-card" onclick="goTask('task5','Task 5')">
+    <div class="task-card-head">
+      <div class="task-num-badge" style="background:var(--blue-bg);color:var(--blue)">5</div>
+      <div class="task-card-info">
+        <h3>Fetch Live Exchange Rate into Sheets</h3>
+        <p>Call an external API → pull USD→INR rate → write to cell → runs every hour</p>
+      </div>
+      <div class="task-meta">
+        <span class="pill blue">API + Sheets</span>
+        <span class="pill amber">Intermediate</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="task-card" onclick="goTask('task6','Task 6')">
+    <div class="task-card-head">
+      <div class="task-num-badge" style="background:var(--green-bg);color:var(--green)">6</div>
+      <div class="task-card-info">
+        <h3>onEdit Trigger — Status Changes Auto-Colour Rows</h3>
+        <p>When someone types "Done" in col C, that entire row turns green automatically — live, no button</p>
+      </div>
+      <div class="task-meta">
+        <span class="pill green">Sheets</span>
+        <span class="pill green">Event Trigger</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="task-card" onclick="goTask('task7','Task 7')">
+    <div class="task-card-head">
+      <div class="task-num-badge" style="background:var(--amber-bg);color:var(--amber)">7</div>
+      <div class="task-card-info">
+        <h3>Auto-Create Client Folders in Google Drive</h3>
+        <p>New client added to sheet → a named folder is instantly created in Google Drive for them</p>
+      </div>
+      <div class="task-meta">
+        <span class="pill amber">Drive + Sheets</span>
+        <span class="pill amber">Intermediate</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="task-card" onclick="goTask('task8','Task 8')">
+    <div class="task-card-head">
+      <div class="task-num-badge" style="background:var(--purple-bg);color:var(--purple)">8</div>
+      <div class="task-card-info">
+        <h3>Invoice Generator — Sheets → PDF → Email to Client</h3>
+        <p>Select a client row → script generates a Google Doc invoice → exports as PDF → emails it</p>
+      </div>
+      <div class="task-meta">
+        <span class="pill purple">Drive + Gmail</span>
+        <span class="pill purple">Advanced</span>
+      </div>
+    </div>
+  </div>
+
+  <hr class="div">
+  <div class="note blue">
+    <div class="note-icon">💡</div>
+    <div><strong>How to use this guide:</strong> Start with the "How to Access" tab — learn exactly where to paste and run code. Then do Task 1 through 8 in order. Each task gives you: sample data setup → exact menu navigation → complete code → what to expect as output.</div>
+  </div>
+</div>
+
+<!-- ===================== HOW TO ACCESS ===================== -->
+<div class="page" id="access">
+  <div class="hero">
+    <h1>Where do you <em>paste and run</em> the code?</h1>
+    <p>There are 3 ways to get to the Apps Script editor. Learn all three — each is used in different scenarios at work.</p>
+  </div>
+
+  <div class="slabel">Method 1 — From inside Google Sheets (most common)</div>
+
+  <div class="instruction-block">
+    <div class="instr-head">
+      <div class="instr-num">1</div>
+      <div>
+        <h3>Open any Google Sheet</h3>
+        <p>Go to sheets.google.com → open a sheet you already have or create a new blank one</p>
+      </div>
+    </div>
+    <div class="instr-body">
+      <div class="menu-path">
+        <span class="menu-item">Google Sheets (any open sheet)</span>
+        <span class="menu-arrow">→</span>
+        <span class="menu-item">Extensions</span>
+        <span class="menu-arrow">→</span>
+        <span class="menu-item">Apps Script</span>
+        <span class="menu-arrow">→</span>
+        <span class="menu-final">Apps Script Editor opens</span>
+      </div>
+      <div class="screen-sim">
+        <div class="screen-bar">
+          <div class="screen-dot" style="background:#ff5f57"></div>
+          <div class="screen-dot" style="background:#febc2e"></div>
+          <div class="screen-dot" style="background:#28c840"></div>
+          <span>Google Sheets menu bar</span>
+        </div>
+        <div class="screen-content">
+          <div style="display:flex;gap:24px;font-size:13px;border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:10px">
+            <span style="color:var(--muted)">File</span>
+            <span style="color:var(--muted)">Edit</span>
+            <span style="color:var(--muted)">View</span>
+            <span style="color:var(--muted)">Insert</span>
+            <span style="color:var(--muted)">Format</span>
+            <span style="color:var(--muted)">Data</span>
+            <span style="color:var(--muted)">Tools</span>
+            <span style="font-weight:700;color:var(--green);border-bottom:2px solid var(--green);padding-bottom:2px">Extensions ←</span>
+            <span style="color:var(--muted)">Help</span>
+          </div>
+          <div style="background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:8px 0;width:200px;font-size:13px;box-shadow:0 4px 16px rgba(0,0,0,0.1)">
+            <div style="padding:8px 16px;color:var(--muted)">Add-ons</div>
+            <div style="padding:8px 16px;font-weight:600;color:var(--green);background:var(--green-bg)">▶ Apps Script</div>
+            <div style="padding:8px 16px;color:var(--muted)">Macros</div>
+            <div style="padding:8px 16px;color:var(--muted)">AppSheet</div>
+          </div>
+        </div>
+      </div>
+      <div class="note green">
+        <div class="note-icon">✓</div>
+        <div>This opens the script editor in a <strong>new browser tab</strong>. The script is automatically linked to your sheet — so <code class="inline">SpreadsheetApp.getActiveSpreadsheet()</code> will refer to THIS specific sheet.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slabel">Method 2 — Standalone Script (not linked to any sheet)</div>
+
+  <div class="instruction-block">
+    <div class="instr-head">
+      <div class="instr-num">2</div>
+      <div>
+        <h3>Go directly to script.google.com</h3>
+        <p>Use this when you want a script that works across multiple sheets or has no specific sheet</p>
+      </div>
+    </div>
+    <div class="instr-body">
+      <div class="menu-path">
+        <span class="menu-item">script.google.com</span>
+        <span class="menu-arrow">→</span>
+        <span class="menu-item">New project (top left)</span>
+        <span class="menu-arrow">→</span>
+        <span class="menu-final">Blank script editor</span>
+      </div>
+      <div class="note amber">
+        <div class="note-icon">⚠</div>
+        <div>In standalone scripts, <code class="inline">SpreadsheetApp.getActiveSpreadsheet()</code> won't work. You must use the Sheet ID: <code class="inline">SpreadsheetApp.openById("your-sheet-id")</code>. Find the ID in the sheet URL between /d/ and /edit.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slabel">What you see inside the Apps Script editor</div>
+
+  <div class="instruction-block">
+    <div class="instr-head">
+      <div class="instr-num">3</div>
+      <div>
+        <h3>The Editor — 5 things to know</h3>
+        <p>Everything you need to run, test, and debug your scripts</p>
+      </div>
+    </div>
+    <div class="instr-body">
+      <div class="screen-sim">
+        <div class="screen-bar">
+          <div class="screen-dot" style="background:#ff5f57"></div>
+          <div class="screen-dot" style="background:#febc2e"></div>
+          <div class="screen-dot" style="background:#28c840"></div>
+          <span>script.google.com — Apps Script Editor</span>
+        </div>
+        <div class="screen-content">
+          <div style="display:grid;grid-template-columns:180px 1fr;gap:0;border:1px solid var(--border);border-radius:6px;overflow:hidden;font-size:12px">
+            <div style="background:#f0ece4;border-right:1px solid var(--border);padding:12px 0">
+              <div style="padding:8px 14px;font-weight:700;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em">Files</div>
+              <div style="padding:7px 14px;background:var(--bg2);font-weight:600;color:var(--green)">Code.gs ←</div>
+              <div style="padding:7px 14px;color:var(--muted)">+ New file</div>
+              <div style="padding:16px 14px 8px;font-weight:700;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.06em">Services</div>
+              <div style="padding:7px 14px;color:var(--muted)">+ Add a service</div>
+            </div>
+            <div style="padding:14px;background:#1e1c18;font-family:'DM Mono',monospace;color:#a8d5b8;font-size:12px;line-height:1.8">
+              <div style="color:#5a5650">// Your code goes here</div>
+              <div><span style="color:#e879a0">function</span> <span style="color:#79b8ff">myFunction</span>() {</div>
+              <div style="padding-left:20px;color:#e8e4d8">  <span style="color:#5a5650">// paste and replace this</span></div>
+              <div>}</div>
+            </div>
+          </div>
+          <div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:10px;font-size:12px">
+            <div style="background:var(--green-bg);border:1px solid var(--green-border);border-radius:6px;padding:8px 14px;color:var(--green)"><strong>▶ Run button</strong> — runs the selected function</div>
+            <div style="background:var(--blue-bg);border:1px solid var(--blue-border);border-radius:6px;padding:8px 14px;color:var(--blue)"><strong>🐛 Debug button</strong> — step through code line by line</div>
+            <div style="background:var(--amber-bg);border:1px solid var(--amber-border);border-radius:6px;padding:8px 14px;color:var(--amber)"><strong>Function selector</strong> — choose which function to run</div>
+            <div style="background:var(--purple-bg);border:1px solid var(--purple-border);border-radius:6px;padding:8px 14px;color:var(--purple)"><strong>Execution log</strong> — appears below, shows Logger.log() output</div>
+          </div>
+        </div>
+      </div>
+
+      <ul class="step-list" style="margin-top:16px">
+        <li><div class="sn">1</div><div><span>PASTE your code</span> inside the editor — select all existing text (Ctrl+A) and replace it with the new code</div></li>
+        <li><div class="sn">2</div><div><span>SAVE</span> with <kbd>Ctrl+S</kbd> or click the floppy disk icon. You must save before running.</div></li>
+        <li><div class="sn">3</div><div><span>SELECT the function</span> to run from the dropdown (next to the Run button). If you have multiple functions, pick the right one.</div></li>
+        <li><div class="sn">4</div><div><span>CLICK ▶ Run</span>. First time only — Google will ask for permissions. Click "Review permissions" → select your Google account → click "Advanced" → "Go to [project name]" → Allow.</div></li>
+        <li><div class="sn">5</div><div><span>CHECK the Execution Log</span> at the bottom of the screen. It shows your <code class="inline">Logger.log()</code> outputs and any errors.</div></li>
+      </ul>
+
+      <div class="note red">
+        <div class="note-icon">🔑</div>
+        <div><strong>Permissions popup:</strong> The first time you run any script that accesses Gmail or Drive, Google shows a scary "This app isn't verified" warning. This is NORMAL. Click "Advanced" at the bottom left of that popup, then "Go to [script name] (unsafe)" — it's your own code so it's fine.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="slabel">How to set up a Trigger (schedule / auto-run)</div>
+
+  <div class="instruction-block">
+    <div class="instr-head">
+      <div class="instr-num">4</div>
+      <div>
+        <h3>Add a Trigger — run automatically without clicking</h3>
+        <p>Triggers are the heart of automation — schedule or event-based</p>
+      </div>
+    </div>
+    <div class="instr-body">
+      <div class="menu-path">
+        <span class="menu-item">Apps Script Editor</span>
+        <span class="menu-arrow">→</span>
+        <span class="menu-item">⏰ Triggers (alarm clock icon, left sidebar)</span>
+        <span class="menu-arrow">→</span>
+        <span class="menu-item">+ Add Trigger (bottom right)</span>
+        <span class="menu-arrow">→</span>
+        <span class="menu-final">Configure popup</span>
+      </div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px;margin:14px 0;font-size:13px">
+        <div style="font-weight:600;margin-bottom:14px;color:var(--text)">Trigger configuration popup — what to set:</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div style="background:var(--bg3);border-radius:6px;padding:12px">
+            <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:6px">For time-based (daily email)</div>
+            <div style="color:var(--muted)">Function: <span style="color:var(--text);font-weight:600">sendDailyReport</span></div>
+            <div style="color:var(--muted)">Event source: <span style="color:var(--text);font-weight:600">Time-driven</span></div>
+            <div style="color:var(--muted)">Type: <span style="color:var(--text);font-weight:600">Day timer</span></div>
+            <div style="color:var(--muted)">Time: <span style="color:var(--text);font-weight:600">8am to 9am</span></div>
+          </div>
+          <div style="background:var(--bg3);border-radius:6px;padding:12px">
+            <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:6px">For sheet edit trigger</div>
+            <div style="color:var(--muted)">Function: <span style="color:var(--text);font-weight:600">onEdit</span></div>
+            <div style="color:var(--muted)">Event source: <span style="color:var(--text);font-weight:600">From spreadsheet</span></div>
+            <div style="color:var(--muted)">Event type: <span style="color:var(--text);font-weight:600">On edit</span></div>
+            <div style="color:var(--muted)">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== TASK 1 ===================== -->
+<div class="page" id="task1">
+  <div class="hero">
+    <h1>Task 1 — <em>Auto-Format a Sales Report</em></h1>
+    <p>Scenario: Your manager dumps raw sales data into a Google Sheet every Monday. Your job: write a script that automatically highlights overdue deals, marks high-value deals in gold, and flags deals with no follow-up date.</p>
+  </div>
+
+  <div class="slabel">Step 1 — Set up sample data in Google Sheets</div>
+  <div class="note blue"><div class="note-icon">📋</div><div>Create a new Google Sheet. Name the first tab <strong>Sales</strong>. Type in this data exactly (row 1 = headers):</div></div>
+  <table class="setup-table">
+    <tr class="header-row"><td>A — Deal Name</td><td>B — Sales Rep</td><td>C — Value (₹)</td><td>D — Status</td><td>E — Deadline</td></tr>
+    <tr class="data-row"><td>Acme Corp CRM Deal</td><td>Priya Sharma</td><td>250000</td><td>In Progress</td><td>2024-01-10</td></tr>
+    <tr class="data-row"><td>TechStart SaaS</td><td>Ravi Kumar</td><td>85000</td><td>In Progress</td><td>2024-03-20</td></tr>
+    <tr class="data-row"><td>Mega Bank Automation</td><td>Anita Joshi</td><td>500000</td><td>Won</td><td>2024-02-15</td></tr>
+    <tr class="data-row"><td>LocalShop POS</td><td>Ravi Kumar</td><td>30000</td><td>In Progress</td><td>2024-01-05</td></tr>
+    <tr class="data-row"><td>CloudCo Migration</td><td>Priya Sharma</td><td>180000</td><td>In Progress</td><td></td></tr>
+  </table>
+
+  <div class="slabel">Step 2 — Open Apps Script Editor</div>
+  <div class="menu-path">
+    <span class="menu-item">Your Sheet</span>
+    <span class="menu-arrow">→</span>
+    <span class="menu-item">Extensions</span>
+    <span class="menu-arrow">→</span>
+    <span class="menu-final">Apps Script</span>
+  </div>
+  <div class="note amber"><div class="note-icon">⚠</div><div>A new tab opens with the script editor. <strong>Select all the default code (Ctrl+A) and delete it.</strong> Then paste the code below.</div></div>
+
+  <div class="slabel">Step 3 — Paste this code</div>
+  <div class="code-wrap">
+    <div class="code-header">
+      <span class="lang">Apps Script — Code.gs</span>
+      <button class="copy-btn" onclick="copyCode(this,'code1')">Copy</button>
+    </div>
+    <pre class="code" id="code1"><span class="k">function</span> <span class="f">formatSalesReport</span>() {
+
+  <span class="c">// Get the active spreadsheet and the "Sales" sheet tab</span>
+  <span class="k">const</span> <span class="v">ss</span> = <span class="o">SpreadsheetApp</span>.<span class="f">getActiveSpreadsheet</span>();
+  <span class="k">const</span> <span class="v">sheet</span> = <span class="v">ss</span>.<span class="f">getSheetByName</span>(<span class="s">"Sales"</span>);
+
+  <span class="c">// Get all data rows (starting from row 2, skip header)</span>
+  <span class="k">const</span> <span class="v">lastRow</span> = <span class="v">sheet</span>.<span class="f">getLastRow</span>();
+  <span class="k">const</span> <span class="v">today</span> = <span class="k">new</span> <span class="o">Date</span>();
+
+  <span class="c">// First clear all existing background colours so we start fresh</span>
+  <span class="v">sheet</span>.<span class="f">getRange</span>(<span class="n">2</span>, <span class="n">1</span>, <span class="v">lastRow</span> - <span class="n">1</span>, <span class="n">5</span>).<span class="f">setBackground</span>(<span class="k">null</span>);
+
+  <span class="c">// Loop through each data row (row 2 onwards)</span>
+  <span class="k">for</span> (<span class="k">let</span> <span class="v">i</span> = <span class="n">2</span>; <span class="v">i</span> &lt;= <span class="v">lastRow</span>; <span class="v">i</span>++) {
+
+    <span class="c">// getRange(row, column) — row i, columns 1-5</span>
+    <span class="k">const</span> <span class="v">row</span> = <span class="v">sheet</span>.<span class="f">getRange</span>(<span class="v">i</span>, <span class="n">1</span>, <span class="n">1</span>, <span class="n">5</span>);
+    <span class="k">const</span> <span class="v">values</span> = <span class="v">row</span>.<span class="f">getValues</span>()[<span class="n">0</span>]; <span class="c">// [0] because getValues returns 2D array</span>
+
+    <span class="k">const</span> <span class="v">dealValue</span>  = <span class="v">values</span>[<span class="n">2</span>]; <span class="c">// Column C (index 2)</span>
+    <span class="k">const</span> <span class="v">status</span>     = <span class="v">values</span>[<span class="n">3</span>]; <span class="c">// Column D (index 3)</span>
+    <span class="k">const</span> <span class="v">deadline</span>   = <span class="v">values</span>[<span class="n">4</span>]; <span class="c">// Column E (index 4)</span>
+
+    <span class="c">// RULE 1: Won deals → light green background</span>
+    <span class="k">if</span> (<span class="v">status</span> === <span class="s">"Won"</span>) {
+      <span class="v">row</span>.<span class="f">setBackground</span>(<span class="s">"#d9ead3"</span>); <span class="c">// light green</span>
+      <span class="k">continue</span>; <span class="c">// skip other rules for this row</span>
+    }
+
+    <span class="c">// RULE 2: No deadline set → orange background (needs attention)</span>
+    <span class="k">if</span> (!<span class="v">deadline</span> || <span class="v">deadline</span> === <span class="s">""</span>) {
+      <span class="v">row</span>.<span class="f">setBackground</span>(<span class="s">"#fce5cd"</span>); <span class="c">// light orange</span>
+      <span class="k">continue</span>;
+    }
+
+    <span class="c">// RULE 3: Deadline is in the past → red (overdue)</span>
+    <span class="k">const</span> <span class="v">deadlineDate</span> = <span class="k">new</span> <span class="o">Date</span>(<span class="v">deadline</span>);
+    <span class="k">if</span> (<span class="v">deadlineDate</span> &lt; <span class="v">today</span> &amp;&amp; <span class="v">status</span> !== <span class="s">"Won"</span>) {
+      <span class="v">row</span>.<span class="f">setBackground</span>(<span class="s">"#f4cccc"</span>); <span class="c">// light red</span>
+      <span class="k">continue</span>;
+    }
+
+    <span class="c">// RULE 4: High value deal (>= 200000) → gold/yellow</span>
+    <span class="k">if</span> (<span class="v">dealValue</span> >= <span class="n">200000</span>) {
+      <span class="v">row</span>.<span class="f">setBackground</span>(<span class="s">"#fff2cc"</span>); <span class="c">// light yellow/gold</span>
+    }
+  }
+
+  <span class="c">// Log a message to the execution log so you can confirm it ran</span>
+  <span class="o">Logger</span>.<span class="f">log</span>(<span class="s">"Formatting done! Rows processed: "</span> + (<span class="v">lastRow</span> - <span class="n">1</span>));
+}</pre>
+  </div>
+
+  <div class="slabel">Step 4 — Run it</div>
+  <ul class="step-list">
+    <li><div class="sn">1</div><div>Save the code: <kbd>Ctrl+S</kbd></div></li>
+    <li><div class="sn">2</div><div>Make sure the function selector dropdown shows <span class="hl">formatSalesReport</span></div></li>
+    <li><div class="sn">3</div><div>Click <span class="hl">▶ Run</span></div></li>
+    <li><div class="sn">4</div><div>First run: Google asks for permissions → click "Review permissions" → pick your account → "Advanced" → "Go to [project]" → Allow</div></li>
+    <li><div class="sn">5</div><div>Go back to your Google Sheet tab and refresh — the rows should now be coloured!</div></li>
+  </ul>
+
+  <div class="output-box">
+    <div class="out-label">✓ Expected result</div>
+    <ul>
+      <li>Acme Corp → Red (deadline was 2024-01-10, overdue)</li>
+      <li>TechStart → Red (overdue)</li>
+      <li>Mega Bank → Green (status = Won)</li>
+      <li>LocalShop → Red (overdue + low value)</li>
+      <li>CloudCo → Orange (no deadline set)</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===================== TASK 2 ===================== -->
+<div class="page" id="task2">
+  <div class="hero">
+    <h1>Task 2 — <em>Mail Merge from Google Sheets</em></h1>
+    <p>Scenario: You have a list of 5 leads. For each lead with status "New", send a personalised welcome email. After sending, mark them as "Emailed" so the script doesn't email the same person twice when run again.</p>
+  </div>
+
+  <div class="slabel">Step 1 — Set up sample data</div>
+  <div class="note blue"><div class="note-icon">📋</div><div>Create a new sheet tab called <strong>Leads</strong> in the same file. Type this data:</div></div>
+  <table class="setup-table">
+    <tr class="header-row"><td>A — Name</td><td>B — Email</td><td>C — Company</td><td>D — Status</td></tr>
+    <tr class="data-row"><td>Priya Mehta</td><td>your-test-email@gmail.com</td><td>TechCorp</td><td>New</td></tr>
+    <tr class="data-row"><td>Rahul Singh</td><td>your-test-email@gmail.com</td><td>FinanceHub</td><td>New</td></tr>
+    <tr class="data-row"><td>Sneha Reddy</td><td>your-test-email@gmail.com</td><td>StartupX</td><td>Emailed</td></tr>
+    <tr class="data-row"><td>Amit Patel</td><td>your-test-email@gmail.com</td><td>Retail Co</td><td>New</td></tr>
+  </table>
+  <div class="note amber"><div class="note-icon">⚠</div><div><strong>Important:</strong> Replace <code class="inline">your-test-email@gmail.com</code> with your <strong>own email</strong> in column B so you can actually receive and check the test emails.</div></div>
+
+  <div class="slabel">Step 2 — Open Apps Script</div>
+  <div class="menu-path">
+    <span class="menu-item">Your Sheet</span>
+    <span class="menu-arrow">→</span>
+    <span class="menu-item">Extensions</span>
+    <span class="menu-arrow">→</span>
+    <span class="menu-final">Apps Script</span>
+  </div>
+
+  <div class="slabel">Step 3 — Paste this code</div>
+  <div class="code-wrap">
+    <div class="code-header">
+      <span class="lang">Apps Script — Code.gs</span>
+      <button class="copy-btn" onclick="copyCode(this,'code2')">Copy</button>
+    </div>
+    <pre class="code" id="code2"><span class="k">function</span> <span class="f">sendMailMerge</span>() {
+
+  <span class="c">// Get the "Leads" sheet tab</span>
+  <span class="k">const</span> <span class="v">sheet</span> = <span class="o">SpreadsheetApp</span>
+    .<span class="f">getActiveSpreadsheet</span>()
+    .<span class="f">getSheetByName</span>(<span class="s">"Leads"</span>);
+
+  <span class="c">// Get all data as a 2D array. Row 0 = headers, Row 1+ = data</span>
+  <span class="k">const</span> <span class="v">data</span> = <span class="v">sheet</span>.<span class="f">getDataRange</span>().<span class="f">getValues</span>();
+
+  <span class="k">let</span> <span class="v">emailsSent</span> = <span class="n">0</span>;
+
+  <span class="c">// Start from index 1 to skip the header row</span>
+  <span class="k">for</span> (<span class="k">let</span> <span class="v">i</span> = <span class="n">1</span>; <span class="v">i</span> &lt; <span class="v">data</span>.length; <span class="v">i</span>++) {
+
+    <span class="c">// Destructure: pull column values into named variables</span>
+    <span class="k">const</span> [<span class="v">name</span>, <span class="v">email</span>, <span class="v">company</span>, <span class="v">status</span>] = <span class="v">data</span>[<span class="v">i</span>];
+
+    <span class="c">// Only send if status is "New" — skip already-emailed rows</span>
+    <span class="k">if</span> (<span class="v">status</span> !== <span class="s">"New"</span>) <span class="k">continue</span>;
+
+    <span class="c">// Build the personalised email subject and body</span>
+    <span class="k">const</span> <span class="v">subject</span> = <span class="s">`Welcome to our platform, ${</span><span class="v">name</span><span class="s">}!`</span>;
+
+    <span class="k">const</span> <span class="v">htmlBody</span> = <span class="s">`
+      &lt;div style="font-family: Arial, sans-serif; max-width: 500px;"&gt;
+        &lt;h2 style="color: #1a7a4a;"&gt;Hi ${</span><span class="v">name</span><span class="s">} 👋&lt;/h2&gt;
+        &lt;p&gt;Thank you for your interest from &lt;strong&gt;${</span><span class="v">company</span><span class="s">}&lt;/strong&gt;.&lt;/p&gt;
+        &lt;p&gt;We're excited to work with you! Our team will reach out 
+           within 24 hours to schedule a demo.&lt;/p&gt;
+        &lt;p style="color: #666;"&gt;— The Automation Team&lt;/p&gt;
+      &lt;/div&gt;
+    `</span>;
+
+    <span class="c">// Send the email using GmailApp (no setup needed, uses your account)</span>
+    <span class="o">GmailApp</span>.<span class="f">sendEmail</span>(
+      <span class="v">email</span>,    <span class="c">// to</span>
+      <span class="v">subject</span>,  <span class="c">// subject</span>
+      <span class="s">""</span>,       <span class="c">// plain text body (empty, using HTML instead)</span>
+      { <span class="v">htmlBody</span>: <span class="v">htmlBody</span> }  <span class="c">// options object with HTML version</span>
+    );
+
+    <span class="c">// Update status in column D (column index 4 = 1-based) to "Emailed"</span>
+    <span class="c">// i+1 because sheet rows are 1-based, but our array is 0-based</span>
+    <span class="v">sheet</span>.<span class="f">getRange</span>(<span class="v">i</span> + <span class="n">1</span>, <span class="n">4</span>).<span class="f">setValue</span>(<span class="s">"Emailed"</span>);
+
+    <span class="v">emailsSent</span>++;
+    <span class="o">Logger</span>.<span class="f">log</span>(<span class="s">`Sent email to: ${</span><span class="v">name</span><span class="s">} &lt;${</span><span class="v">email</span><span class="s">}&gt;`</span>);
+  }
+
+  <span class="o">Logger</span>.<span class="f">log</span>(<span class="s">`Done! Total emails sent: ${</span><span class="v">emailsSent</span><span class="s">}`</span>);
+
+  <span class="c">// Show a popup in the Sheet to confirm</span>
+  <span class="o">SpreadsheetApp</span>.<span class="f">getUi</span>().<span class="f">alert</span>(<span class="s">`✅ Sent ${</span><span class="v">emailsSent</span><span class="s">} emails!`</span>);
+}</pre>
+  </div>
+
+  <div class="output-box">
+    <div class="out-label">✓ Expected result</div>
+    <ul>
+      <li>Emails go to rows 1, 2, 4 (status = "New"). Row 3 (Sneha, already "Emailed") is skipped.</li>
+      <li>Column D for rows 1, 2, 4 updates to "Emailed" in the sheet</li>
+      <li>A popup says "✅ Sent 3 emails!"</li>
+      <li>Check your inbox — you'll receive 3 nicely formatted HTML emails</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===================== TASK 3 ===================== -->
+<div class="page" id="task3">
+  <div class="hero">
+    <h1>Task 3 — <em>Auto-Acknowledge Form Submissions</em></h1>
+    <p>Scenario: You have a Google Form for new client inquiries. The moment someone submits the form, they should immediately receive a thank-you email — without anyone manually doing anything. This uses an onFormSubmit trigger.</p>
+  </div>
+
+  <div class="slabel">Step 1 — Create a Google Form</div>
+  <ul class="step-list">
+    <li><div class="sn">1</div><div>Go to <strong>forms.google.com</strong> → click <strong>Blank</strong></div></li>
+    <li><div class="sn">2</div><div>Add these fields:<br>
+      • Short answer: <strong>"Your Name"</strong><br>
+      • Short answer: <strong>"Your Email"</strong><br>
+      • Short answer: <strong>"Company Name"</strong>
+    </div></li>
+    <li><div class="sn">3</div><div>Click the <strong>Responses tab</strong> (top of form) → click the green Sheets icon → "Create a new spreadsheet" → this links your form to a Sheet</div></li>
+    <li><div class="sn">4</div><div>The sheet that opens automatically gets a tab called <strong>"Form Responses 1"</strong></div></li>
+  </ul>
+
+  <div class="slabel">Step 2 — Open Apps Script from the linked Sheet</div>
+  <div class="menu-path">
+    <span class="menu-item">Linked Google Sheet</span>
+    <span class="menu-arrow">→</span>
+    <span class="menu-item">Extensions</span>
+    <span class="menu-arrow">→</span>
+    <span class="menu-final">Apps Script</span>
+  </div>
+
+  <div class="slabel">Step 3 — Paste this code</div>
+  <div class="code-wrap">
+    <div class="code-header">
+      <span class="lang">Apps Script — Code.gs</span>
+      <button class="copy-btn" onclick="copyCode(this,'code3')">Copy</button>
+    </div>
+    <pre class="code" id="code3"><span class="c">// This function is called automatically when a Form is submitted.
+// The parameter "e" is the event object — it contains all submitted data.</span>
+
+<span class="k">function</span> <span class="f">onFormSubmit</span>(<span class="v">e</span>) {
+
+  <span class="c">// e.namedValues gives us an object like:
+  // { "Your Name": ["Priya"], "Your Email": ["priya@co.com"], ... }
+  // The [0] at the end gets the first (only) value from each array</span>
+  <span class="k">const</span> <span class="v">name</span>    = <span class="v">e</span>.namedValues[<span class="s">"Your Name"</span>][<span class="n">0</span>];
+  <span class="k">const</span> <span class="v">email</span>   = <span class="v">e</span>.namedValues[<span class="s">"Your Email"</span>][<span class="n">0</span>];
+  <span class="k">const</span> <span class="v">company</span> = <span class="v">e</span>.namedValues[<span class="s">"Company Name"</span>][<span class="n">0</span>];
+
+  <span class="c">// Build confirmation email</span>
+  <span class="k">const</span> <span class="v">subject</span> = <span class="s">`We received your inquiry, ${</span><span class="v">name</span><span class="s">}!`</span>;
+  <span class="k">const</span> <span class="v">body</span> = <span class="s">`
+Hi ${</span><span class="v">name</span><span class="s">},
+
+Thank you for reaching out from ${</span><span class="v">company</span><span class="s">}!
+
+We have received your inquiry and one of our team members 
+will contact you within 1 business day.
+
+Reference ID: ${</span><span class="v">new</span> <span class="o">Date</span>().<span class="f">getTime</span>()<span class="s">}
+
+Best regards,
+The Team
+  `</span>;
+
+  <span class="c">// Send the thank-you email to the person who submitted the form</span>
+  <span class="o">GmailApp</span>.<span class="f">sendEmail</span>(<span class="v">email</span>, <span class="v">subject</span>, <span class="v">body</span>);
+
+  <span class="c">// Also notify your own team (notify the script owner)</span>
+  <span class="k">const</span> <span class="v">teamEmail</span> = <span class="o">Session</span>.<span class="f">getActiveUser</span>().<span class="f">getEmail</span>();
+  <span class="o">GmailApp</span>.<span class="f">sendEmail</span>(
+    <span class="v">teamEmail</span>,
+    <span class="s">`New form submission from ${</span><span class="v">name</span><span class="s">} @ ${</span><span class="v">company</span><span class="s">}`</span>,
+    <span class="s">`Name: ${</span><span class="v">name</span><span class="s">}\nEmail: ${</span><span class="v">email</span><span class="s">}\nCompany: ${</span><span class="v">company</span><span class="s">}`</span>
+  );
+
+  <span class="o">Logger</span>.<span class="f">log</span>(<span class="s">`Acknowledgement sent to: ${</span><span class="v">email</span><span class="s">}`</span>);
+}</pre>
+  </div>
+
+  <div class="slabel">Step 4 — Set up the Form Submit Trigger (critical step)</div>
+  <div class="note red"><div class="note-icon">🔑</div><div>This function does NOT run when you click ▶ Run — it only runs when a form is submitted. You need to set up a trigger to tell GAS to call this function on every form submit.</div></div>
+
+  <div class="menu-path">
+    <span class="menu-item">Apps Script Editor</span>
+    <span class="menu-arrow">→</span>
+    <span class="menu-item">⏰ Triggers (alarm clock, left sidebar)</span>
+    <span class="menu-arrow">→</span>
+    <span class="menu-item">+ Add Trigger</span>
+    <span class="menu-arrow">→</span>
+    <span class="menu-final">Configure as below</span>
+  </div>
+
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:16px;margin:14px 0">
+    <table class="setup-table">
+      <tr><td style="width:40%;font-weight:600">Choose which function to run</td><td><span class="hl">onFormSubmit</span></td></tr>
+      <tr><td style="font-weight:600">Choose which deployment</td><td>Head</td></tr>
+      <tr><td style="font-weight:600">Select event source</td><td><strong>From spreadsheet</strong></td></tr>
+      <tr><td style="font-weight:600">Select event type</td><td><strong>On form submit</strong></td></tr>
+    </table>
+  </div>
+
+  <ul class="step-list">
+    <li><div class="sn">5</div><div>Click <strong>Save</strong>. Grant permissions when asked.</div></li>
+    <li><div class="sn">6</div><div>Now go fill out your Google Form as a test. Check your email — the acknowledgement arrives instantly.</div></li>
+  </ul>
+
+  <div class="output-box">
+    <div class="out-label">✓ Expected result</div>
+    <ul>
+      <li>Submitter instantly receives a personalised thank-you email with their name and company</li>
+      <li>You (team) receive an alert email with the submission details</li>
+      <li>All with zero manual work — runs automatically on every future submission</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===================== TASK 4 ===================== -->
+<div class="page" id="task4">
+  <div class="hero">
+    <h1>Task 4 — <em>Daily Report Email at 9am</em></h1>
+    <p>Scenario: Every morning at 9am, a script reads your sales sheet, calculates total pipeline value, counts deals by status, and emails a formatted summary to your manager — fully automatic, no button press needed.</p>
+  </div>
+
+  <div class="slabel">Step 1 — Use the Sales sheet from Task 1</div>
+  <div class="note blue"><div class="note-icon">📋</div><div>This script reads the <strong>Sales</strong> sheet tab. If you did Task 1, it's already set up. If not, create it with the same columns: Deal Name, Sales Rep, Value, Status, Deadline.</div></div>
+
+  <div class="slabel">Step 2 — Paste this code</div>
+  <div class="code-wrap">
+    <div class="code-header">
+      <span class="lang">Apps Script — Code.gs</span>
+      <button class="copy-btn" onclick="copyCode(this,'code4')">Copy</button>
+    </div>
+    <pre class="code" id="code4"><span class="k">function</span> <span class="f">sendDailyReport</span>() {
+
+  <span class="k">const</span> <span class="v">sheet</span> = <span class="o">SpreadsheetApp</span>
+    .<span class="f">getActiveSpreadsheet</span>()
+    .<span class="f">getSheetByName</span>(<span class="s">"Sales"</span>);
+
+  <span class="k">const</span> <span class="v">data</span> = <span class="v">sheet</span>.<span class="f">getDataRange</span>().<span class="f">getValues</span>();
+  <span class="k">const</span> <span class="v">today</span> = <span class="k">new</span> <span class="o">Date</span>();
+
+  <span class="c">// Initialise counters</span>
+  <span class="k">let</span> <span class="v">totalPipeline</span> = <span class="n">0</span>;
+  <span class="k">let</span> <span class="v">wonDeals</span>      = <span class="n">0</span>;
+  <span class="k">let</span> <span class="v">inProgress</span>    = <span class="n">0</span>;
+  <span class="k">let</span> <span class="v">overdueDeals</span>  = <span class="n">0</span>;
+  <span class="k">let</span> <span class="v">wonValue</span>      = <span class="n">0</span>;
+
+  <span class="c">// Loop from row 1 (skip row 0 = headers)</span>
+  <span class="k">for</span> (<span class="k">let</span> <span class="v">i</span> = <span class="n">1</span>; <span class="v">i</span> &lt; <span class="v">data</span>.length; <span class="v">i</span>++) {
+    <span class="k">const</span> [<span class="v">deal</span>, <span class="v">rep</span>, <span class="v">value</span>, <span class="v">status</span>, <span class="v">deadline</span>] = <span class="v">data</span>[<span class="v">i</span>];
+    <span class="k">if</span> (!<span class="v">deal</span>) <span class="k">continue</span>; <span class="c">// skip empty rows</span>
+
+    <span class="v">totalPipeline</span> += <span class="o">Number</span>(<span class="v">value</span>);
+
+    <span class="k">if</span> (<span class="v">status</span> === <span class="s">"Won"</span>) {
+      <span class="v">wonDeals</span>++;
+      <span class="v">wonValue</span> += <span class="o">Number</span>(<span class="v">value</span>);
+    }
+    <span class="k">if</span> (<span class="v">status</span> === <span class="s">"In Progress"</span>) <span class="v">inProgress</span>++;
+
+    <span class="k">if</span> (<span class="v">deadline</span> &amp;&amp; <span class="k">new</span> <span class="o">Date</span>(<span class="v">deadline</span>) &lt; <span class="v">today</span> &amp;&amp; <span class="v">status</span> !== <span class="s">"Won"</span>) {
+      <span class="v">overdueDeals</span>++;
+    }
+  }
+
+  <span class="c">// Format numbers as Indian Rupees</span>
+  <span class="k">const</span> <span class="f">formatINR</span> = (<span class="v">n</span>) => <span class="s">`₹${</span><span class="v">n</span>.<span class="f">toLocaleString</span>(<span class="s">'en-IN'</span>)<span class="s">}`</span>;
+
+  <span class="c">// Build the date string for the email subject</span>
+  <span class="k">const</span> <span class="v">dateStr</span> = <span class="o">Utilities</span>.<span class="f">formatDate</span>(
+    <span class="v">today</span>, 
+    <span class="o">Session</span>.<span class="f">getScriptTimeZone</span>(), 
+    <span class="s">"dd MMM yyyy"</span>
+  );
+
+  <span class="k">const</span> <span class="v">subject</span> = <span class="s">`📊 Daily Sales Report — ${</span><span class="v">dateStr</span><span class="s">}`</span>;
+
+  <span class="k">const</span> <span class="v">htmlBody</span> = <span class="s">`
+    &lt;div style="font-family:Arial,sans-serif;max-width:520px;border:1px solid #ddd;border-radius:8px;overflow:hidden"&gt;
+      &lt;div style="background:#1a7a4a;padding:20px 24px"&gt;
+        &lt;h2 style="color:white;margin:0"&gt;Daily Sales Report&lt;/h2&gt;
+        &lt;p style="color:rgba(255,255,255,0.7);margin:4px 0 0"&gt;${</span><span class="v">dateStr</span><span class="s">}&lt;/p&gt;
+      &lt;/div&gt;
+      &lt;div style="padding:20px 24px"&gt;
+        &lt;table style="width:100%;border-collapse:collapse"&gt;
+          &lt;tr&gt;&lt;td style="padding:10px;background:#f5f5f5;font-weight:bold"&gt;Total Pipeline&lt;/td&gt;
+              &lt;td style="padding:10px;background:#f5f5f5;text-align:right;font-size:18px;color:#1a7a4a"&gt;
+                &lt;strong&gt;${</span><span class="f">formatINR</span>(<span class="v">totalPipeline</span>)<span class="s">}&lt;/strong&gt;&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;td style="padding:10px"&gt;Won Value&lt;/td&gt;
+              &lt;td style="padding:10px;text-align:right"&gt;${</span><span class="f">formatINR</span>(<span class="v">wonValue</span>)<span class="s">}&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;td style="padding:10px;background:#f5f5f5"&gt;Won Deals&lt;/td&gt;
+              &lt;td style="padding:10px;background:#f5f5f5;text-align:right"&gt;${</span><span class="v">wonDeals</span><span class="s">}&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;td style="padding:10px"&gt;In Progress&lt;/td&gt;
+              &lt;td style="padding:10px;text-align:right"&gt;${</span><span class="v">inProgress</span><span class="s">}&lt;/td&gt;&lt;/tr&gt;
+          &lt;tr&gt;&lt;td style="padding:10px;background:#fce5cd;color:#e65100;font-weight:bold"&gt;⚠ Overdue Deals&lt;/td&gt;
+              &lt;td style="padding:10px;background:#fce5cd;text-align:right;color:#e65100;font-weight:bold"&gt;${</span><span class="v">overdueDeals</span><span class="s">}&lt;/td&gt;&lt;/tr&gt;
+        &lt;/table&gt;
+      &lt;/div&gt;
+      &lt;div style="background:#f5f5f5;padding:12px 24px;font-size:12px;color:#999"&gt;
+        Auto-generated by Google Apps Script. Do not reply.
+      &lt;/div&gt;
+    &lt;/div&gt;
+  `</span>;
+
+  <span class="c">// Send to yourself (change this to manager's email in real use)</span>
+  <span class="k">const</span> <span class="v">recipient</span> = <span class="o">Session</span>.<span class="f">getActiveUser</span>().<span class="f">getEmail</span>();
+  <span class="o">GmailApp</span>.<span class="f">sendEmail</span>(<span class="v">recipient</span>, <span class="v">subject</span>, <span class="s">""</span>, { <span class="v">htmlBody</span>: <span class="v">htmlBody</span> });
+  <span class="o">Logger</span>.<span class="f">log</span>(<span class="s">"Report sent to: "</span> + <span class="v">recipient</span>);
+}
+
+<span class="c">// Run this ONCE to set up the daily 9am trigger</span>
+<span class="k">function</span> <span class="f">createDailyTrigger</span>() {
+  <span class="o">ScriptApp</span>.<span class="f">newTrigger</span>(<span class="s">"sendDailyReport"</span>)
+    .<span class="f">timeBased</span>()
+    .<span class="f">everyDays</span>(<span class="n">1</span>)
+    .<span class="f">atHour</span>(<span class="n">9</span>)  <span class="c">// 9am in your timezone</span>
+    .<span class="f">create</span>();
+  <span class="o">Logger</span>.<span class="f">log</span>(<span class="s">"Daily trigger created! sendDailyReport will run at 9am every day."</span>);
+}</pre>
+  </div>
+
+  <ul class="step-list">
+    <li><div class="sn">1</div><div>First, <strong>test it manually</strong>: select <code class="inline">sendDailyReport</code> in dropdown → click ▶ Run → check your email</div></li>
+    <li><div class="sn">2</div><div>Then <strong>activate the schedule</strong>: select <code class="inline">createDailyTrigger</code> → click ▶ Run → this sets up the 9am daily schedule permanently</div></li>
+    <li><div class="sn">3</div><div>Verify: go to ⏰ Triggers (left sidebar) — you should see a trigger listed there now</div></li>
+  </ul>
+</div>
+
+<!-- ===================== TASK 5 ===================== -->
+<div class="page" id="task5">
+  <div class="hero">
+    <h1>Task 5 — <em>Fetch Live Data from an External API</em></h1>
+    <p>Scenario: Your team tracks USD→INR exchange rate in a Google Sheet. Instead of manually updating it, a script calls a public API and writes the latest rate to a cell automatically every hour.</p>
+  </div>
+
+  <div class="slabel">Step 1 — Set up a sheet called "Live Data"</div>
+  <div class="note blue"><div class="note-icon">📋</div><div>Create a new tab called <strong>Live Data</strong>. Put these labels in column A:<br>
+  A1: <strong>USD to INR Rate</strong> &nbsp;|&nbsp; A2: <strong>Last Updated</strong> &nbsp;|&nbsp; A3: <strong>EUR to INR Rate</strong>
+  </div></div>
+
+  <div class="slabel">Step 2 — Paste this code</div>
+  <div class="code-wrap">
+    <div class="code-header">
+      <span class="lang">Apps Script — Code.gs</span>
+      <button class="copy-btn" onclick="copyCode(this,'code5')">Copy</button>
+    </div>
+    <pre class="code" id="code5"><span class="k">function</span> <span class="f">fetchExchangeRates</span>() {
+
+  <span class="k">const</span> <span class="v">sheet</span> = <span class="o">SpreadsheetApp</span>
+    .<span class="f">getActiveSpreadsheet</span>()
+    .<span class="f">getSheetByName</span>(<span class="s">"Live Data"</span>);
+
+  <span class="c">// UrlFetchApp.fetch() = Python's requests.get()
+  // This API is free and requires no API key</span>
+  <span class="k">const</span> <span class="v">apiUrl</span> = <span class="s">"https://open.er-api.com/v6/latest/USD"</span>;
+
+  <span class="k">try</span> {
+    <span class="c">// Make the GET request</span>
+    <span class="k">const</span> <span class="v">response</span> = <span class="o">UrlFetchApp</span>.<span class="f">fetch</span>(<span class="v">apiUrl</span>);
+
+    <span class="c">// getContentText() = .text in Python's requests
+    // JSON.parse() = json.loads() in Python</span>
+    <span class="k">const</span> <span class="v">json</span> = <span class="o">JSON</span>.<span class="f">parse</span>(<span class="v">response</span>.<span class="f">getContentText</span>());
+
+    <span class="c">// Navigate the JSON object to get specific rates</span>
+    <span class="k">const</span> <span class="v">usdToInr</span> = <span class="v">json</span>.rates.INR;  <span class="c">// e.g. 83.45</span>
+    <span class="k">const</span> <span class="v">eurToInr</span> = <span class="v">json</span>.rates.INR / <span class="v">json</span>.rates.EUR;
+
+    <span class="c">// Write rates to column B (column index 2)</span>
+    <span class="v">sheet</span>.<span class="f">getRange</span>(<span class="s">"B1"</span>).<span class="f">setValue</span>(<span class="v">usdToInr</span>.<span class="f">toFixed</span>(<span class="n">2</span>));
+    <span class="v">sheet</span>.<span class="f">getRange</span>(<span class="s">"B3"</span>).<span class="f">setValue</span>(<span class="v">eurToInr</span>.<span class="f">toFixed</span>(<span class="n">2</span>));
+
+    <span class="c">// Write last updated timestamp</span>
+    <span class="k">const</span> <span class="v">now</span> = <span class="k">new</span> <span class="o">Date</span>();
+    <span class="k">const</span> <span class="v">timestamp</span> = <span class="o">Utilities</span>.<span class="f">formatDate</span>(
+      <span class="v">now</span>,
+      <span class="o">Session</span>.<span class="f">getScriptTimeZone</span>(),
+      <span class="s">"dd MMM yyyy, hh:mm a"</span>
+    );
+    <span class="v">sheet</span>.<span class="f">getRange</span>(<span class="s">"B2"</span>).<span class="f">setValue</span>(<span class="v">timestamp</span>);
+
+    <span class="o">Logger</span>.<span class="f">log</span>(<span class="s">`Rates updated. USD→INR: ${</span><span class="v">usdToInr</span><span class="s">}`</span>);
+
+  } <span class="k">catch</span> (<span class="v">error</span>) {
+    <span class="c">// Always wrap API calls in try/catch — APIs can go down</span>
+    <span class="o">Logger</span>.<span class="f">log</span>(<span class="s">"Error fetching rates: "</span> + <span class="v">error</span>.message);
+  }
+}
+
+<span class="c">// Run this once to make it refresh every hour automatically</span>
+<span class="k">function</span> <span class="f">createHourlyTrigger</span>() {
+  <span class="o">ScriptApp</span>.<span class="f">newTrigger</span>(<span class="s">"fetchExchangeRates"</span>)
+    .<span class="f">timeBased</span>()
+    .<span class="f">everyHours</span>(<span class="n">1</span>)
+    .<span class="f">create</span>();
+  <span class="o">Logger</span>.<span class="f">log</span>(<span class="s">"Hourly trigger created!"</span>);
+}</pre>
+  </div>
+
+  <div class="output-box">
+    <div class="out-label">✓ Expected result</div>
+    <ul>
+      <li>B1 shows the live USD→INR rate (e.g. 83.45)</li>
+      <li>B2 shows the exact time the data was last fetched</li>
+      <li>B3 shows the EUR→INR rate</li>
+      <li>After running createHourlyTrigger(), B1-B3 update automatically every hour</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===================== TASK 6 ===================== -->
+<div class="page" id="task6">
+  <div class="hero">
+    <h1>Task 6 — <em>Live onEdit Trigger: Status Changes Auto-Colour Rows</em></h1>
+    <p>Scenario: Your team manages a task tracker. When anyone types "Done" in column C, that entire row should instantly turn green. "In Progress" = yellow. "Blocked" = red. This happens live — no button, no script run, just typing.</p>
+  </div>
+
+  <div class="slabel">Step 1 — Set up a Task Tracker sheet</div>
+  <div class="note blue"><div class="note-icon">📋</div><div>Create a sheet tab called <strong>Tasks</strong> with this data:</div></div>
+  <table class="setup-table">
+    <tr class="header-row"><td>A — Task Name</td><td>B — Owner</td><td>C — Status</td><td>D — Due Date</td></tr>
+    <tr class="data-row"><td>Set up CRM integration</td><td>Priya</td><td>In Progress</td><td>2024-03-20</td></tr>
+    <tr class="data-row"><td>Write API documentation</td><td>Rahul</td><td>Done</td><td>2024-03-15</td></tr>
+    <tr class="data-row"><td>Fix login bug</td><td>Anita</td><td>Blocked</td><td>2024-03-18</td></tr>
+    <tr class="data-row"><td>Deploy to production</td><td>Priya</td><td>Not Started</td><td>2024-03-25</td></tr>
+  </table>
+
+  <div class="slabel">Step 2 — Paste this code</div>
+  <div class="note amber"><div class="note-icon">⚠</div><div><strong>Special:</strong> The function must be named exactly <code class="inline">onEdit</code> — GAS recognises this name as a special "Simple Trigger" and runs it automatically on every edit. No trigger setup needed in the Triggers menu.</div></div>
+  <div class="code-wrap">
+    <div class="code-header">
+      <span class="lang">Apps Script — Code.gs</span>
+      <button class="copy-btn" onclick="copyCode(this,'code6')">Copy</button>
+    </div>
+    <pre class="code" id="code6"><span class="c">// onEdit(e) is a SIMPLE TRIGGER — GAS calls it automatically on every edit.
+// No setup in the Triggers menu required. Just name it "onEdit".</span>
+
+<span class="k">function</span> <span class="f">onEdit</span>(<span class="v">e</span>) {
+
+  <span class="c">// e.range = the cell that was just edited
+  // e.value = the new value that was typed</span>
+  <span class="k">const</span> <span class="v">range</span> = <span class="v">e</span>.range;
+  <span class="k">const</span> <span class="v">sheet</span> = <span class="v">range</span>.<span class="f">getSheet</span>();
+
+  <span class="c">// Only run on the "Tasks" sheet tab (ignore other tabs)</span>
+  <span class="k">if</span> (<span class="v">sheet</span>.<span class="f">getName</span>() !== <span class="s">"Tasks"</span>) <span class="k">return</span>;
+
+  <span class="c">// Only run if the edited cell is in column C (column index 3)</span>
+  <span class="k">if</span> (<span class="v">range</span>.<span class="f">getColumn</span>() !== <span class="n">3</span>) <span class="k">return</span>;
+
+  <span class="c">// Skip the header row</span>
+  <span class="k">if</span> (<span class="v">range</span>.<span class="f">getRow</span>() === <span class="n">1</span>) <span class="k">return</span>;
+
+  <span class="k">const</span> <span class="v">status</span> = <span class="v">e</span>.value; <span class="c">// what was just typed</span>
+  <span class="k">const</span> <span class="v">row</span>    = <span class="v">range</span>.<span class="f">getRow</span>();
+
+  <span class="c">// Get the full row range (columns A to D)</span>
+  <span class="k">const</span> <span class="v">fullRow</span> = <span class="v">sheet</span>.<span class="f">getRange</span>(<span class="v">row</span>, <span class="n">1</span>, <span class="n">1</span>, <span class="n">4</span>);
+
+  <span class="c">// Apply colour based on status value</span>
+  <span class="k">switch</span> (<span class="v">status</span>) {
+    <span class="k">case</span> <span class="s">"Done"</span>:
+      <span class="v">fullRow</span>.<span class="f">setBackground</span>(<span class="s">"#d9ead3"</span>); <span class="c">// green</span>
+      <span class="v">fullRow</span>.<span class="f">setFontColor</span>(<span class="s">"#1a7a4a"</span>);
+      <span class="k">break</span>;
+    <span class="k">case</span> <span class="s">"In Progress"</span>:
+      <span class="v">fullRow</span>.<span class="f">setBackground</span>(<span class="s">"#fff2cc"</span>); <span class="c">// yellow</span>
+      <span class="v">fullRow</span>.<span class="f">setFontColor</span>(<span class="s">"#92540a"</span>);
+      <span class="k">break</span>;
+    <span class="k">case</span> <span class="s">"Blocked"</span>:
+      <span class="v">fullRow</span>.<span class="f">setBackground</span>(<span class="s">"#f4cccc"</span>); <span class="c">// red</span>
+      <span class="v">fullRow</span>.<span class="f">setFontColor</span>(<span class="s">"#8a1a1a"</span>);
+      <span class="k">break</span>;
+    <span class="k">default</span>:
+      <span class="c">// Any other status (e.g. "Not Started") → clear formatting</span>
+      <span class="v">fullRow</span>.<span class="f">setBackground</span>(<span class="k">null</span>);
+      <span class="v">fullRow</span>.<span class="f">setFontColor</span>(<span class="s">"#000000"</span>);
+  }
+}</pre>
+  </div>
+
+  <ul class="step-list">
+    <li><div class="sn">1</div><div>Save the code. No need to run it manually — it auto-activates.</div></li>
+    <li><div class="sn">2</div><div>Go back to your sheet. Click any cell in column C (say row 2).</div></li>
+    <li><div class="sn">3</div><div>Type <strong>Done</strong> and press Enter — the row turns green instantly.</div></li>
+    <li><div class="sn">4</div><div>Type <strong>Blocked</strong> in another row's column C — it turns red.</div></li>
+  </ul>
+
+  <div class="output-box">
+    <div class="out-label">✓ Expected result</div>
+    <p>The colour changes happen in real-time as you type. No button click needed. Multiple team members editing the sheet at the same time all trigger the colouring automatically.</p>
+  </div>
+</div>
+
+<!-- ===================== TASK 7 ===================== -->
+<div class="page" id="task7">
+  <div class="hero">
+    <h1>Task 7 — <em>Auto-Create Client Folders in Google Drive</em></h1>
+    <p>Scenario: Every time a new client is added to your Clients sheet, a script creates a dedicated folder for them in Google Drive. No more manually making folders and hunting for the right parent folder.</p>
+  </div>
+
+  <div class="slabel">Step 1 — Set up Clients sheet</div>
+  <table class="setup-table">
+    <tr class="header-row"><td>A — Client Name</td><td>B — Contact Email</td><td>C — Folder Created?</td><td>D — Folder Link</td></tr>
+    <tr class="data-row"><td>Acme Corp</td><td>contact@acme.com</td><td></td><td></td></tr>
+    <tr class="data-row"><td>TechStart India</td><td>hello@techstart.in</td><td></td><td></td></tr>
+    <tr class="data-row"><td>Mega Bank</td><td>ops@megabank.co.in</td><td></td><td></td></tr>
+  </table>
+
+  <div class="slabel">Step 2 — Paste this code</div>
+  <div class="code-wrap">
+    <div class="code-header">
+      <span class="lang">Apps Script — Code.gs</span>
+      <button class="copy-btn" onclick="copyCode(this,'code7')">Copy</button>
+    </div>
+    <pre class="code" id="code7"><span class="k">function</span> <span class="f">createClientFolders</span>() {
+
+  <span class="k">const</span> <span class="v">sheet</span> = <span class="o">SpreadsheetApp</span>
+    .<span class="f">getActiveSpreadsheet</span>()
+    .<span class="f">getSheetByName</span>(<span class="s">"Clients"</span>);
+
+  <span class="k">const</span> <span class="v">data</span> = <span class="v">sheet</span>.<span class="f">getDataRange</span>().<span class="f">getValues</span>();
+
+  <span class="c">// Create or find the parent "Clients" folder in Drive root
+  // We check if it already exists to avoid duplicates</span>
+  <span class="k">let</span> <span class="v">parentFolder</span>;
+  <span class="k">const</span> <span class="v">existingFolders</span> = <span class="o">DriveApp</span>.<span class="f">getFoldersByName</span>(<span class="s">"All Clients"</span>);
+
+  <span class="k">if</span> (<span class="v">existingFolders</span>.<span class="f">hasNext</span>()) {
+    <span class="v">parentFolder</span> = <span class="v">existingFolders</span>.<span class="f">next</span>(); <span class="c">// Use existing folder</span>
+  } <span class="k">else</span> {
+    <span class="v">parentFolder</span> = <span class="o">DriveApp</span>.<span class="f">createFolder</span>(<span class="s">"All Clients"</span>); <span class="c">// Create new</span>
+  }
+
+  <span class="k">let</span> <span class="v">created</span> = <span class="n">0</span>;
+
+  <span class="c">// Loop from row 1 (skip header)</span>
+  <span class="k">for</span> (<span class="k">let</span> <span class="v">i</span> = <span class="n">1</span>; <span class="v">i</span> &lt; <span class="v">data</span>.length; <span class="v">i</span>++) {
+    <span class="k">const</span> [<span class="v">clientName</span>, <span class="v">email</span>, <span class="v">folderCreated</span>] = <span class="v">data</span>[<span class="v">i</span>];
+
+    <span class="k">if</span> (!<span class="v">clientName</span>) <span class="k">continue</span>;              <span class="c">// skip blank rows</span>
+    <span class="k">if</span> (<span class="v">folderCreated</span> === <span class="s">"Yes"</span>) <span class="k">continue</span>; <span class="c">// already done, skip</span>
+
+    <span class="c">// Create subfolder inside "All Clients" with the client's name</span>
+    <span class="k">const</span> <span class="v">clientFolder</span> = <span class="v">parentFolder</span>.<span class="f">createFolder</span>(<span class="v">clientName</span>);
+
+    <span class="c">// Create standard subfolders inside each client folder</span>
+    <span class="v">clientFolder</span>.<span class="f">createFolder</span>(<span class="s">"Documents"</span>);
+    <span class="v">clientFolder</span>.<span class="f">createFolder</span>(<span class="s">"Invoices"</span>);
+    <span class="v">clientFolder</span>.<span class="f">createFolder</span>(<span class="s">"Proposals"</span>);
+
+    <span class="c">// Get the shareable URL of the new folder</span>
+    <span class="k">const</span> <span class="v">folderUrl</span> = <span class="v">clientFolder</span>.<span class="f">getUrl</span>();
+
+    <span class="c">// Update the sheet: mark as created and write the folder link
+    // i+1 = sheet row number (1-based), column 3 = "Folder Created?"</span>
+    <span class="v">sheet</span>.<span class="f">getRange</span>(<span class="v">i</span> + <span class="n">1</span>, <span class="n">3</span>).<span class="f">setValue</span>(<span class="s">"Yes"</span>);
+    <span class="v">sheet</span>.<span class="f">getRange</span>(<span class="v">i</span> + <span class="n">1</span>, <span class="n">4</span>).<span class="f">setValue</span>(<span class="v">folderUrl</span>);
+
+    <span class="c">// Make folder link clickable using a hyperlink formula</span>
+    <span class="v">sheet</span>.<span class="f">getRange</span>(<span class="v">i</span> + <span class="n">1</span>, <span class="n">4</span>).<span class="f">setFormula</span>(
+      <span class="s">`=HYPERLINK("${</span><span class="v">folderUrl</span><span class="s">}","Open Folder")`</span>
+    );
+
+    <span class="v">created</span>++;
+    <span class="o">Logger</span>.<span class="f">log</span>(<span class="s">`Created folder for: ${</span><span class="v">clientName</span><span class="s">}`</span>);
+  }
+
+  <span class="o">SpreadsheetApp</span>.<span class="f">getUi</span>().<span class="f">alert</span>(<span class="s">`✅ Created ${</span><span class="v">created</span><span class="s">} client folders!`</span>);
+}</pre>
+  </div>
+
+  <div class="output-box">
+    <div class="out-label">✓ Expected result</div>
+    <ul>
+      <li>A folder called "All Clients" appears in your Google Drive root</li>
+      <li>Inside it: Acme Corp, TechStart India, Mega Bank — each with Documents / Invoices / Proposals subfolders</li>
+      <li>Column C updates to "Yes", Column D becomes a clickable "Open Folder" link</li>
+      <li>Run the script again — it skips already-created folders (won't duplicate)</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===================== TASK 8 ===================== -->
+<div class="page" id="task8">
+  <div class="hero">
+    <h1>Task 8 — <em>Invoice Generator: Sheet → Doc → PDF → Email</em></h1>
+    <p>Scenario: You maintain a list of invoices in a Sheet. Select a row by putting its row number in a cell, click a custom menu button → script generates a Google Doc invoice for that client, converts it to PDF, and emails it automatically.</p>
+  </div>
+
+  <div class="slabel">Step 1 — Set up Invoices sheet</div>
+  <table class="setup-table">
+    <tr class="header-row"><td>A — Client</td><td>B — Email</td><td>C — Amount (₹)</td><td>D — Invoice No</td><td>E — Description</td><td>F — Due Date</td></tr>
+    <tr class="data-row"><td>Acme Corp</td><td>your@email.com</td><td>50000</td><td>INV-001</td><td>CRM Setup Phase 1</td><td>2024-04-15</td></tr>
+    <tr class="data-row"><td>TechStart</td><td>your@email.com</td><td>25000</td><td>INV-002</td><td>API Integration</td><td>2024-04-20</td></tr>
+  </table>
+  <div class="note amber"><div class="note-icon">⚠</div><div>Replace <strong>your@email.com</strong> with your own email in column B so you can see the result. Also add cell <strong>H1</strong> with label "Send Row #" and <strong>I1</strong> with value <strong>2</strong> (row 2 = first data row).</div></div>
+
+  <div class="slabel">Step 2 — Paste this code</div>
+  <div class="code-wrap">
+    <div class="code-header">
+      <span class="lang">Apps Script — Code.gs</span>
+      <button class="copy-btn" onclick="copyCode(this,'code8')">Copy</button>
+    </div>
+    <pre class="code" id="code8"><span class="c">// onOpen runs automatically when the spreadsheet opens.
+// It adds a custom "Invoice Tools" menu to the top menu bar.</span>
+<span class="k">function</span> <span class="f">onOpen</span>() {
+  <span class="o">SpreadsheetApp</span>.<span class="f">getUi</span>()
+    .<span class="f">createMenu</span>(<span class="s">"📄 Invoice Tools"</span>)
+    .<span class="f">addItem</span>(<span class="s">"Generate &amp; Send Invoice"</span>, <span class="s">"generateAndSendInvoice"</span>)
+    .<span class="f">addToUi</span>();
+}
+
+<span class="k">function</span> <span class="f">generateAndSendInvoice</span>() {
+
+  <span class="k">const</span> <span class="v">ss</span>    = <span class="o">SpreadsheetApp</span>.<span class="f">getActiveSpreadsheet</span>();
+  <span class="k">const</span> <span class="v">sheet</span> = <span class="v">ss</span>.<span class="f">getSheetByName</span>(<span class="s">"Invoices"</span>);
+
+  <span class="c">// Read which row number to generate invoice for (from cell I1)</span>
+  <span class="k">const</span> <span class="v">targetRow</span> = <span class="v">sheet</span>.<span class="f">getRange</span>(<span class="s">"I1"</span>).<span class="f">getValue</span>();
+  <span class="k">const</span> <span class="v">rowData</span>   = <span class="v">sheet</span>.<span class="f">getRange</span>(<span class="v">targetRow</span>, <span class="n">1</span>, <span class="n">1</span>, <span class="n">6</span>).<span class="f">getValues</span>()[<span class="n">0</span>];
+
+  <span class="k">const</span> [<span class="v">client</span>, <span class="v">email</span>, <span class="v">amount</span>, <span class="v">invoiceNo</span>, <span class="v">description</span>, <span class="v">dueDate</span>] = <span class="v">rowData</span>;
+
+  <span class="c">// Format amount as Indian Rupees</span>
+  <span class="k">const</span> <span class="v">formattedAmount</span> = <span class="s">`₹${</span><span class="o">Number</span>(<span class="v">amount</span>).<span class="f">toLocaleString</span>(<span class="s">'en-IN'</span>)<span class="s">}`</span>;
+
+  <span class="c">// ---- CREATE GOOGLE DOC INVOICE ----</span>
+  <span class="k">const</span> <span class="v">doc</span>  = <span class="o">DocumentApp</span>.<span class="f">create</span>(<span class="s">`Invoice ${</span><span class="v">invoiceNo</span><span class="s">} — ${</span><span class="v">client</span><span class="s">}`</span>);
+  <span class="k">const</span> <span class="v">body</span> = <span class="v">doc</span>.<span class="f">getBody</span>();
+
+  <span class="c">// Set page margins</span>
+  <span class="v">body</span>.<span class="f">setMarginTop</span>(<span class="n">50</span>).<span class="f">setMarginBottom</span>(<span class="n">50</span>)
+      .<span class="f">setMarginLeft</span>(<span class="n">60</span>).<span class="f">setMarginRight</span>(<span class="n">60</span>);
+
+  <span class="c">// --- Header ---</span>
+  <span class="k">const</span> <span class="v">header</span> = <span class="v">body</span>.<span class="f">appendParagraph</span>(<span class="s">"TAX INVOICE"</span>);
+  <span class="v">header</span>.<span class="f">setHeading</span>(<span class="o">DocumentApp</span>.<span class="o">ParagraphHeading</span>.HEADING1);
+  <span class="v">header</span>.<span class="f">setAlignment</span>(<span class="o">DocumentApp</span>.<span class="o">HorizontalAlignment</span>.CENTER);
+
+  <span class="v">body</span>.<span class="f">appendParagraph</span>(<span class="s">"\nYour Company Name\ninfo@yourcompany.com | +91 98765 43210"</span>)
+      .<span class="f">setAlignment</span>(<span class="o">DocumentApp</span>.<span class="o">HorizontalAlignment</span>.CENTER);
+
+  <span class="v">body</span>.<span class="f">appendHorizontalRule</span>();
+
+  <span class="c">// --- Invoice Details ---</span>
+  <span class="v">body</span>.<span class="f">appendParagraph</span>(<span class="s">`Invoice No: ${</span><span class="v">invoiceNo</span><span class="s">}`</span>).<span class="f">setBold</span>(<span class="k">true</span>);
+  <span class="v">body</span>.<span class="f">appendParagraph</span>(<span class="s">`Date: ${</span><span class="k">new</span> <span class="o">Date</span>().<span class="f">toDateString</span>()<span class="s">}`</span>);
+  <span class="v">body</span>.<span class="f">appendParagraph</span>(<span class="s">`Due Date: ${</span><span class="k">new</span> <span class="o">Date</span>(<span class="v">dueDate</span>).<span class="f">toDateString</span>()<span class="s">}`</span>);
+  <span class="v">body</span>.<span class="f">appendParagraph</span>(<span class="s">`\nBilled To:\n${</span><span class="v">client</span><span class="s">}\n${</span><span class="v">email</span><span class="s">}`</span>);
+  <span class="v">body</span>.<span class="f">appendHorizontalRule</span>();
+
+  <span class="c">// --- Item Table ---</span>
+  <span class="k">const</span> <span class="v">table</span> = <span class="v">body</span>.<span class="f">appendTable</span>([
+    [<span class="s">"Description"</span>,   <span class="s">"Amount"</span>       ],
+    [<span class="v">description</span>,     <span class="v">formattedAmount</span>],
+    [<span class="s">"TOTAL"</span>,          <span class="v">formattedAmount</span>]
+  ]);
+
+  <span class="c">// Style header row of table</span>
+  <span class="v">table</span>.<span class="f">getRow</span>(<span class="n">0</span>).<span class="f">editAsText</span>().<span class="f">setBold</span>(<span class="k">true</span>);
+  <span class="v">table</span>.<span class="f">getRow</span>(<span class="n">2</span>).<span class="f">editAsText</span>().<span class="f">setBold</span>(<span class="k">true</span>);
+
+  <span class="v">body</span>.<span class="f">appendParagraph</span>(<span class="s">"\nThank you for your business!"</span>)
+      .<span class="f">setAlignment</span>(<span class="o">DocumentApp</span>.<span class="o">HorizontalAlignment</span>.CENTER);
+
+  <span class="v">doc</span>.<span class="f">saveAndClose</span>();
+
+  <span class="c">// ---- CONVERT DOC TO PDF ----
+  // getAs('application/pdf') converts the Google Doc to PDF bytes</span>
+  <span class="k">const</span> <span class="v">docFile</span> = <span class="o">DriveApp</span>.<span class="f">getFileById</span>(<span class="v">doc</span>.<span class="f">getId</span>());
+  <span class="k">const</span> <span class="v">pdfBlob</span> = <span class="v">docFile</span>.<span class="f">getAs</span>(<span class="s">"application/pdf"</span>);
+  <span class="v">pdfBlob</span>.<span class="f">setName</span>(<span class="s">`${</span><span class="v">invoiceNo</span><span class="s">}_${</span><span class="v">client</span><span class="s">}.pdf`</span>);
+
+  <span class="c">// ---- EMAIL THE PDF ----</span>
+  <span class="o">GmailApp</span>.<span class="f">sendEmail</span>(
+    <span class="v">email</span>,
+    <span class="s">`Invoice ${</span><span class="v">invoiceNo</span><span class="s">} from Your Company`</span>,
+    <span class="s">`Dear ${</span><span class="v">client</span><span class="s">},\n\nPlease find your invoice attached.\n\nAmount Due: ${</span><span class="v">formattedAmount</span><span class="s">}\nDue Date: ${</span><span class="v">dueDate</span><span class="s">}\n\nThank you,\nYour Company`</span>,
+    {
+      attachments: [<span class="v">pdfBlob</span>],
+      htmlBody: <span class="s">`&lt;p&gt;Dear &lt;strong&gt;${</span><span class="v">client</span><span class="s">}&lt;/strong&gt;,&lt;/p&gt;&lt;p&gt;Please find your invoice attached.&lt;/p&gt;&lt;p&gt;Amount Due: &lt;strong&gt;${</span><span class="v">formattedAmount</span><span class="s">}&lt;/strong&gt;&lt;br&gt;Due: ${</span><span class="v">dueDate</span><span class="s">}&lt;/p&gt;&lt;p&gt;Thank you!&lt;/p&gt;`</span>
+    }
+  );
+
+  <span class="c">// Clean up: delete the intermediate Google Doc from Drive</span>
+  <span class="v">docFile</span>.<span class="f">setTrashed</span>(<span class="k">true</span>);
+
+  <span class="o">SpreadsheetApp</span>.<span class="f">getUi</span>().<span class="f">alert</span>(<span class="s">`✅ Invoice ${</span><span class="v">invoiceNo</span><span class="s">} sent to ${</span><span class="v">email</span><span class="s">}!`</span>);
+}</pre>
+  </div>
+
+  <ul class="step-list">
+    <li><div class="sn">1</div><div>Save code and <strong>reload your Google Sheet</strong> (Ctrl+R). You'll see a new <strong>"📄 Invoice Tools"</strong> menu appear in the top menu bar — that's the <code class="inline">onOpen()</code> function working.</div></li>
+    <li><div class="sn">2</div><div>In cell <strong>I1</strong> of the Invoices sheet, type <strong>2</strong> (to select row 2, which is Acme Corp).</div></li>
+    <li><div class="sn">3</div><div>Click <strong>📄 Invoice Tools → Generate &amp; Send Invoice</strong></div></li>
+    <li><div class="sn">4</div><div>Grant permissions when prompted. Then check your email — you'll receive a PDF invoice!</div></li>
+    <li><div class="sn">5</div><div>Change I1 to <strong>3</strong> and run again to generate TechStart's invoice.</div></li>
+  </ul>
+
+  <div class="output-box">
+    <div class="out-label">✓ Expected result</div>
+    <ul>
+      <li>A new Google Doc invoice is created, formatted with the client details</li>
+      <li>It's converted to PDF and attached to an email</li>
+      <li>The client receives the email with the attached PDF invoice</li>
+      <li>The intermediate Google Doc is deleted from Drive (clean up)</li>
+      <li>A popup confirms the send</li>
+    </ul>
+  </div>
+
+  <hr class="div">
+  <div class="note green">
+    <div class="note-icon">🎉</div>
+    <div><strong>You've completed all 8 tasks!</strong> You now know how to: auto-format sheets, do mail merge, handle form submissions, schedule daily emails, call external APIs, create live triggers, manage Drive folders, and generate + email PDFs. This covers 95% of what an Automation Executive handles day-to-day.</div>
+  </div>
+</div>
+
+<script>
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function goTask(id, label) {
+  const btns = document.querySelectorAll('.nav-btn');
+  btns.forEach(b => { if (b.textContent.trim() === label) b.click(); });
+}
+
+function copyCode(btn, id) {
+  const code = document.getElementById(id).textContent;
+  navigator.clipboard.writeText(code).then(() => {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+</script>
+</body>
+</html>
