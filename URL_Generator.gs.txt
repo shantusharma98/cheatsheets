@@ -1,0 +1,79 @@
+// ============================================
+// URL GENERATOR - NO CODE CHANGES NEEDED
+// ============================================
+// Just run this ONCE to get all your Week 2 URLs
+
+function generateWeek2URLs() {
+  // STEP 1: Get your Web App URL
+  // Go to: Deploy → Manage deployments → Copy the Web App URL
+  // Paste it here:
+  var WEB_APP_URL = "PASTE_YOUR_WEB_APP_URL_HERE";
+  
+  // STEP 2: List your customers (MUST match sheet headers exactly!)
+  var customers = [
+    "Print King",
+    "Tapu",
+    "Bengaluru Store",
+    "Increments",
+    "Upper Frozen",
+    "Spice Works",
+    "Khaleelah Handilooms",
+    "Darapur Videos",
+    "SOFPL",
+    "Gajanan Iron",
+    "Zyph"
+  ];
+  
+  // STEP 3: Run this function and copy URLs from logs
+  Logger.log("=== WEEK 2 CUSTOMER URLS ===\n");
+  Logger.log("Add these to your Google Sites buttons:\n");
+  
+  for(var i = 0; i < customers.length; i++) {
+    var customer = customers[i];
+    
+    // Build URL with customer and Week 2 parameters
+    var url = WEB_APP_URL + "?client=" + encodeURIComponent(customer) + "&sheet=Week 2";
+    
+    Logger.log("▶ " + customer);
+    Logger.log(url);
+    Logger.log(""); // blank line
+  }
+  
+  Logger.log("=== COPY THESE URLS TO YOUR GOOGLE SITES BUTTONS ===");
+}
+
+// ============================================
+// OPTIONAL: Generate URLs for ALL weeks at once
+// ============================================
+function generateAllWeekURLs() {
+  var WEB_APP_URL = "PASTE_YOUR_WEB_APP_URL_HERE";
+  
+  var customers = [
+    "Print King",
+    "Tapu",
+    "Bengaluru Store",
+    "Increments",
+    "Upper Frozen",
+    "Spice Works",
+    "Khaleelah Handilooms",
+    "Darapur Videos",
+    "SOFPL",
+    "Gajanan Iron",
+    "Zyph"
+  ];
+  
+  var weeks = ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5"];
+  
+  for(var w = 0; w < weeks.length; w++) {
+    var week = weeks[w];
+    Logger.log("\n========== " + week.toUpperCase() + " ==========\n");
+    
+    for(var i = 0; i < customers.length; i++) {
+      var customer = customers[i];
+      var url = WEB_APP_URL + "?client=" + encodeURIComponent(customer) + "&sheet=" + encodeURIComponent(week);
+      
+      Logger.log(customer + ":");
+      Logger.log(url + "\n");
+    }
+  }
+}
