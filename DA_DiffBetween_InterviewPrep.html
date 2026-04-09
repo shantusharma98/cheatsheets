@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DA Interview — Difference Between Questions</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#07090f;--bg2:#0b0e18;--bg3:#10131e;--card:#0d1020;
+  --border:#18203a;--border2:#222d48;
+  --sql:#22d3ee;--excel:#34d399;--pbi:#f59e0b;--py:#a78bfa;--stats:#f87171;--biz:#fb923c;
+  --text:#c8d4e8;--muted:#4a5a7a;--head:#eef2ff;
+  --red:#f87171;--green:#34d399;--yellow:#f59e0b;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--text);font-size:14.5px;line-height:1.7}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:100;background:rgba(7,9,15,.97);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:0 20px;display:flex;align-items:center;gap:12px;height:50px}
+.logo{font-size:13px;font-weight:700;color:var(--head);font-family:'JetBrains Mono',monospace;white-space:nowrap;flex-shrink:0}
+.logo span{color:var(--pbi)}
+.filters{display:flex;gap:6px;overflow-x:auto;flex:1}
+.filters::-webkit-scrollbar{height:0}
+.fbtn{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:5px 12px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer;white-space:nowrap;transition:all .2s;letter-spacing:.3px}
+.fbtn:hover{color:var(--head);border-color:#3a4a6a}
+.fbtn.active{color:var(--head);background:rgba(255,255,255,.06);border-color:#3a4a6a}
+.fbtn.sql.active{border-color:var(--sql);color:var(--sql);background:rgba(34,211,238,.08)}
+.fbtn.excel.active{border-color:var(--excel);color:var(--excel);background:rgba(52,211,153,.08)}
+.fbtn.pbi.active{border-color:var(--pbi);color:var(--pbi);background:rgba(245,158,11,.08)}
+.fbtn.py.active{border-color:var(--py);color:var(--py);background:rgba(167,139,250,.08)}
+.fbtn.stats.active{border-color:var(--stats);color:var(--stats);background:rgba(248,113,113,.08)}
+
+/* STATS BAR */
+.statsbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;gap:20px;align-items:center}
+.stat{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+.stat span{font-weight:700;font-size:13px}
+.stat.t span{color:var(--head)}
+.stat.g span{color:var(--green)}
+.stat.r span{color:var(--red)}
+.stat.y span{color:var(--yellow)}
+.progress-track{flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--sql));border-radius:2px;transition:width .4s ease;width:0%}
+
+/* MAIN */
+.main{padding:24px 20px 80px;max-width:900px;margin:0 auto}
+
+/* SECTION HEADER */
+.sec{margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.sec-tag{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:3px}
+.sec-tag.sql{background:rgba(34,211,238,.1);color:var(--sql);border:1px solid rgba(34,211,238,.25)}
+.sec-tag.excel{background:rgba(52,211,153,.1);color:var(--excel);border:1px solid rgba(52,211,153,.25)}
+.sec-tag.pbi{background:rgba(245,158,11,.1);color:var(--pbi);border:1px solid rgba(245,158,11,.25)}
+.sec-tag.py{background:rgba(167,139,250,.1);color:var(--py);border:1px solid rgba(167,139,250,.25)}
+.sec-tag.stats{background:rgba(248,113,113,.1);color:var(--stats);border:1px solid rgba(248,113,113,.25)}
+.sec h2{font-size:16px;font-weight:600;color:var(--head)}
+.priority{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 7px;border-radius:3px;font-weight:700;letter-spacing:.5px}
+.p-critical{background:rgba(248,113,113,.15);color:var(--red);border:1px solid rgba(248,113,113,.3)}
+.p-high{background:rgba(245,158,11,.12);color:var(--yellow);border:1px solid rgba(245,158,11,.25)}
+.p-med{background:rgba(52,211,153,.1);color:var(--green);border:1px solid rgba(52,211,153,.2)}
+
+/* CARD */
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:10px;overflow:hidden;transition:border-color .2s;data-visible:true}
+.card:hover{border-color:var(--border2)}
+.card-head{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;cursor:pointer;user-select:none}
+.q-num{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.q-num.sql{background:rgba(34,211,238,.12);color:var(--sql)}
+.q-num.excel{background:rgba(52,211,153,.12);color:var(--excel)}
+.q-num.pbi{background:rgba(245,158,11,.12);color:var(--pbi)}
+.q-num.py{background:rgba(167,139,250,.12);color:var(--py)}
+.q-num.stats{background:rgba(248,113,113,.12);color:var(--stats)}
+.q-info{flex:1}
+.q-text{font-size:14px;color:var(--head);font-weight:500;line-height:1.45;margin-bottom:4px}
+.q-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.q-cat{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);letter-spacing:.3px}
+.q-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.done-btn{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--muted);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;transition:all .2s;color:var(--muted);flex-shrink:0}
+.done-btn:hover{border-color:var(--green);color:var(--green)}
+.done-btn.checked{background:var(--green);border-color:var(--green);color:#031a10}
+.arr{color:var(--muted);font-size:11px;transition:transform .2s;flex-shrink:0}
+.arr.open{transform:rotate(180deg)}
+
+/* ANSWER BODY */
+.ans-body{border-top:1px solid var(--border);display:none;padding:0}
+.ans-body.show{display:block}
+
+/* COMPARISON TABLE */
+.comp-wrap{overflow-x:auto}
+.comp{width:100%;border-collapse:collapse;font-size:12.5px}
+.comp th{padding:10px 14px;text-align:left;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.5px;font-weight:700;text-transform:uppercase;white-space:nowrap}
+.comp td{padding:9px 14px;vertical-align:top;line-height:1.55;border-top:1px solid var(--border)}
+.comp tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+.comp .a-col{background:rgba(34,211,238,.04);border-left:2px solid rgba(34,211,238,.3)}
+.comp .b-col{background:rgba(167,139,250,.04);border-left:2px solid rgba(167,139,250,.3)}
+.comp .head-a{background:rgba(34,211,238,.08);color:var(--sql);padding:11px 14px}
+.comp .head-b{background:rgba(167,139,250,.08);color:var(--py);padding:11px 14px}
+.comp .head-asp{background:rgba(245,158,11,.06);color:var(--pbi)}
+
+/* KEY POINT BOX */
+.kp{margin:14px 16px;padding:11px 14px;border-radius:7px;font-size:13px;line-height:1.65}
+.kp.green{background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.2);color:#a7f3d0}
+.kp.yellow{background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.2);color:#fde68a}
+.kp.red{background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.2);color:#fecaca}
+.kp.blue{background:rgba(34,211,238,.06);border:1px solid rgba(34,211,238,.2);color:#a5f3fc}
+.kp strong{color:white;font-weight:600}
+
+/* CODE SNIPPET */
+pre{background:#040610;border:1px solid var(--border);border-radius:6px;padding:12px 14px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.65;overflow-x:auto;margin:10px 16px}
+.kw{color:#f97583}.fn{color:#b392f0}.st{color:#9ecbff}.nm{color:#79b8ff}.cm{color:#3a4d6a;font-style:italic}
+
+/* MNEMONIC */
+.mnem{margin:0 16px 14px;padding:10px 14px;background:rgba(167,139,250,.08);border:1px solid rgba(167,139,250,.2);border-radius:6px;font-size:12.5px;color:#c4b5fd}
+.mnem strong{color:#e9d5ff;font-weight:600}
+
+/* USES WHEN */
+.uw-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:12px 16px}
+.uw{padding:10px 12px;border-radius:6px;font-size:12.5px;line-height:1.55}
+.uw.a{background:rgba(34,211,238,.06);border:1px solid rgba(34,211,238,.18)}
+.uw.b{background:rgba(167,139,250,.06);border:1px solid rgba(167,139,250,.18)}
+.uw-head{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;letter-spacing:1px;margin-bottom:6px}
+.uw.a .uw-head{color:var(--sql)}
+.uw.b .uw-head{color:var(--py)}
+
+/* SECTION DIVIDER */
+.sdiv{height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);margin:28px 0 20px}
+
+/* HIDDEN */
+.card[data-hidden="true"]{display:none}
+
+/* SCROLL TOP */
+.back{position:fixed;bottom:20px;right:20px;width:38px;height:38px;background:var(--py);border:none;border-radius:50%;color:#1a0a3a;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;z-index:200}
+
+strong{color:var(--head);font-weight:600}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">DIFF<span>.</span>BETWEEN</div>
+  <div class="filters">
+    <button class="fbtn active" onclick="filter('all',this)">ALL</button>
+    <button class="fbtn pbi" onclick="filter('pbi',this)">Power BI</button>
+    <button class="fbtn sql" onclick="filter('sql',this)">SQL</button>
+    <button class="fbtn excel" onclick="filter('excel',this)">Excel</button>
+    <button class="fbtn py" onclick="filter('py',this)">Python</button>
+    <button class="fbtn stats" onclick="filter('stats',this)">Statistics</button>
+  </div>
+</div>
+
+<div class="statsbar">
+  <div class="stat t"><span id="s-total">0</span> total</div>
+  <div class="stat g"><span id="s-done">0</span> done</div>
+  <div class="stat r"><span id="s-left">0</span> left</div>
+  <div class="progress-track"><div class="progress-fill" id="prog-fill"></div></div>
+  <div class="stat y"><span id="s-pct">0%</span></div>
+</div>
+
+<main class="main" id="main">
+
+<!-- ══════════ POWER BI ══════════ -->
+<div class="sec"><span class="sec-tag pbi">Power BI</span><h2>Power BI Comparisons</h2><span class="priority p-critical">CRITICAL — scored 1.3</span></div>
+
+<div class="card" data-cat="pbi">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num pbi">PB1</span>
+  <div class="q-info">
+    <div class="q-text">ALL vs REMOVEFILTERS vs ALLEXCEPT in DAX — what does each do?</div>
+    <div class="q-meta"><span class="q-cat">DAX · Filter Modifiers · Direct from your feedback</span><span class="priority p-critical">MUST KNOW</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<div class="comp-wrap"><table class="comp">
+<tr><th class="head-asp">Aspect</th><th class="head-a">ALL()</th><th class="head-b" style="background:rgba(245,158,11,.08);color:var(--pbi)">REMOVEFILTERS()</th><th class="head-b">ALLEXCEPT()</th></tr>
+<tr><td>What it does</td><td class="a-col">Removes ALL filters from a table or column. Also returns all rows of a table when used outside CALCULATE.</td><td class="b-col" style="border-left:2px solid rgba(245,158,11,.3)">Identical to ALL() when used inside CALCULATE. Preferred modern syntax for clarity.</td><td class="b-col">Removes ALL filters EXCEPT the columns you specify. Those columns keep their filter context.</td></tr>
+<tr><td>Use inside CALCULATE?</td><td class="a-col">Yes — most common usage</td><td class="b-col" style="border-left:2px solid rgba(245,158,11,.3)">Yes — same effect as ALL inside CALCULATE</td><td class="b-col">Yes — required usage context</td></tr>
+<tr><td>Typical use</td><td class="a-col">Grand total denominator: divide by total ignoring all filters</td><td class="b-col" style="border-left:2px solid rgba(245,158,11,.3)">Cleaner replacement for ALL() inside CALCULATE</td><td class="b-col">Remove all filters except one specific dimension (e.g. keep Year filter but ignore all others)</td></tr>
+<tr><td>Example</td><td class="a-col">CALCULATE([Sales], ALL(Dim_Product))</td><td class="b-col" style="border-left:2px solid rgba(245,158,11,.3)">CALCULATE([Sales], REMOVEFILTERS(Dim_Product))</td><td class="b-col">CALCULATE([Sales], ALLEXCEPT(Sales, Sales[Year]))</td></tr>
+</table></div>
+<div class="kp green"><strong>Interview one-liner:</strong> ALL removes every filter. REMOVEFILTERS is the same thing, just cleaner modern syntax. ALLEXCEPT removes everything EXCEPT the columns you want to keep — like a whitelist vs ALL's blacklist.</div>
+<div class="mnem"><strong>Memory trick:</strong> ALL = wipe everything. ALLEXCEPT = ALL… except these columns stay. REMOVEFILTERS = just a cleaner name for ALL inside CALCULATE.</div>
+</div>
+</div>
+
+<div class="card" data-cat="pbi">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num pbi">PB2</span>
+  <div class="q-info">
+    <div class="q-text">ALL vs ALLSELECTED — the most confusing DAX pair</div>
+    <div class="q-meta"><span class="q-cat">DAX · Filter Context</span><span class="priority p-critical">MUST KNOW</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<div class="comp-wrap"><table class="comp">
+<tr><th class="head-asp">Aspect</th><th class="head-a">ALL()</th><th class="head-b">ALLSELECTED()</th></tr>
+<tr><td>What it removes</td><td class="a-col">Removes EVERY filter — slicers, page filters, visual filters, everything</td><td class="b-col">Removes only the visual-level filter (from the matrix/chart row context). Keeps slicer and page-level filters.</td></tr>
+<tr><td>% of what?</td><td class="a-col">% of GRAND total of ALL data (ignores your slicers)</td><td class="b-col">% of total of only what is currently selected in the slicer</td></tr>
+<tr><td>User sees slicer change?</td><td class="a-col">No — denominator never changes</td><td class="b-col">Yes — denominator updates with slicer selection</td></tr>
+<tr><td>Use case</td><td class="a-col">Fixed total benchmark (e.g. % of all-time revenue)</td><td class="b-col">Dynamic % of filtered total (e.g. % within slicer selection)</td></tr>
+</table></div>
+<div class="kp yellow"><strong>Classic interview scenario:</strong> Slicer selects Jan-Jun. Bar chart shows each month. With ALL, each bar shows % of 12-month total. With ALLSELECTED, each bar shows % of Jan-Jun total only. Almost always, users want ALLSELECTED for "% within selection."</div>
+</div>
+</div>
+
+<div class="card" data-cat="pbi">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num pbi">PB3</span>
+  <div class="q-info">
+    <div class="q-text">Slicer vs Filter panel in Power BI — when to use each?</div>
+    <div class="q-meta"><span class="q-cat">Report Design · Direct from your feedback</span><span class="priority p-critical">MUST KNOW</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<div class="comp-wrap"><table class="comp">
+<tr><th class="head-asp">Aspect</th><th class="head-a">Slicer</th><th class="head-b">Filter Panel</th></tr>
+<tr><td>Visibility</td><td class="a-col">Visible on the report canvas — users can see and interact with it</td><td class="b-col">Hidden by default — only visible when report is open in edit mode (or when Filters pane is toggled)</td></tr>
+<tr><td>User interaction</td><td class="a-col">End users can change it freely in Published reports</td><td class="b-col">Can be locked to prevent changes; developers use it for permanent filters</td></tr>
+<tr><td>Scope</td><td class="a-col">Affects all connected visuals on same page (or synced pages)</td><td class="b-col">3 levels: Visual-level, Page-level, Report-level</td></tr>
+<tr><td>Best for</td><td class="a-col">Interactive dashboards where users need to explore (date pickers, region selectors)</td><td class="b-col">Fixed business rules: "only show active customers," "only current year" that users shouldn't change</td></tr>
+<tr><td>Synced pages?</td><td class="a-col">Yes — Sync Slicers feature across pages</td><td class="b-col">Report-level filter applies to ALL pages automatically</td></tr>
+</table></div>
+<div class="kp green"><strong>One-liner answer:</strong> Slicer = user-facing interactive filter on the canvas. Filter panel = developer-controlled filter, often hidden, used for fixed/locked filtering logic.</div>
+</div>
+</div>
+
+<div class="card" data-cat="pbi">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num pbi">PB4</span>
+  <div class="q-info">
+    <div class="q-text">Measure vs Calculated Column in Power BI</div>
+    <div class="q-meta"><span class="q-cat">DAX Fundamentals · Extremely common interview Q</span><span class="priority p-critical">MUST KNOW</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<div class="comp-wrap"><table class="comp">
+<tr><th class="head-asp">Aspect</th><th class="head-a">Measure</th><th class="head-b">Calculated Column</th></tr>
+<tr><td>When it calculates</td><td class="a-col">At query time — dynamically recalculates based on current filter context</td><td class="b-col">At data refresh time — calculated once per row and stored in the model</td></tr>
+<tr><td>Stored in memory?</td><td class="a-col">No — recalculated on every visual interaction</td><td class="b-col">Yes — adds to model size / RAM</td></tr>
+<tr><td>Can use in slicer?</td><td class="a-col">No (it's an aggregation, not a row value)</td><td class="b-col">Yes — you can slice/filter on a calculated column</td></tr>
+<tr><td>Context it uses</td><td class="a-col">Filter context (from visuals, slicers)</td><td class="b-col">Row context (each row at refresh time)</td></tr>
+<tr><td>Example</td><td class="a-col">Total Sales = SUM(Sales[Revenue]) — changes per slicer</td><td class="b-col">Full Name = [First] & " " & [Last] — same for every row always</td></tr>
+<tr><td>Best for</td><td class="a-col">Aggregations, KPIs, ratios, time intelligence</td><td class="b-col">Derived row-level attributes: full name, price bucket, date label</td></tr>
+</table></div>
+<div class="kp yellow"><strong>Shortcut answer:</strong> Measure = aggregation, dynamic, lives in a visual. Calculated Column = row-level, computed at refresh, lives in the table.</div>
+<div class="mnem"><strong>Memory trick:</strong> Column = "computed once, stored in the column." Measure = "measured fresh every time you look at it."</div>
+</div>
+</div>
+
+<div class="card" data-cat="pbi">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num pbi">PB5</span>
+  <div class="q-info">
+    <div class="q-text">Import Mode vs DirectQuery vs Live Connection in Power BI</div>
+    <div class="q-meta"><span class="q-cat">Data Connectivity</span><span class="priority p-high">HIGH PRIORITY</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<div class="comp-wrap"><table class="comp">
+<tr><th class="head-asp">Aspect</th><th class="head-a">Import Mode</th><th class="head-b">DirectQuery</th><th class="head-b">Live Connection</th></tr>
+<tr><td>Data stored?</td><td class="a-col">Yes — copy in Power BI's in-memory model</td><td class="b-col">No — queries sent live to source</td><td class="b-col">No — connects to existing model (SSAS/PBI Service)</td></tr>
+<tr><td>Performance</td><td class="a-col">Fastest — data in RAM</td><td class="b-col">Depends on source DB speed</td><td class="b-col">Depends on remote model</td></tr>
+<tr><td>Data freshness</td><td class="a-col">Scheduled refresh (max 8x/day free, 48x Premium)</td><td class="b-col">Real-time — always current</td><td class="b-col">Real-time</td></tr>
+<tr><td>DAX limitations?</td><td class="a-col">Full DAX available</td><td class="b-col">Some DAX functions not supported</td><td class="b-col">Very limited DAX (model is read-only)</td></tr>
+<tr><td>Use when</td><td class="a-col">Data < 1GB, speed matters, daily refresh OK</td><td class="b-col">Data > 1GB, or real-time needed, strict governance</td><td class="b-col">Reusing a central Power BI / SSAS model</td></tr>
+</table></div>
+<div class="kp green"><strong>Default advice:</strong> Use Import Mode unless data is too large or must be real-time — it's faster and has full DAX support.</div>
+</div>
+</div>
+
+<div class="card" data-cat="pbi">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num pbi">PB6</span>
+  <div class="q-info">
+    <div class="q-text">Different types of visuals in Power BI and when to use each</div>
+    <div class="q-meta"><span class="q-cat">Report Design · Direct from your feedback</span><span class="priority p-critical">MUST KNOW</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<div class="comp-wrap"><table class="comp">
+<tr><th class="head-asp" style="width:140px">Visual</th><th class="head-a">Best For</th><th class="head-b">Avoid When</th></tr>
+<tr><td><strong>Bar / Column Chart</strong></td><td class="a-col">Comparing categories, rankings, discrete values</td><td class="b-col">Too many bars (>15) — hard to read</td></tr>
+<tr><td><strong>Line Chart</strong></td><td class="a-col">Trends over time, continuous data</td><td class="b-col">Categorical x-axis with no time meaning</td></tr>
+<tr><td><strong>Card / KPI</strong></td><td class="a-col">Single metric display (Revenue, Count, %). KPI shows vs target.</td><td class="b-col">Multiple metrics side by side — use metric grid</td></tr>
+<tr><td><strong>Matrix</strong></td><td class="a-col">Cross-tabulation of two dimensions (rows × columns)</td><td class="b-col">Simple totals — overkill</td></tr>
+<tr><td><strong>Scatter Chart</strong></td><td class="a-col">Correlation between 2 numeric variables, outlier spotting</td><td class="b-col">Categorical axes</td></tr>
+<tr><td><strong>Map / Filled Map</strong></td><td class="a-col">Geographic distribution of a metric</td><td class="b-col">Non-geographic data</td></tr>
+<tr><td><strong>Funnel</strong></td><td class="a-col">Conversion pipelines: sales funnel, signup flow</td><td class="b-col">Non-sequential data</td></tr>
+<tr><td><strong>Gauge</strong></td><td class="a-col">Progress toward a single target (e.g. 75% of quota)</td><td class="b-col">Comparing multiple metrics</td></tr>
+<tr><td><strong>Treemap</strong></td><td class="a-col">Hierarchical part-to-whole (e.g. revenue by category > subcategory)</td><td class="b-col">Precise value comparison</td></tr>
+<tr><td><strong>Waterfall</strong></td><td class="a-col">Showing incremental changes (P&amp;L bridge, MoM delta)</td><td class="b-col">Simple comparisons</td></tr>
+</table></div>
+<div class="kp blue"><strong>Key rule:</strong> Match the visual to the question. "How much?" → Card. "Trend?" → Line. "Compare categories?" → Bar. "Part of whole?" → Pie/Treemap. "Relationship?" → Scatter.</div>
+</div>
+</div>
+
+<div class="card" data-cat="pbi">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num pbi">PB7</span>
+  <div class="q-info">
+    <div class="q-text">Filter context vs Row context in DAX</div>
+    <div class="q-meta"><span class="q-cat">DAX Core Concept · Most important DAX concept</span><span class="priority p-critical">MUST KNOW</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<div class="comp-wrap"><table class="comp">
+<tr><th class="head-asp">Aspect</th><th class="head-a">Filter Context</th><th class="head-b">Row Context</th></tr>
+<tr><td>What creates it</td><td class="a-col">Slicers, visual axes, page filters, CALCULATE() arguments</td><td class="b-col">Calculated Columns (each row), Iterator functions like SUMX, AVERAGEX</td></tr>
+<tr><td>What it controls</td><td class="a-col">Which rows of the table are "visible" for aggregation</td><td class="b-col">Which specific row is currently being processed</td></tr>
+<tr><td>Where it lives</td><td class="a-col">Measures always evaluate in a filter context</td><td class="b-col">Calculated columns have row context automatically</td></tr>
+<tr><td>Context transition</td><td class="a-col" colspan="2">CALCULATE() converts row context into filter context — this is called "context transition"</td></tr>
+</table></div>
+<pre>Total Sales = SUM(Sales[Revenue])  <span class="cm">-- uses filter context (from visual/slicer)</span>
+Tax Col = Sales[Revenue] * 0.18    <span class="cm">-- uses row context (per row in table)</span>
+SUMX(Sales, Sales[Qty] * Sales[Price])  <span class="cm">-- iterator creates row context inside</span></pre>
+<div class="kp yellow"><strong>Most asked follow-up:</strong> "What does CALCULATE do?" — It modifies filter context. It can ADD filters, REMOVE filters (with ALL), or REPLACE filters. It also triggers context transition if inside a row context.</div>
+</div>
+</div>
+
+<div class="sdiv"></div>
+
+<!-- ══════════ SQL ══════════ -->
+<div class="sec"><span class="sec-tag sql">SQL</span><h2>SQL Comparisons</h2><span class="priority p-high">HIGH PRIORITY — scored 4.6 but specific gaps noted</span></div>
+
+<div class="card" data-cat="sql">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num sql">S1</span>
+  <div class="q-info">
+    <div class="q-text">RANK vs DENSE_RANK vs ROW_NUMBER — the exact difference with ties</div>
+    <div class="q-meta"><span class="q-cat">Window Functions · Direct from your interview feedback</span><span class="priority p-critical">MUST KNOW</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<div class="comp-wrap"><table class="comp">
+<tr><th class="head-asp">Aspect</th><th class="head-a">ROW_NUMBER()</th><th class="head-b">RANK()</th><th class="head-b" style="background:rgba(52,211,153,.08);color:var(--excel)">DENSE_RANK()</th></tr>
+<tr><td>Ties handled?</td><td class="a-col">Assigns unique numbers regardless — ties get different numbers (arbitrary order)</td><td class="b-col">Ties get the SAME rank. Next rank SKIPS numbers.</td><td class="b-col" style="border-left:2px solid rgba(52,211,153,.3)">Ties get the SAME rank. Next rank does NOT skip.</td></tr>
+<tr><td>Example data: 100, 100, 90, 80</td><td class="a-col">1, 2, 3, 4</td><td class="b-col">1, 1, 3, 4 (2 is skipped!)</td><td class="b-col" style="border-left:2px solid rgba(52,211,153,.3)">1, 1, 2, 3 (no gap)</td></tr>
+<tr><td>Always unique?</td><td class="a-col">Yes — always unique</td><td class="b-col">No — ties share a rank</td><td class="b-col" style="border-left:2px solid rgba(52,211,153,.3)">No — ties share a rank</td></tr>
+<tr><td>Use when</td><td class="a-col">Need unique row identifiers (pagination, deduplication)</td><td class="b-col">Sports rankings (2 silvers → no bronze)</td><td class="b-col" style="border-left:2px solid rgba(52,211,153,.3)">Get Nth distinct value (2nd highest salary)</td></tr>
+</table></div>
+<pre><span class="kw">SELECT</span> Name, Salary,
+  <span class="fn">ROW_NUMBER</span>() <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> Salary <span class="kw">DESC</span>) <span class="kw">AS</span> rn,
+  <span class="fn">RANK</span>()       <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> Salary <span class="kw">DESC</span>) <span class="kw">AS</span> rnk,
+  <span class="fn">DENSE_RANK</span>() <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> Salary <span class="kw">DESC</span>) <span class="kw">AS</span> drnk
+<span class="kw">FROM</span> Employees;
+<span class="cm">-- For 2nd highest salary: WHERE drnk = 2 (use DENSE_RANK)</span></pre>
+<div class="mnem"><strong>Memory trick:</strong> RANK = like an Olympic podium (2 golds → no silver). DENSE_RANK = like a leaderboard (2 firsts → second place still exists). ROW_NUMBER = just a line number, doesn't care about ties.</div>
+</div>
+</div>
+
+<div class="card" data-cat="sql">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num sql">S2</span>
+  <div class="q-info">
+    <div class="q-text">Second highest salary — the 3 correct methods (direct from your feedback)</div>
+    <div class="q-meta"><span class="q-cat">Classic Interview Problem</span><span class="priority p-critical">MUST KNOW</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<pre><span class="cm">-- Method 1: Subquery with MAX (simplest, often asked first)</span>
+<span class="kw">SELECT</span> <span class="fn">MAX</span>(Salary) <span class="kw">FROM</span> Employees
+<span class="kw">WHERE</span> Salary <span class="kw">&lt;</span> (<span class="kw">SELECT</span> <span class="fn">MAX</span>(Salary) <span class="kw">FROM</span> Employees);
+
+<span class="cm">-- Method 2: DENSE_RANK (safest — handles ties correctly)</span>
+<span class="kw">SELECT</span> Salary <span class="kw">FROM</span> (
+  <span class="kw">SELECT</span> Salary, <span class="fn">DENSE_RANK</span>() <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> Salary <span class="kw">DESC</span>) dr
+  <span class="kw">FROM</span> Employees
+) t <span class="kw">WHERE</span> dr = <span class="nm">2</span>;
+
+<span class="cm">-- Method 3: LIMIT/OFFSET (MySQL/PostgreSQL)</span>
+<span class="kw">SELECT DISTINCT</span> Salary <span class="kw">FROM</span> Employees
+<span class="kw">ORDER BY</span> Salary <span class="kw">DESC</span> <span class="kw">LIMIT</span> <span class="nm">1</span> <span class="kw">OFFSET</span> <span class="nm">1</span>;</pre>
+<div class="kp red"><strong>Trap:</strong> Method 1 fails with ties. If two people share the MAX salary, it returns the second person's salary which is actually the HIGHEST. Always use DENSE_RANK for correctness.</div>
+</div>
+</div>
+
+<div class="card" data-cat="sql">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num sql">S3</span>
+  <div class="q-info">
+    <div class="q-text">WHERE vs HAVING — when to use each</div>
+    <div class="q-meta"><span class="q-cat">SQL Fundamentals</span><span class="priority p-high">HIGH PRIORITY</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<div class="comp-wrap"><table class="comp">
+<tr><th class="head-asp">Aspect</th><th class="head-a">WHERE</th><th class="head-b">HAVING</th></tr>
+<tr><td>Filters</td><td class="a-col">Individual rows before grouping</td><td class="b-col">Groups after GROUP BY</td></tr>
+<tr><td>Execution order</td><td class="a-col">Runs BEFORE GROUP BY</td><td class="b-col">Runs AFTER GROUP BY</td></tr>
+<tr><td>Can use aggregates?</td><td class="a-col">No — WHERE SUM(x) > 5 is an ERROR</td><td class="b-col">Yes — HAVING SUM(x) > 5 is valid</td></tr>
+<tr><td>Example</td><td class="a-col">WHERE Country = 'India' (filter rows first)</td><td class="b-col">HAVING COUNT(*) > 10 (filter after grouping)</td></tr>
+</table></div>
+<pre><span class="kw">SELECT</span> Region, <span class="fn">SUM</span>(Revenue) <span class="kw">AS</span> Total
+<span class="kw">FROM</span> Sales
+<span class="kw">WHERE</span> Year = <span class="nm">2024</span>          <span class="cm">-- row-level filter (before grouping)</span>
+<span class="kw">GROUP BY</span> Region
+<span class="kw">HAVING</span> <span class="fn">SUM</span>(Revenue) > <span class="nm">50000</span>; <span class="cm">-- group-level filter (after grouping)</span></pre>
+<div class="mnem"><strong>Memory trick:</strong> WHERE = filter before cooking (select ingredients). HAVING = filter after cooking (taste and discard bad dishes).</div>
+</div>
+</div>
+
+<div class="card" data-cat="sql">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num sql">S4</span>
+  <div class="q-info">
+    <div class="q-text">DELETE vs TRUNCATE vs DROP</div>
+    <div class="q-meta"><span class="q-cat">DDL / DML</span><span class="priority p-high">HIGH PRIORITY</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<div class="comp-wrap"><table class="comp">
+<tr><th class="head-asp">Aspect</th><th class="head-a">DELETE</th><th class="head-b">TRUNCATE</th><th class="head-b" style="background:rgba(248,113,113,.08);color:var(--red)">DROP</th></tr>
+<tr><td>Removes</td><td class="a-col">Specific rows (with WHERE) or all rows</td><td class="b-col">ALL rows only</td><td class="b-col" style="border-left:2px solid rgba(248,113,113,.3)">The entire table (structure + data)</td></tr>
+<tr><td>Rollback?</td><td class="a-col">Yes — can be rolled back in a transaction</td><td class="b-col">No in most DBs (DDL statement)</td><td class="b-col" style="border-left:2px solid rgba(248,113,113,.3)">No</td></tr>
+<tr><td>Speed</td><td class="a-col">Slow — logs each row deletion</td><td class="b-col">Very fast — minimal logging</td><td class="b-col" style="border-left:2px solid rgba(248,113,113,.3)">Fast</td></tr>
+<tr><td>Triggers fire?</td><td class="a-col">Yes</td><td class="b-col">No</td><td class="b-col" style="border-left:2px solid rgba(248,113,113,.3)">No</td></tr>
+<tr><td>Resets auto-increment?</td><td class="a-col">No</td><td class="b-col">Yes</td><td class="b-col" style="border-left:2px solid rgba(248,113,113,.3)">N/A (table gone)</td></tr>
+</table></div>
+<div class="mnem"><strong>Memory trick:</strong> DELETE = selective surgeon (removes specific rows, careful, logged). TRUNCATE = power-wash (wipes entire table fast, can't undo). DROP = demolish the building entirely.</div>
+</div>
+</div>
+
+<div class="card" data-cat="sql">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num sql">S5</span>
+  <div class="q-info">
+    <div class="q-text">UNION vs UNION ALL — when does it matter?</div>
+    <div class="q-meta"><span class="q-cat">Set Operations</span><span class="priority p-high">HIGH PRIORITY</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<div class="comp-wrap"><table class="comp">
+<tr><th class="head-asp">Aspect</th><th class="head-a">UNION</th><th class="head-b">UNION ALL</th></tr>
+<tr><td>Duplicates</td><td class="a-col">Removes duplicate rows</td><td class="b-col">Keeps ALL rows including duplicates</td></tr>
+<tr><td>Performance</td><td class="a-col">Slower — performs a DISTINCT sort</td><td class="b-col">Faster — no deduplication step</td></tr>
+<tr><td>Use when</td><td class="a-col">Two overlapping sources where you want unique results (e.g. customer lists from two systems)</td><td class="b-col">Appending non-overlapping datasets (e.g. Jan + Feb transactions). Also for aggregations — always use UNION ALL or you corrupt the data.</td></tr>
+<tr><td>Default preference</td><td class="a-col">Only when deduplication is genuinely needed</td><td class="b-col">Preferred by default for performance</td></tr>
+</table></div>
+<div class="kp red"><strong>Critical trap:</strong> Never use UNION when you're just appending non-overlapping tables (e.g. combining monthly sales files). UNION will silently remove "duplicate" rows that happen to have the same values — corrupting your aggregations.</div>
+</div>
+</div>
+
+<div class="card" data-cat="sql">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num sql">S6</span>
+  <div class="q-info">
+    <div class="q-text">Subquery vs CTE vs Derived Table — practical differences</div>
+    <div class="q-meta"><span class="q-cat">Query Structure</span><span class="priority p-high">HIGH PRIORITY</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<div class="comp-wrap"><table class="comp">
+<tr><th class="head-asp">Aspect</th><th class="head-a">Subquery</th><th class="head-b">CTE (WITH clause)</th><th class="head-b" style="background:rgba(245,158,11,.06);color:var(--pbi)">Derived Table</th></tr>
+<tr><td>Location</td><td class="a-col">Inside WHERE, FROM, SELECT</td><td class="b-col">Defined before the main query with WITH</td><td class="b-col" style="border-left:2px solid rgba(245,158,11,.3)">Inline in FROM clause (also a subquery really)</td></tr>
+<tr><td>Reusable?</td><td class="a-col">No — must rewrite if needed again</td><td class="b-col">Yes — can reference same CTE multiple times</td><td class="b-col" style="border-left:2px solid rgba(245,158,11,.3)">No</td></tr>
+<tr><td>Readable?</td><td class="a-col">Poor for complex logic</td><td class="b-col">Best — clear named steps</td><td class="b-col" style="border-left:2px solid rgba(245,158,11,.3)">OK for simple cases</td></tr>
+<tr><td>Recursive?</td><td class="a-col">No</td><td class="b-col">Yes — WITH RECURSIVE</td><td class="b-col" style="border-left:2px solid rgba(245,158,11,.3)">No</td></tr>
+<tr><td>Performance</td><td class="a-col">Optimizer usually handles it</td><td class="b-col">Same as subquery in most modern DBs</td><td class="b-col" style="border-left:2px solid rgba(245,158,11,.3)">Same</td></tr>
+</table></div>
+<div class="kp green"><strong>Rule of thumb:</strong> Use CTE whenever subquery logic is complex or reused. Use subquery for simple one-off filters. CTEs make code readable and debuggable — break complex logic into named steps.</div>
+</div>
+</div>
+
+<div class="sdiv"></div>
+
+<!-- ══════════ EXCEL ══════════ -->
+<div class="sec"><span class="sec-tag excel">Excel</span><h2>Excel Comparisons</h2><span class="priority p-critical">CRITICAL — scored 2.5, needs Data Validation + TRIM</span></div>
+
+<div class="card" data-cat="excel">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num excel">E1</span>
+  <div class="q-info">
+    <div class="q-text">VLOOKUP vs INDEX-MATCH vs XLOOKUP — complete comparison</div>
+    <div class="q-meta"><span class="q-cat">Lookup Functions · Most asked Excel interview Q</span><span class="priority p-critical">MUST KNOW</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<div class="comp-wrap"><table class="comp">
+<tr><th class="head-asp">Aspect</th><th class="head-a">VLOOKUP</th><th class="head-b">INDEX+MATCH</th><th class="head-b" style="background:rgba(52,211,153,.08);color:var(--excel)">XLOOKUP</th></tr>
+<tr><td>Search direction</td><td class="a-col">Right only — lookup column must be leftmost</td><td class="b-col">Any direction — left, right, up, down</td><td class="b-col" style="border-left:2px solid rgba(52,211,153,.3)">Any direction</td></tr>
+<tr><td>Multiple columns</td><td class="a-col">One at a time (change col_num)</td><td class="b-col">One at a time</td><td class="b-col" style="border-left:2px solid rgba(52,211,153,.3)">Yes — return array of multiple columns</td></tr>
+<tr><td>Error handling</td><td class="a-col">Need IFERROR wrapper</td><td class="b-col">Need IFERROR wrapper</td><td class="b-col" style="border-left:2px solid rgba(52,211,153,.3)">Built-in 4th argument: if_not_found</td></tr>
+<tr><td>Column insertion safe?</td><td class="a-col">No — hardcoded column number breaks if columns inserted</td><td class="b-col">Yes — uses column reference, not number</td><td class="b-col" style="border-left:2px solid rgba(52,211,153,.3)">Yes</td></tr>
+<tr><td>Excel version</td><td class="a-col">All versions</td><td class="b-col">All versions</td><td class="b-col" style="border-left:2px solid rgba(52,211,153,.3)">Excel 365 / 2021 only</td></tr>
+</table></div>
+<div class="kp yellow"><strong>Interview answer:</strong> VLOOKUP is simple but limited — can only look right. INDEX+MATCH is more powerful and flexible. XLOOKUP is the modern best-practice when available. In older Excel, always prefer INDEX+MATCH over VLOOKUP.</div>
+</div>
+</div>
+
+<div class="card" data-cat="excel">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num excel">E2</span>
+  <div class="q-info">
+    <div class="q-text">Data Validation in Excel — what it is and how to use it (from your feedback)</div>
+    <div class="q-meta"><span class="q-cat">Data Quality · Direct from your feedback</span><span class="priority p-critical">MUST KNOW</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<div class="kp blue"><strong>What it is:</strong> Data Validation (Data tab → Data Validation) restricts what values a user can enter in a cell. Prevents bad data from entering your spreadsheet in the first place.</div>
+<div class="comp-wrap"><table class="comp">
+<tr><th class="head-a">Type</th><th class="head-b">Use Case</th><th class="head-asp">Example</th></tr>
+<tr><td class="a-col">Whole Number</td><td class="b-col">Age, quantity, score</td><td>Allow: between 1 and 100</td></tr>
+<tr><td class="a-col">Decimal</td><td class="b-col">Price, percentage</td><td>Allow: between 0.0 and 1.0</td></tr>
+<tr><td class="a-col">List</td><td class="b-col">Dropdowns from predefined options</td><td>Source: North,South,East,West or =$A$1:$A$4</td></tr>
+<tr><td class="a-col">Date</td><td class="b-col">Restrict date ranges</td><td>After today, before end of year</td></tr>
+<tr><td class="a-col">Text Length</td><td class="b-col">Limit character count</td><td>Phone number = exactly 10 digits</td></tr>
+<tr><td class="a-col">Custom Formula</td><td class="b-col">Complex rules</td><td>=AND(A1>0, A1<>"")</td></tr>
+</table></div>
+<div class="kp green"><strong>Key feature:</strong> You can set a custom Error Alert (Stop / Warning / Information) that shows when invalid data is entered. "Stop" prevents the entry entirely. Always use Data Validation in shared spreadsheets to maintain data integrity.</div>
+<div class="mnem"><strong>Quick steps:</strong> Select cells → Data tab → Data Validation → Settings tab → Choose type → Set criteria → Error Alert tab → Set message. Done.</div>
+</div>
+</div>
+
+<div class="card" data-cat="excel">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num excel">E3</span>
+  <div class="q-info">
+    <div class="q-text">TRIM vs CLEAN vs SUBSTITUTE — text cleaning functions</div>
+    <div class="q-meta"><span class="q-cat">Text Functions · Direct from your feedback</span><span class="priority p-critical">MUST KNOW</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<div class="comp-wrap"><table class="comp">
+<tr><th class="head-asp">Function</th><th class="head-a">What it removes</th><th class="head-b">Example</th></tr>
+<tr><td><strong>TRIM(text)</strong></td><td class="a-col">Leading spaces, trailing spaces, and extra spaces between words (leaves single spaces between words)</td><td class="b-col">" Hello  World " → "Hello World"</td></tr>
+<tr><td><strong>CLEAN(text)</strong></td><td class="a-col">Non-printable characters (ASCII 0-31) — common in data exported from databases or old systems</td><td class="b-col">Removes line breaks, tabs, strange symbols</td></tr>
+<tr><td><strong>SUBSTITUTE(text, old, new)</strong></td><td class="a-col">Replaces a specific character or string with another (can target specific occurrence)</td><td class="b-col">SUBSTITUTE("Hi-Hi","Hi","Bye") → "Bye-Bye"</td></tr>
+</table></div>
+<div class="kp yellow"><strong>Best practice for full text cleaning:</strong> Combine all three: <code>=TRIM(CLEAN(SUBSTITUTE(A1, CHAR(160), " ")))</code><br>This handles: regular spaces (TRIM) + non-printable chars (CLEAN) + non-breaking spaces (CHAR(160) from web data)</div>
+</div>
+</div>
+
+<div class="card" data-cat="excel">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num excel">E4</span>
+  <div class="q-info">
+    <div class="q-text">SUMIF vs SUMIFS vs SUMPRODUCT — when to use each</div>
+    <div class="q-meta"><span class="q-cat">Conditional Aggregation</span><span class="priority p-high">HIGH PRIORITY</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<div class="comp-wrap"><table class="comp">
+<tr><th class="head-asp">Function</th><th class="head-a">Conditions</th><th class="head-b">Best For</th></tr>
+<tr><td><strong>SUMIF</strong></td><td class="a-col">Single condition only</td><td class="b-col">Quick single-filter sum: total sales for "North"</td></tr>
+<tr><td><strong>SUMIFS</strong></td><td class="a-col">Multiple conditions (AND logic)</td><td class="b-col">Total sales in "North" AND Year=2024 AND Category="A"</td></tr>
+<tr><td><strong>SUMPRODUCT</strong></td><td class="a-col">Complex conditions, OR logic, calculated criteria</td><td class="b-col">Complex multi-condition sums, unique counts, weighted averages</td></tr>
+</table></div>
+<pre><span class="cm">-- SUMIF: one condition</span>
+=SUMIF(Region, "North", Revenue)
+
+<span class="cm">-- SUMIFS: multiple AND conditions</span>
+=SUMIFS(Revenue, Region, "North", Year, 2024)
+
+<span class="cm">-- SUMPRODUCT: complex logic (OR, calculated thresholds)</span>
+=SUMPRODUCT((Region="North")+(Region="South"), Revenue)  <span class="cm">-- OR logic</span>
+=SUMPRODUCT((Revenue>AVERAGE(Revenue))*Revenue)  <span class="cm">-- calculated criterion</span></pre>
+</div>
+</div>
+
+<div class="card" data-cat="excel">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num excel">E5</span>
+  <div class="q-info">
+    <div class="q-text">Absolute reference ($A$1) vs Relative (A1) vs Mixed ($A1 or A$1)</div>
+    <div class="q-meta"><span class="q-cat">Cell References · Essential concept</span><span class="priority p-high">HIGH PRIORITY</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<div class="comp-wrap"><table class="comp">
+<tr><th class="head-asp">Type</th><th class="head-a">Behavior when copied</th><th class="head-b">Use when</th></tr>
+<tr><td><strong>A1</strong> (Relative)</td><td class="a-col">Both row AND column adjust when copied</td><td class="b-col">Applying same formula pattern to different rows/columns</td></tr>
+<tr><td><strong>$A$1</strong> (Absolute)</td><td class="a-col">Neither row nor column changes — always points to same cell</td><td class="b-col">Referencing a fixed value/rate (tax rate, exchange rate, header)</td></tr>
+<tr><td><strong>$A1</strong> (Mixed — col locked)</td><td class="a-col">Column stays, row adjusts</td><td class="b-col">Multiplication tables — copying across columns but down rows</td></tr>
+<tr><td><strong>A$1</strong> (Mixed — row locked)</td><td class="a-col">Row stays, column adjusts</td><td class="b-col">Headers row reference</td></tr>
+</table></div>
+<div class="kp green"><strong>Toggle shortcut:</strong> Press F4 while cursor is on a cell reference in the formula bar to cycle through all 4 types: A1 → $A$1 → A$1 → $A1 → A1</div>
+</div>
+</div>
+
+<div class="sdiv"></div>
+
+<!-- ══════════ PYTHON ══════════ -->
+<div class="sec"><span class="sec-tag py">Python</span><h2>Python Comparisons</h2><span class="priority p-high">SCORED 4.1 — gaps in NumPy 2D arrays + Pandas missing values</span></div>
+
+<div class="card" data-cat="py">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num py">PY1</span>
+  <div class="q-info">
+    <div class="q-text">Python List vs NumPy Array — deep comparison (from your feedback)</div>
+    <div class="q-meta"><span class="q-cat">Core Python · Direct from your feedback</span><span class="priority p-critical">MUST KNOW</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<div class="comp-wrap"><table class="comp">
+<tr><th class="head-asp">Aspect</th><th class="head-a">Python List</th><th class="head-b">NumPy Array</th></tr>
+<tr><td>Data types</td><td class="a-col">Mixed types: [1, "hello", True]</td><td class="b-col">Single type (dtype): all int, all float etc.</td></tr>
+<tr><td>Math operations</td><td class="a-col">[1,2,3] + [1,2,3] = [1,2,3,1,2,3] (concatenation!)</td><td class="b-col">np.array([1,2,3]) + np.array([1,2,3]) = [2,4,6] (element-wise math)</td></tr>
+<tr><td>Speed</td><td class="a-col">Slow — Python loop overhead for operations</td><td class="b-col">50-100x faster — vectorized C/Fortran backend</td></tr>
+<tr><td>Memory</td><td class="a-col">More memory — Python object references per element</td><td class="b-col">Less memory — contiguous typed memory block</td></tr>
+<tr><td>Multi-dimensional</td><td class="a-col">Nested lists (not true 2D): [[1,2],[3,4]]</td><td class="b-col">True n-dimensional arrays with shape (2,2), (3,4,5) etc.</td></tr>
+<tr><td>Broadcasting</td><td class="a-col">Not supported</td><td class="b-col">Supported — scalar operations apply to all elements</td></tr>
+<tr><td>Use when</td><td class="a-col">General purpose collections, mixed data, small datasets, appending</td><td class="b-col">Numerical computation, matrix operations, large datasets, ML inputs</td></tr>
+</table></div>
+<pre><span class="cm"># Critical difference — + operator:</span>
+[<span class="nm">1</span>,<span class="nm">2</span>,<span class="nm">3</span>] + [<span class="nm">4</span>,<span class="nm">5</span>,<span class="nm">6</span>]  <span class="cm"># [1, 2, 3, 4, 5, 6] ← CONCATENATION</span>
+np.array([<span class="nm">1</span>,<span class="nm">2</span>,<span class="nm">3</span>]) + np.array([<span class="nm">4</span>,<span class="nm">5</span>,<span class="nm">6</span>])  <span class="cm"># [5, 7, 9] ← ADDITION</span></pre>
+<div class="mnem"><strong>Memory trick:</strong> List = flexible bag (different things, slow to process). NumPy array = spreadsheet column (one type, lightning fast for math).</div>
+</div>
+</div>
+
+<div class="card" data-cat="py">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num py">PY2</span>
+  <div class="q-info">
+    <div class="q-text">NumPy 2D array operations — syntax and logic (from your feedback)</div>
+    <div class="q-meta"><span class="q-cat">NumPy · Direct from your feedback</span><span class="priority p-critical">MUST KNOW</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<pre><span class="kw">import</span> numpy <span class="kw">as</span> np
+
+a = np.array([[<span class="nm">1</span>,<span class="nm">2</span>,<span class="nm">3</span>],
+              [<span class="nm">4</span>,<span class="nm">5</span>,<span class="nm">6</span>]])   <span class="cm"># shape: (2, 3) → 2 rows, 3 columns</span>
+
+<span class="cm"># Indexing: [row, col]</span>
+a[<span class="nm">0</span>, <span class="nm">1</span>]       <span class="cm"># → 2 (row 0, col 1)</span>
+a[<span class="nm">1</span>, :]       <span class="cm"># → [4, 5, 6] (entire row 1)</span>
+a[:, <span class="nm">2</span>]       <span class="cm"># → [3, 6] (entire column 2)</span>
+
+<span class="cm"># Operations along axis</span>
+a.sum(axis=<span class="nm">0</span>)  <span class="cm"># → [5, 7, 9] (sum each COLUMN)</span>
+a.sum(axis=<span class="nm">1</span>)  <span class="cm"># → [6, 15] (sum each ROW)</span>
+a.mean()       <span class="cm"># → 3.5 (mean of ALL elements)</span>
+a.T            <span class="cm"># transpose: shape becomes (3, 2)</span>
+a.reshape(<span class="nm">3</span>,<span class="nm">2</span>) <span class="cm"># reshape to 3 rows, 2 columns</span>
+np.dot(a, a.T) <span class="cm"># matrix multiplication</span></pre>
+<div class="kp blue"><strong>Axis rule:</strong> axis=0 = "collapse rows" (operate down columns). axis=1 = "collapse columns" (operate across rows). Think of it as which axis disappears after the operation.</div>
+</div>
+</div>
+
+<div class="card" data-cat="py">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num py">PY3</span>
+  <div class="q-info">
+    <div class="q-text">Handling missing values in Pandas — fillna vs dropna vs interpolate (from your feedback)</div>
+    <div class="q-meta"><span class="q-cat">Pandas · Data Cleaning · Direct from your feedback</span><span class="priority p-critical">MUST KNOW</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<div class="comp-wrap"><table class="comp">
+<tr><th class="head-asp">Method</th><th class="head-a">What it does</th><th class="head-b">Use when</th></tr>
+<tr><td><strong>dropna()</strong></td><td class="a-col">Removes rows (or columns) containing NaN</td><td class="b-col">NaN is truly missing/meaningless AND you have enough data. Risk: lose too many rows.</td></tr>
+<tr><td><strong>fillna(value)</strong></td><td class="a-col">Replaces NaN with a fixed value or method</td><td class="b-col">You have a sensible default: 0 for counts, mean/median for numeric, "Unknown" for categorical</td></tr>
+<tr><td><strong>fillna(method='ffill')</strong></td><td class="a-col">Forward fill — propagates last valid value forward</td><td class="b-col">Time series data where gaps should inherit previous value (stock prices, sensor readings)</td></tr>
+<tr><td><strong>fillna(method='bfill')</strong></td><td class="a-col">Backward fill — propagates next valid value backward</td><td class="b-col">Time series gaps filled from next known value</td></tr>
+<tr><td><strong>interpolate()</strong></td><td class="a-col">Fills with linearly interpolated values between known points</td><td class="b-col">Continuous numeric data where smooth interpolation makes sense (temperature, sensor)</td></tr>
+</table></div>
+<pre><span class="cm"># Check missing values first</span>
+df.isnull().sum()
+df.isnull().sum() / <span class="fn">len</span>(df) * <span class="nm">100</span>  <span class="cm"># % missing per column</span>
+
+<span class="cm"># Fill strategies</span>
+df[<span class="st">'age'</span>].fillna(df[<span class="st">'age'</span>].median(), inplace=<span class="kw">True</span>)  <span class="cm"># median for skewed</span>
+df[<span class="st">'category'</span>].fillna(<span class="st">'Unknown'</span>, inplace=<span class="kw">True</span>)    <span class="cm"># categorical</span>
+df[<span class="st">'price'</span>].fillna(method=<span class="st">'ffill'</span>)               <span class="cm"># time series</span>
+df.dropna(subset=[<span class="st">'target_col'</span>])                  <span class="cm"># drop only if key col is null</span></pre>
+</div>
+</div>
+
+<div class="card" data-cat="py">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num py">PY4</span>
+  <div class="q-info">
+    <div class="q-text">loc vs iloc in Pandas — exact difference with examples</div>
+    <div class="q-meta"><span class="q-cat">Pandas Indexing · Classic interview question</span><span class="priority p-high">HIGH PRIORITY</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<div class="comp-wrap"><table class="comp">
+<tr><th class="head-asp">Aspect</th><th class="head-a">loc[]</th><th class="head-b">iloc[]</th></tr>
+<tr><td>Selects by</td><td class="a-col">Label (index name, column name)</td><td class="b-col">Integer position (0, 1, 2...)</td></tr>
+<tr><td>Slicing includes end?</td><td class="a-col">Yes — df.loc[0:3] includes row 3</td><td class="b-col">No — df.iloc[0:3] gives rows 0,1,2 (like Python list slicing)</td></tr>
+<tr><td>When index is not 0,1,2...</td><td class="a-col">Works on actual index labels: df.loc['Alice']</td><td class="b-col">Always 0-based positions regardless of index</td></tr>
+</table></div>
+<pre><span class="cm"># df with index: ['A','B','C','D']</span>
+df.loc[<span class="st">'B':'C'</span>]       <span class="cm"># rows B and C (inclusive)</span>
+df.iloc[<span class="nm">1</span>:<span class="nm">3</span>]          <span class="cm"># rows at position 1,2 (exclusive end)</span>
+df.loc[<span class="st">'B'</span>, <span class="st">'Revenue'</span>]  <span class="cm"># label-based cell access</span>
+df.iloc[<span class="nm">1</span>, <span class="nm">2</span>]          <span class="cm"># position-based cell access</span></pre>
+<div class="mnem"><strong>Memory trick:</strong> loc = label (l = l). iloc = integer location (i = integer).</div>
+</div>
+</div>
+
+<div class="card" data-cat="py">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num py">PY5</span>
+  <div class="q-info">
+    <div class="q-text">apply() vs map() vs applymap()/map() — which to use when</div>
+    <div class="q-meta"><span class="q-cat">Pandas Functions</span><span class="priority p-high">HIGH PRIORITY</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<div class="comp-wrap"><table class="comp">
+<tr><th class="head-asp">Function</th><th class="head-a">Works on</th><th class="head-b">Purpose</th></tr>
+<tr><td><strong>Series.map()</strong></td><td class="a-col">Series (single column)</td><td class="b-col">Element-wise transformation on a Series. Also for value substitution with a dict.</td></tr>
+<tr><td><strong>DataFrame.apply()</strong></td><td class="a-col">DataFrame — along an axis</td><td class="b-col">Apply a function to each row or each column. Returns Series or DataFrame.</td></tr>
+<tr><td><strong>DataFrame.map()</strong> (pandas 2.1+)<br>old: <strong>applymap()</strong></td><td class="a-col">DataFrame — every cell</td><td class="b-col">Element-wise function to every single cell. Slowest — prefer vectorized operations.</td></tr>
+</table></div>
+<pre><span class="cm"># Series.map — element-wise on one column</span>
+df[<span class="st">'grade'</span>].map({<span class="st">'A'</span>: <span class="nm">4</span>, <span class="st">'B'</span>: <span class="nm">3</span>, <span class="st">'C'</span>: <span class="nm">2</span>})  <span class="cm"># dict substitution</span>
+df[<span class="st">'salary'</span>].map(<span class="kw">lambda</span> x: x * <span class="nm">1.1</span>)           <span class="cm"># function on each value</span>
+
+<span class="cm"># DataFrame.apply — per column or per row</span>
+df.apply(<span class="kw">lambda</span> col: col.max() - col.min())    <span class="cm"># per column (axis=0 default)</span>
+df.apply(<span class="kw">lambda</span> row: row[<span class="st">'A'</span>] + row[<span class="st">'B'</span>], axis=<span class="nm">1</span>)  <span class="cm"># per row</span></pre>
+</div>
+</div>
+
+<div class="card" data-cat="py">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num py">PY6</span>
+  <div class="q-info">
+    <div class="q-text">list vs tuple vs set vs dict — when to use each</div>
+    <div class="q-meta"><span class="q-cat">Core Python Data Structures</span><span class="priority p-high">HIGH PRIORITY</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<div class="comp-wrap"><table class="comp">
+<tr><th class="head-asp">Structure</th><th class="head-a">Key Properties</th><th class="head-b">Use When</th></tr>
+<tr><td><strong>list []</strong></td><td class="a-col">Ordered, mutable, allows duplicates, O(n) search</td><td class="b-col">Sequence of items you'll iterate, modify, or append to</td></tr>
+<tr><td><strong>tuple ()</strong></td><td class="a-col">Ordered, immutable, allows duplicates, slightly faster than list</td><td class="b-col">Fixed records (coordinates, RGB), dictionary keys, returning multiple values from a function</td></tr>
+<tr><td><strong>set {}</strong></td><td class="a-col">Unordered, mutable, NO duplicates, O(1) lookup</td><td class="b-col">Unique values, fast membership test, set operations (union, intersection)</td></tr>
+<tr><td><strong>dict {k:v}</strong></td><td class="a-col">Key-value pairs, ordered (3.7+), O(1) key lookup</td><td class="b-col">Lookups by key, counting, grouping — "map one thing to another"</td></tr>
+</table></div>
+</div>
+</div>
+
+<div class="sdiv"></div>
+
+<!-- ══════════ STATISTICS ══════════ -->
+<div class="sec"><span class="sec-tag stats">Statistics</span><h2>Statistics Comparisons</h2><span class="priority p-high">SCORED 3.4 — needs normal distribution + hypothesis testing clarity</span></div>
+
+<div class="card" data-cat="stats">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num stats">ST1</span>
+  <div class="q-info">
+    <div class="q-text">Mean vs Median vs Mode — when each is the right measure to use</div>
+    <div class="q-meta"><span class="q-cat">Descriptive Statistics · Direct from your feedback</span><span class="priority p-critical">MUST KNOW</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<div class="comp-wrap"><table class="comp">
+<tr><th class="head-asp">Measure</th><th class="head-a">Best For</th><th class="head-b">Avoid When</th></tr>
+<tr><td><strong>Mean</strong></td><td class="a-col">Symmetric distributions, no extreme outliers. Good for calculating total from average.</td><td class="b-col">Skewed data or outliers present (income, house prices) — outliers pull it too much</td></tr>
+<tr><td><strong>Median</strong></td><td class="a-col">Skewed distributions, outliers present. Salary reports, house prices, response times.</td><td class="b-col">When you need the mathematical average for further calculations</td></tr>
+<tr><td><strong>Mode</strong></td><td class="a-col">Categorical data (most common category). Also for finding peaks in multimodal distributions.</td><td class="b-col">Continuous numeric data with no repeats — may not exist</td></tr>
+</table></div>
+<div class="kp yellow"><strong>Skewness rule:</strong> Skewed right (long right tail, like income): Mean > Median > Mode → use Median. Skewed left: Mean < Median < Mode → use Median. Symmetric (like exam scores): all three ≈ equal → use Mean.</div>
+<div class="mnem"><strong>Real-world example:</strong> 9 workers earn ₹30K/month. 1 CEO earns ₹10L/month. Mean = ₹1.27L (misleading — no one earns this). Median = ₹30K (reflects reality).</div>
+</div>
+</div>
+
+<div class="card" data-cat="stats">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num stats">ST2</span>
+  <div class="q-info">
+    <div class="q-text">Normal distribution explained clearly — properties, Z-score, 68-95-99.7 rule</div>
+    <div class="q-meta"><span class="q-cat">Probability Distributions · Direct from your feedback</span><span class="priority p-critical">MUST KNOW</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<div class="kp blue"><strong>What it is:</strong> A symmetric bell-shaped distribution where most values cluster around the mean. Defined by two parameters: mean (μ) = center, std dev (σ) = spread.</div>
+<div class="comp-wrap"><table class="comp">
+<tr><th class="head-asp">Rule</th><th class="head-a">Coverage</th><th class="head-b">Real Example (μ=170cm height, σ=10cm)</th></tr>
+<tr><td>μ ± 1σ</td><td class="a-col">68% of all values</td><td class="b-col">160–180cm → 68% of people</td></tr>
+<tr><td>μ ± 2σ</td><td class="a-col">95% of all values</td><td class="b-col">150–190cm → 95% of people</td></tr>
+<tr><td>μ ± 3σ</td><td class="a-col">99.7% of all values</td><td class="b-col">140–200cm → 99.7% of people</td></tr>
+</table></div>
+<pre><span class="cm"># Z-score: how many std devs from mean</span>
+Z = (x - μ) / σ
+<span class="cm"># Z=0: exactly average | Z=2: top ~2.3% | Z=-1: below 84% of population</span>
+
+<span class="cm"># Python: find probability</span>
+<span class="kw">from</span> scipy.stats <span class="kw">import</span> norm
+norm.cdf(<span class="nm">1.96</span>)    <span class="cm"># → 0.975 (97.5% of values below 1.96σ)</span>
+norm.ppf(<span class="nm">0.95</span>)    <span class="cm"># → 1.645 (Z-score for 95th percentile)</span></pre>
+<div class="mnem"><strong>68-95-99.7:</strong> "One sigma covers most (68%), two sigmas covers almost all (95%), three sigmas covers nearly everything (99.7%)."</div>
+</div>
+</div>
+
+<div class="card" data-cat="stats">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num stats">ST3</span>
+  <div class="q-info">
+    <div class="q-text">Hypothesis testing — step-by-step structure (from your feedback)</div>
+    <div class="q-meta"><span class="q-cat">Inferential Statistics · Direct from your feedback</span><span class="priority p-critical">MUST KNOW</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<div class="comp-wrap"><table class="comp">
+<tr><th class="head-asp" style="width:30px">Step</th><th class="head-a">Action</th><th class="head-b">Example (testing if new drug works)</th></tr>
+<tr><td>1</td><td class="a-col"><strong>State H₀ and H₁</strong></td><td class="b-col">H₀: Drug has no effect (mean = 0). H₁: Drug has effect (mean ≠ 0)</td></tr>
+<tr><td>2</td><td class="a-col"><strong>Choose significance level α</strong></td><td class="b-col">α = 0.05 (5% chance we reject H₀ when it's actually true)</td></tr>
+<tr><td>3</td><td class="a-col"><strong>Choose the right test</strong></td><td class="b-col">t-test (small sample, unknown population std dev)</td></tr>
+<tr><td>4</td><td class="a-col"><strong>Calculate test statistic + p-value</strong></td><td class="b-col">Run ttest, get p = 0.03</td></tr>
+<tr><td>5</td><td class="a-col"><strong>Compare p-value to α</strong></td><td class="b-col">0.03 &lt; 0.05 → Reject H₀</td></tr>
+<tr><td>6</td><td class="a-col"><strong>Interpret in context</strong></td><td class="b-col">"Statistically significant evidence that the drug has an effect at 5% level"</td></tr>
+</table></div>
+<div class="kp red"><strong>p-value misinterpretation trap:</strong> p=0.03 does NOT mean "97% chance the drug works." It means "IF the drug had no effect, there's only a 3% chance of seeing this result by random chance." The actual probability of H₁ being true requires Bayesian reasoning.</div>
+<div class="kp green"><strong>Type I error (α):</strong> Rejecting H₀ when it's true = false positive. Type II error (β): Failing to reject H₀ when H₁ is true = false negative. Power = 1 - β.</div>
+</div>
+</div>
+
+<div class="card" data-cat="stats">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num stats">ST4</span>
+  <div class="q-info">
+    <div class="q-text">Type I vs Type II error — with a real-world analogy</div>
+    <div class="q-meta"><span class="q-cat">Hypothesis Testing</span><span class="priority p-high">HIGH PRIORITY</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<div class="comp-wrap"><table class="comp">
+<tr><th class="head-asp">Error Type</th><th class="head-a">Definition</th><th class="head-b">Fire Alarm Analogy</th></tr>
+<tr><td><strong>Type I (α)</strong> False Positive</td><td class="a-col">Rejecting H₀ when H₀ is actually TRUE. Claiming an effect exists when it doesn't.</td><td class="b-col">Fire alarm goes off when there's NO fire — false alarm. Scary but usually low consequence.</td></tr>
+<tr><td><strong>Type II (β)</strong> False Negative</td><td class="a-col">Failing to reject H₀ when H₁ is TRUE. Missing a real effect.</td><td class="b-col">Fire alarm DOESN'T go off when there IS a fire — missed detection. Often more dangerous.</td></tr>
+<tr><td><strong>Power (1-β)</strong></td><td class="a-col">Probability of correctly detecting a real effect</td><td class="b-col">Probability the alarm works when there's a real fire</td></tr>
+</table></div>
+<div class="kp yellow"><strong>Tradeoff:</strong> Decreasing α (stricter test) reduces Type I errors but increases Type II errors. You can't minimize both without increasing sample size. In medicine, Type II errors are often worse (missing a disease). In spam detection, Type I errors are worse (blocking real emails).</div>
+</div>
+</div>
+
+<div class="card" data-cat="stats">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num stats">ST5</span>
+  <div class="q-info">
+    <div class="q-text">Correlation vs Causation — the key distinction with examples</div>
+    <div class="q-meta"><span class="q-cat">Statistics Concepts · Always asked</span><span class="priority p-high">HIGH PRIORITY</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<div class="comp-wrap"><table class="comp">
+<tr><th class="head-asp">Aspect</th><th class="head-a">Correlation</th><th class="head-b">Causation</th></tr>
+<tr><td>Meaning</td><td class="a-col">Two variables move together statistically</td><td class="b-col">One variable DIRECTLY causes a change in another</td></tr>
+<tr><td>Proof required</td><td class="a-col">Statistical test (Pearson r, Spearman ρ)</td><td class="b-col">Controlled experiment (A/B test, randomized trial)</td></tr>
+<tr><td>Can have without the other</td><td class="a-col">Yes — spurious correlation (ice cream sales and drowning both rise in summer — heat is the confound)</td><td class="b-col">Yes — causation without strong correlation (small consistent effect)</td></tr>
+</table></div>
+<div class="kp red"><strong>Classic spurious examples:</strong> Nicolas Cage films per year correlates with pool drownings. Pirates correlate with lower CO₂. More fire trucks = more fire damage. These are all confounded or coincidental — correlation only.</div>
+<div class="kp green"><strong>How to establish causation:</strong> Randomized controlled experiment (A/B test). Randomly assign users to groups so confounds are eliminated. Correlation in an experiment with random assignment = strong evidence of causation.</div>
+</div>
+</div>
+
+<div class="card" data-cat="stats">
+<div class="card-head" onclick="tog(this)">
+  <span class="q-num stats">ST6</span>
+  <div class="q-info">
+    <div class="q-text">Variance vs Standard Deviation — practical difference</div>
+    <div class="q-meta"><span class="q-cat">Descriptive Statistics</span><span class="priority p-med">MEDIUM</span></div>
+  </div>
+  <div class="q-right"><button class="done-btn" onclick="markDone(event,this)" title="Mark done">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ans-body">
+<div class="comp-wrap"><table class="comp">
+<tr><th class="head-asp">Aspect</th><th class="head-a">Variance (σ²)</th><th class="head-b">Standard Deviation (σ)</th></tr>
+<tr><td>Formula</td><td class="a-col">Average of squared deviations: Σ(xᵢ − μ)² / N</td><td class="b-col">Square root of variance: √σ²</td></tr>
+<tr><td>Units</td><td class="a-col">Squared units (e.g. cm² if x is cm) — hard to interpret</td><td class="b-col">Same units as data (cm) — directly interpretable</td></tr>
+<tr><td>Sensitivity to outliers</td><td class="a-col">Very sensitive — outliers squared → large impact</td><td class="b-col">Also sensitive, but less extreme than variance</td></tr>
+<tr><td>Use in</td><td class="a-col">Mathematical proofs, ANOVA calculations</td><td class="b-col">Reporting, normal distribution, Z-scores</td></tr>
+</table></div>
+<div class="mnem"><strong>Why not always use variance?</strong> If data is in ₹, variance is in ₹² which is meaningless to report. "Revenue spread is ₹4,000,000 squared" says nothing. "Revenue std dev is ₹2,000" is interpretable.</div>
+</div>
+</div>
+
+</main>
+
+<button class="back" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+const cards = document.querySelectorAll('.card');
+let doneSet = new Set(JSON.parse(localStorage.getItem('diffDone') || '[]'));
+
+function tog(hdr) {
+  const body = hdr.nextElementSibling;
+  const arr = hdr.querySelector('.arr');
+  body.classList.toggle('show');
+  arr.classList.toggle('open');
+}
+
+function markDone(e, btn) {
+  e.stopPropagation();
+  const card = btn.closest('.card');
+  const id = card.querySelector('.q-num').textContent;
+  btn.classList.toggle('checked');
+  if (btn.classList.contains('checked')) {
+    doneSet.add(id);
+  } else {
+    doneSet.delete(id);
+  }
+  try { localStorage.setItem('diffDone', JSON.stringify([...doneSet])); } catch(err) {}
+  updateStats();
+}
+
+function filter(cat, btn) {
+  document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  cards.forEach(card => {
+    if (cat === 'all' || card.dataset.cat === cat) {
+      card.dataset.hidden = 'false';
+      card.style.display = '';
+    } else {
+      card.dataset.hidden = 'true';
+      card.style.display = 'none';
+    }
+  });
+  updateStats();
+}
+
+function updateStats() {
+  const visible = [...cards].filter(c => c.style.display !== 'none');
+  const total = visible.length;
+  const done = visible.filter(c => {
+    const id = c.querySelector('.q-num').textContent;
+    return doneSet.has(id);
+  }).length;
+  const left = total - done;
+  const pct = total ? Math.round(done / total * 100) : 0;
+  document.getElementById('s-total').textContent = total;
+  document.getElementById('s-done').textContent = done;
+  document.getElementById('s-left').textContent = left;
+  document.getElementById('s-pct').textContent = pct + '%';
+  document.getElementById('prog-fill').style.width = pct + '%';
+}
+
+// Restore done state
+doneSet.forEach(id => {
+  cards.forEach(card => {
+    const num = card.querySelector('.q-num');
+    if (num && num.textContent === id) {
+      card.querySelector('.done-btn').classList.add('checked');
+    }
+  });
+});
+
+updateStats();
+</script>
+</body>
+</html>

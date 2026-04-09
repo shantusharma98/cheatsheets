@@ -1,0 +1,3517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Statistics Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 50px;
+            text-align: center;
+            color: white;
+        }
+        
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+        
+        .content {
+            padding: 50px;
+        }
+        
+        .toc {
+            background: linear-gradient(135deg, #e0e7ff 0%, #f3e7ff 100%);
+            padding: 40px;
+            border-radius: 12px;
+            margin-bottom: 50px;
+            border: 3px solid #667eea;
+        }
+        
+        .toc h2 {
+            color: #2c3e50;
+            margin-bottom: 25px;
+            font-size: 2em;
+        }
+        
+        .toc-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        
+        .toc-item {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            border-left: 5px solid #667eea;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .toc-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .section {
+            margin-bottom: 60px;
+        }
+        
+        .section-title {
+            font-size: 2.2em;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 4px solid #667eea;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .section-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.8em;
+            flex-shrink: 0;
+        }
+        
+        .subsection {
+            margin: 30px 0;
+            padding: 25px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #3498db;
+        }
+        
+        .subsection h3 {
+            color: #2c3e50;
+            font-size: 1.6em;
+            margin-bottom: 15px;
+        }
+        
+        .definition-box {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 5px solid #e74c3c;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .definition-box strong {
+            color: #c0392b;
+            font-size: 1.15em;
+        }
+        
+        .formula-box {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1em;
+            border-left: 5px solid #3498db;
+            overflow-x: auto;
+        }
+        
+        .example-box {
+            background: #e8f5e9;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 5px solid #4caf50;
+        }
+        
+        .example-box strong {
+            color: #2e7d32;
+            font-size: 1.1em;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .comparison-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 18px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+        
+        .comparison-table td {
+            padding: 15px 18px;
+            border-bottom: 1px solid #ecf0f1;
+            font-size: 1.05em;
+        }
+        
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .comparison-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+        
+        .comparison-table tr:hover {
+            background: #e8f4f8;
+        }
+        
+        .key-point {
+            background: #fff3cd;
+            border-left: 5px solid #ffc107;
+            padding: 18px 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .key-point strong {
+            color: #856404;
+            font-size: 1.15em;
+        }
+        
+        .tip-box {
+            background: #d1ecf1;
+            border-left: 5px solid #17a2b8;
+            padding: 18px 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .tip-box strong {
+            color: #0c5460;
+            font-size: 1.15em;
+        }
+        
+        .warning-box {
+            background: #f8d7da;
+            border-left: 5px solid #dc3545;
+            padding: 18px 25px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        
+        .warning-box strong {
+            color: #721c24;
+            font-size: 1.15em;
+        }
+        
+        ul, ol {
+            margin-left: 30px;
+            margin-top: 12px;
+        }
+        
+        ul li, ol li {
+            margin-bottom: 10px;
+            font-size: 1.05em;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+            color: #856404;
+        }
+        
+        .distribution-card {
+            background: white;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+        
+        .distribution-card h4 {
+            color: #495057;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 10px;
+        }
+        
+        .test-card {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+            border: 2px solid #2196f3;
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+        }
+        
+        .test-card h4 {
+            color: #1976d2;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Complete Statistics Guide</h1>
+            <p>Descriptive Statistics • Inferential Statistics • Distributions • Statistical Tests</p>
+        </div>
+        
+        <div class="content">
+            <!-- TABLE OF CONTENTS -->
+            <div class="toc">
+                <h2>📑 Table of Contents</h2>
+                <div class="toc-grid">
+                    <div class="toc-item">1. Descriptive Statistics</div>
+                    <div class="toc-item">2. Inferential Statistics</div>
+                    <div class="toc-item">3. Probability Distributions</div>
+                    <div class="toc-item">4. Hypothesis Testing</div>
+                    <div class="toc-item">5. Statistical Tests (Parametric)</div>
+                    <div class="toc-item">6. Statistical Tests (Non-Parametric)</div>
+                    <div class="toc-item">7. Test Selection Guide</div>
+                </div>
+            </div>
+
+            <!-- SECTION 1: DESCRIPTIVE STATISTICS -->
+            <div class="section" id="descriptive">
+                <h2 class="section-title">
+                    <span class="section-icon">1</span>
+                    Descriptive Statistics
+                </h2>
+                
+                <div class="definition-box">
+                    <strong>What is Descriptive Statistics?</strong>
+                    <p>Methods to summarize, organize, and describe data using numerical measures and visualizations. It answers "What is the data?"</p>
+                </div>
+
+                <!-- MEASURES OF CENTRAL TENDENCY -->
+                <div class="subsection">
+                    <h3>📍 Measures of Central Tendency</h3>
+                    
+                    <div class="distribution-card">
+                        <h4>1. Mean (Average)</h4>
+                        <p><strong>Definition:</strong> Sum of all values divided by the number of values.</p>
+                        <div class="formula-box">
+Mean (μ or x̄) = (Sum of all values) / (Number of values)
+
+μ = (x₁ + x₂ + ... + xₙ) / n
+                        </div>
+                        <div class="example-box">
+                            <strong>Example:</strong> Scores: 70, 80, 90, 100
+                            <br>Mean = (70 + 80 + 90 + 100) / 4 = 340 / 4 = 85
+                        </div>
+                        <p><strong>When to use:</strong> Symmetric distributions, no extreme outliers</p>
+                        <p><strong>Sensitive to:</strong> Outliers (extreme values pull the mean)</p>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>2. Median</h4>
+                        <p><strong>Definition:</strong> Middle value when data is sorted. 50th percentile.</p>
+                        <div class="formula-box">
+Odd number of values: Middle value
+Even number of values: Average of two middle values
+                        </div>
+                        <div class="example-box">
+                            <strong>Example 1:</strong> Scores: 70, 80, 90, 100, 110 (sorted)
+                            <br>Median = 90 (middle value)
+                            <br><br>
+                            <strong>Example 2:</strong> Scores: 70, 80, 90, 100 (sorted)
+                            <br>Median = (80 + 90) / 2 = 85
+                        </div>
+                        <p><strong>When to use:</strong> Skewed distributions, presence of outliers</p>
+                        <p><strong>Resistant to:</strong> Outliers (not affected by extreme values)</p>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>3. Mode</h4>
+                        <p><strong>Definition:</strong> Most frequently occurring value.</p>
+                        <div class="example-box">
+                            <strong>Example:</strong> Scores: 70, 80, 80, 90, 100
+                            <br>Mode = 80 (appears twice, most frequent)
+                        </div>
+                        <p><strong>Types:</strong></p>
+                        <ul>
+                            <li><strong>Unimodal:</strong> One mode</li>
+                            <li><strong>Bimodal:</strong> Two modes</li>
+                            <li><strong>Multimodal:</strong> More than two modes</li>
+                        </ul>
+                        <p><strong>When to use:</strong> Categorical data, finding most common value</p>
+                    </div>
+
+                    <div class="key-point">
+                        <strong>⚡ Mean vs Median vs Mode:</strong>
+                        <ul>
+                            <li><strong>Symmetric distribution:</strong> Mean = Median = Mode</li>
+                            <li><strong>Right-skewed (positive skew):</strong> Mode < Median < Mean</li>
+                            <li><strong>Left-skewed (negative skew):</strong> Mean < Median < Mode</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- MEASURES OF DISPERSION -->
+                <div class="subsection">
+                    <h3>📏 Measures of Dispersion (Spread)</h3>
+                    
+                    <div class="distribution-card">
+                        <h4>1. Range</h4>
+                        <p><strong>Definition:</strong> Difference between maximum and minimum values.</p>
+                        <div class="formula-box">
+Range = Maximum value - Minimum value
+                        </div>
+                        <div class="example-box">
+                            <strong>Example:</strong> Scores: 70, 80, 90, 100
+                            <br>Range = 100 - 70 = 30
+                        </div>
+                        <p><strong>Limitation:</strong> Only considers two values, ignores distribution</p>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>2. Variance</h4>
+                        <p><strong>Definition:</strong> Average of squared deviations from the mean.</p>
+                        <div class="formula-box">
+Population Variance (σ²):
+σ² = Σ(xᵢ - μ)² / N
+
+Sample Variance (s²):
+s² = Σ(xᵢ - x̄)² / (n - 1)
+
+Where:
+- xᵢ = individual value
+- μ or x̄ = mean
+- N = population size
+- n = sample size
+- (n-1) = Bessel's correction for unbiased estimator
+                        </div>
+                        <div class="example-box">
+                            <strong>Example:</strong> Scores: 70, 80, 90, 100 (Mean = 85)
+                            <br>Deviations: -15, -5, 5, 15
+                            <br>Squared: 225, 25, 25, 225
+                            <br>Variance = (225 + 25 + 25 + 225) / (4-1) = 500/3 = 166.67
+                        </div>
+                        <p><strong>Unit:</strong> Squared units (e.g., if data is in dollars, variance is in dollars²)</p>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>3. Standard Deviation (SD)</h4>
+                        <p><strong>Definition:</strong> Square root of variance. Measures average distance from mean.</p>
+                        <div class="formula-box">
+Population SD (σ):
+σ = √(σ²)
+
+Sample SD (s):
+s = √(s²)
+                        </div>
+                        <div class="example-box">
+                            <strong>Example:</strong> From above variance = 166.67
+                            <br>SD = √166.67 = 12.91
+                        </div>
+                        <p><strong>Interpretation:</strong> In normal distribution:</p>
+                        <ul>
+                            <li>68% of data within ±1 SD from mean</li>
+                            <li>95% of data within ±2 SD from mean</li>
+                            <li>99.7% of data within ±3 SD from mean (Empirical Rule)</li>
+                        </ul>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>4. Interquartile Range (IQR)</h4>
+                        <p><strong>Definition:</strong> Range of middle 50% of data. Q3 - Q1.</p>
+                        <div class="formula-box">
+IQR = Q3 - Q1
+
+Where:
+- Q1 = 25th percentile (First Quartile)
+- Q3 = 75th percentile (Third Quartile)
+                        </div>
+                        <div class="example-box">
+                            <strong>Example:</strong> Scores: 60, 70, 80, 90, 100, 110, 120
+                            <br>Q1 = 70, Q3 = 110
+                            <br>IQR = 110 - 70 = 40
+                        </div>
+                        <p><strong>Use:</strong> Resistant to outliers, used in box plots</p>
+                        <p><strong>Outlier Detection:</strong></p>
+                        <ul>
+                            <li>Lower fence: Q1 - 1.5 × IQR</li>
+                            <li>Upper fence: Q3 + 1.5 × IQR</li>
+                            <li>Values outside fences = outliers</li>
+                        </ul>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>5. Coefficient of Variation (CV)</h4>
+                        <p><strong>Definition:</strong> Ratio of standard deviation to mean (as percentage). Measures relative variability.</p>
+                        <div class="formula-box">
+CV = (Standard Deviation / Mean) × 100%
+
+CV = (σ / μ) × 100%
+                        </div>
+                        <div class="example-box">
+                            <strong>Example:</strong> Dataset A: Mean = 100, SD = 10
+                            <br>CV = (10/100) × 100% = 10%
+                            <br><br>Dataset B: Mean = 1000, SD = 50
+                            <br>CV = (50/1000) × 100% = 5%
+                            <br><br><strong>Interpretation:</strong> Dataset B is less variable relative to its mean
+                        </div>
+                        <p><strong>Use:</strong> Compare variability across datasets with different units or scales</p>
+                    </div>
+                </div>
+
+                <!-- MEASURES OF POSITION -->
+                <div class="subsection">
+                    <h3>📊 Measures of Position</h3>
+                    
+                    <div class="distribution-card">
+                        <h4>1. Percentiles</h4>
+                        <p><strong>Definition:</strong> Value below which a given percentage of data falls.</p>
+                        <div class="example-box">
+                            <strong>Example:</strong> 90th percentile = 150
+                            <br>Meaning: 90% of values are ≤ 150
+                        </div>
+                        <p><strong>Common Percentiles:</strong></p>
+                        <ul>
+                            <li>25th percentile = Q1 (First Quartile)</li>
+                            <li>50th percentile = Q2 = Median</li>
+                            <li>75th percentile = Q3 (Third Quartile)</li>
+                        </ul>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>2. Quartiles</h4>
+                        <p><strong>Definition:</strong> Values that divide data into four equal parts.</p>
+                        <ul>
+                            <li><strong>Q1 (25th percentile):</strong> 25% of data below this</li>
+                            <li><strong>Q2 (50th percentile):</strong> Median</li>
+                            <li><strong>Q3 (75th percentile):</strong> 75% of data below this</li>
+                        </ul>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>3. Z-Score (Standard Score)</h4>
+                        <p><strong>Definition:</strong> Number of standard deviations a value is from the mean.</p>
+                        <div class="formula-box">
+Z = (x - μ) / σ
+
+Where:
+- x = value
+- μ = mean
+- σ = standard deviation
+                        </div>
+                        <div class="example-box">
+                            <strong>Example:</strong> Score = 90, Mean = 80, SD = 5
+                            <br>Z = (90 - 80) / 5 = 10/5 = 2
+                            <br><strong>Interpretation:</strong> Score is 2 standard deviations above mean
+                        </div>
+                        <p><strong>Interpretation:</strong></p>
+                        <ul>
+                            <li>Z = 0: Value equals mean</li>
+                            <li>Z > 0: Value above mean</li>
+                            <li>Z < 0: Value below mean</li>
+                            <li>|Z| > 3: Potential outlier</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- MEASURES OF SHAPE -->
+                <div class="subsection">
+                    <h3>📈 Measures of Shape</h3>
+                    
+                    <div class="distribution-card">
+                        <h4>1. Skewness</h4>
+                        <p><strong>Definition:</strong> Measure of asymmetry of the distribution.</p>
+                        
+                        <div class="visual-example">
+                            <strong>📊 Types of Skewness (Visual):</strong>
+                            <pre style="text-align: left; line-height: 1.4;">
+<strong>SYMMETRIC (Skewness = 0):</strong>
+        Mode
+      Median
+       Mean
+         ↓
+        ***
+       *****
+      *******
+     *********
+    ***********
+   *************
+  ***************
+━━━━━━━━━━━━━━━━━━━→
+Perfect mirror image
+Mean = Median = Mode
+
+
+<strong>RIGHT SKEWED (Positive Skew > 0):</strong>
+  Mode
+   ↓ Median
+      ↓  Mean
+         ↓
+      *
+     ***
+    *****
+   *******
+  *********          *
+ ***********      ***
+*************  *****
+━━━━━━━━━━━━━━━━━━━━━━━→
+         Long tail →
+
+Mode < Median < Mean
+Examples: Income, house prices, age at death
+
+
+<strong>LEFT SKEWED (Negative Skew < 0):</strong>
+              Mean
+               ↓ Median
+                  ↓ Mode
+                     ↓
+ *          
+***      
+*****    ***
+******* *****
+***************
+━━━━━━━━━━━━━━━━━━━→
+← Long tail
+
+Mean < Median < Mode
+Examples: Age at retirement, test scores (when easy)
+                            </pre>
+                        </div>
+
+                        <div class="formula-box">
+Skewness Formulas:
+
+Pearson's First Coefficient:
+Skewness = 3 × (Mean - Median) / Standard Deviation
+
+Pearson's Second Coefficient:
+Skewness = (Mean - Mode) / Standard Deviation
+
+Sample Skewness:
+g₁ = [n / ((n-1)(n-2))] × Σ[(xᵢ - x̄)³ / s³]
+                        </div>
+
+                        <p><strong>Interpretation Guidelines:</strong></p>
+                        <table class="comparison-table">
+                            <tr>
+                                <th>Skewness Value</th>
+                                <th>Interpretation</th>
+                                <th>Distribution Shape</th>
+                            </tr>
+                            <tr>
+                                <td>-0.5 to 0.5</td>
+                                <td>Fairly Symmetric</td>
+                                <td>Approximately normal</td>
+                            </tr>
+                            <tr>
+                                <td>0.5 to 1.0</td>
+                                <td>Moderately Right-Skewed</td>
+                                <td>Noticeable tail on right</td>
+                            </tr>
+                            <tr>
+                                <td>> 1.0</td>
+                                <td>Highly Right-Skewed</td>
+                                <td>Long tail on right</td>
+                            </tr>
+                            <tr>
+                                <td>-1.0 to -0.5</td>
+                                <td>Moderately Left-Skewed</td>
+                                <td>Noticeable tail on left</td>
+                            </tr>
+                            <tr>
+                                <td>< -1.0</td>
+                                <td>Highly Left-Skewed</td>
+                                <td>Long tail on left</td>
+                            </tr>
+                        </table>
+
+                        <div class="example-box">
+                            <strong>📝 Real-World Examples:</strong>
+                            <br><br><strong>Right-Skewed Distributions:</strong>
+                            <ul>
+                                <li><strong>Income:</strong> Most people earn moderate income, few billionaires (long right tail)</li>
+                                <li><strong>House Prices:</strong> Many affordable homes, few mansions</li>
+                                <li><strong>Age at Death:</strong> Most die at old age, few die young (but those who do create left tail... wait, this is actually LEFT skewed!)</li>
+                                <li><strong>Website Visit Duration:</strong> Most visits are short, few very long sessions</li>
+                            </ul>
+                            <br><strong>Left-Skewed Distributions:</strong>
+                            <ul>
+                                <li><strong>Age at Retirement:</strong> Most retire around 65, few retire very early</li>
+                                <li><strong>Exam Scores (Easy Test):</strong> Most score high, few fail</li>
+                                <li><strong>Lifespan in Developed Countries:</strong> Most live to old age, fewer die young</li>
+                            </ul>
+                        </div>
+
+                        <div class="tip-box">
+                            <strong>💡 Impact on Analysis:</strong>
+                            <ul>
+                                <li><strong>For Right-Skewed:</strong> Mean > Median, so median is better measure of center</li>
+                                <li><strong>For Left-Skewed:</strong> Mean < Median, so median is better measure of center</li>
+                                <li><strong>Log Transformation:</strong> Can reduce right skewness</li>
+                                <li><strong>Non-Parametric Tests:</strong> Better for highly skewed data</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>2. Kurtosis</h4>
+                        <p><strong>Definition:</strong> Measure of "tailedness" - how heavy or light the tails are compared to normal distribution.</p>
+                        
+                        <div class="visual-example">
+                            <strong>📊 Types of Kurtosis (Visual):</strong>
+                            <pre style="text-align: left; line-height: 1.4;">
+<strong>MESOKURTIC (Kurtosis = 0, Normal):</strong>
+        **
+       ****
+      ******
+     ********
+    **********
+   ************
+  **************
+ ****************
+******************
+━━━━━━━━━━━━━━━━━━━→
+Normal distribution
+Moderate tails
+
+
+<strong>LEPTOKURTIC (Kurtosis > 0, Heavy Tails):</strong>
+         *
+        ***
+       *****
+      *******
+     *********
+    ***********
+   *************
+  ***************    *
+ *****************  ***
+━━━━━━━━━━━━━━━━━━━━━━━→
+Sharp peak, fat tails
+More outliers than normal!
+Examples: Stock returns, financial data
+
+
+<strong>PLATYKURTIC (Kurtosis < 0, Light Tails):</strong>
+     *******
+    *********
+   ***********
+  *************
+ ***************
+*****************
+━━━━━━━━━━━━━━━━━━→
+Flat peak, thin tails
+Fewer outliers than normal
+Example: Uniform distribution
+                            </pre>
+                        </div>
+
+                        <div class="formula-box">
+Sample Kurtosis:
+g₂ = [n(n+1) / ((n-1)(n-2)(n-3))] × Σ[(xᵢ - x̄)⁴ / s⁴] - [3(n-1)² / ((n-2)(n-3))]
+
+Excess Kurtosis = Kurtosis - 3
+(Comparing to normal distribution which has kurtosis = 3)
+                        </div>
+
+                        <p><strong>Interpretation:</strong></p>
+                        <ul>
+                            <li><strong>Kurtosis = 0 (Excess = -3):</strong> Normal distribution (Mesokurtic)</li>
+                            <li><strong>Kurtosis > 0 (Excess > 0):</strong> Leptokurtic - Heavy tails, more outliers</li>
+                            <li><strong>Kurtosis < 0 (Excess < 0):</strong> Platykurtic - Light tails, fewer outliers</li>
+                        </ul>
+
+                        <div class="warning-box">
+                            <strong>⚠️ Why Kurtosis Matters:</strong>
+                            <ul>
+                                <li><strong>Risk Assessment:</strong> High kurtosis = more extreme events</li>
+                                <li><strong>Outlier Detection:</strong> Leptokurtic distributions have more outliers</li>
+                                <li><strong>Model Selection:</strong> Affects which statistical tests are appropriate</li>
+                                <li><strong>Finance:</strong> Stock returns often leptokurtic (fat tails = more crashes)</li>
+                            </ul>
+                        </div>
+
+                        <div class="example-box">
+                            <strong>📊 Kurtosis in Practice:</strong>
+                            <br><br><strong>Stock Returns Example:</strong>
+                            <br>Kurtosis = 5 (excess = 2, leptokurtic)
+                            <br>Interpretation: More extreme price movements than normal distribution predicts
+                            <br>Implication: Higher risk of crashes or booms
+                            <br><br><strong>Manufacturing Quality:</strong>
+                            <br>Kurtosis = -0.5 (excess = -3.5, platykurtic)
+                            <br>Interpretation: Very consistent, few defects
+                            <br>Implication: Good quality control
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: INFERENTIAL STATISTICS -->
+            <div class="section" id="inferential">
+                <h2 class="section-title">
+                    <span class="section-icon">2</span>
+                    Inferential Statistics
+                </h2>
+                
+                <div class="definition-box">
+                    <strong>What is Inferential Statistics?</strong>
+                    <p>Methods to make inferences, predictions, and generalizations about a population based on a sample. It answers "What can we conclude about the population?"</p>
+                </div>
+
+                <!-- KEY CONCEPTS -->
+                <div class="subsection">
+                    <h3>🎯 Key Concepts</h3>
+                    
+                    <div class="distribution-card">
+                        <h4>Population vs Sample</h4>
+                        <ul>
+                            <li><strong>Population (N):</strong> Entire group you want to study
+                                <br>- Parameter: Characteristic of population (μ, σ)
+                                <br>- Example: All students in a university
+                            </li>
+                            <li><strong>Sample (n):</strong> Subset of population actually studied
+                                <br>- Statistic: Characteristic of sample (x̄, s)
+                                <br>- Example: 200 randomly selected students
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>Sampling Distribution</h4>
+                        <p><strong>Definition:</strong> Distribution of a sample statistic (like mean) across all possible samples.</p>
+                        <div class="example-box">
+                            <strong>Example:</strong> Population of 10,000 students
+                            <br>Take 1000 different samples of size 50
+                            <br>Calculate mean for each sample
+                            <br>Plot all 1000 sample means → Sampling distribution
+                        </div>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>⭐ Central Limit Theorem (CLT) - CRITICAL CONCEPT</h4>
+                        <p><strong>Definition:</strong> Regardless of the population distribution shape, the sampling distribution of the sample mean will approach a normal distribution as sample size increases.</p>
+                        
+                        <div class="key-point">
+                            <strong>🎯 The Magic of CLT:</strong>
+                            <p>Even if your population is:</p>
+                            <ul>
+                                <li>Skewed (income distribution)</li>
+                                <li>Uniform (random numbers)</li>
+                                <li>Bimodal (two peaks)</li>
+                                <li>ANY shape at all</li>
+                            </ul>
+                            <p><strong>The distribution of sample means will be approximately normal!</strong></p>
+                        </div>
+
+                        <div class="formula-box">
+If X₁, X₂, ..., Xₙ are random samples from ANY distribution with:
+- Mean = μ
+- Standard Deviation = σ
+
+Then the sample mean (x̄) has:
+- Mean of x̄ = μ (same as population)
+- Standard Deviation of x̄ = σ/√n (Standard Error)
+- Distribution: Approximately Normal when n ≥ 30
+
+x̄ ~ N(μ, σ²/n)  as n → ∞
+                        </div>
+
+                        <div class="visual-example">
+                            <strong>📊 Visual Representation:</strong>
+                            <pre style="font-family: monospace; text-align: left; line-height: 1.2;">
+POPULATION (Any Shape - e.g., Right Skewed):
+     *
+    ***
+   *****
+  ********
+ ***********
+**************
+━━━━━━━━━━━━━━━━━━━━━━━→
+
+Sample Size n = 5 (Small):
+    **
+   ****
+  ******
+ ********
+**********
+━━━━━━━━━━━━━━━→
+Still somewhat skewed
+
+Sample Size n = 30 (Medium):
+      **
+     ****
+    ******
+   ********
+  **********
+ ************
+**************
+━━━━━━━━━━━━━━━→
+More symmetric (bell-shaped)
+
+Sample Size n = 100 (Large):
+        *
+       ***
+      *****
+     *******
+    *********
+   ***********
+  *************
+ ***************
+*****************
+━━━━━━━━━━━━━━━━━→
+Almost perfectly normal!
+                            </pre>
+                        </div>
+
+                        <div class="warning-box">
+                            <strong>⚠️ Key CLT Rules:</strong>
+                            <ul>
+                                <li><strong>n ≥ 30:</strong> General rule for "large enough" sample</li>
+                                <li><strong>If population is normal:</strong> CLT applies for ANY n (even n=2)</li>
+                                <li><strong>If population is heavily skewed:</strong> May need n > 30 (even 50-100)</li>
+                                <li><strong>Standard Error decreases:</strong> As n increases, SE = σ/√n gets smaller</li>
+                            </ul>
+                        </div>
+
+                        <div class="example-box">
+                            <strong>🎲 CLT Example 1: Dice Rolls</strong>
+                            <br><br><strong>Population:</strong> One die roll (uniform: 1,2,3,4,5,6)
+                            <br>Mean = 3.5, Not normal at all!
+                            <br><br><strong>Experiment:</strong> Roll 30 dice, take average. Repeat 1000 times.
+                            <br><br><strong>Result:</strong> The 1000 averages will form a normal distribution!
+                            <br>- Center around 3.5
+                            <br>- Bell-shaped curve
+                            <br>- SE = σ/√30
+                        </div>
+
+                        <div class="example-box">
+                            <strong>💰 CLT Example 2: Income Distribution</strong>
+                            <br><br><strong>Population:</strong> Incomes (highly right-skewed)
+                            <br>Few billionaires, many low earners
+                            <br><br><strong>Sample:</strong> Take 50 people, calculate average income
+                            <br>Repeat 500 times
+                            <br><br><strong>Result:</strong> The 500 sample averages → Normal distribution
+                            <br>Even though individual incomes are NOT normal!
+                        </div>
+
+                        <div class="tip-box">
+                            <strong>💡 Why CLT Matters:</strong>
+                            <ul>
+                                <li>Allows us to use normal-based tests (z-test, t-test) even when population isn't normal</li>
+                                <li>Justifies confidence intervals for means</li>
+                                <li>Foundation of hypothesis testing</li>
+                                <li>Makes inference possible with large samples</li>
+                            </ul>
+                        </div>
+
+                        <div class="example-box">
+                            <strong>📝 Interview Question:</strong>
+                            <br><br><strong>Q:</strong> "You have exponentially distributed data (not normal). Can you still use a t-test?"
+                            <br><br><strong>A:</strong> "Yes, if sample size is large enough (n ≥ 30). The Central Limit Theorem tells us that the sampling distribution of the mean will be approximately normal, regardless of the population distribution. So even though individual data points are exponential, the sample means will be normally distributed, allowing us to use parametric tests like t-test."
+                        </div>
+
+                        <div class="key-point">
+                            <strong>🎯 CLT in Practice:</strong>
+                            <br><br><strong>Standard Error Formula:</strong>
+                            <div class="formula-box">
+SE = σ / √n
+
+Examples:
+- n = 4:  SE = σ/2   (half the population SD)
+- n = 9:  SE = σ/3
+- n = 25: SE = σ/5
+- n = 100: SE = σ/10
+
+As n increases → SE decreases → More precise estimates!
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>Standard Error (SE)</h4>
+                        <p><strong>Definition:</strong> Standard deviation of the sampling distribution.</p>
+                        <div class="formula-box">
+SE of Mean = σ / √n
+
+Where:
+- σ = population standard deviation
+- n = sample size
+
+If σ unknown, use sample SD:
+SE = s / √n
+                        </div>
+                        <p><strong>Interpretation:</strong> Measures precision of sample mean as estimate of population mean</p>
+                        <p><strong>Key insight:</strong> Larger sample → smaller SE → more precise estimate</p>
+                    </div>
+                </div>
+
+                <!-- SAMPLING METHODS -->
+                <div class="subsection">
+                    <h3>🎲 Sampling Methods</h3>
+                    
+                    <div class="definition-box">
+                        <strong>Sampling:</strong>
+                        <p>Process of selecting a subset of individuals from a population to estimate characteristics of the whole population.</p>
+                    </div>
+
+                    <div class="visual-example">
+                        <strong>📊 Probability vs Non-Probability Sampling:</strong>
+                        <pre style="text-align: left;">
+┌──────────────────────────────────────────┐
+│         SAMPLING METHODS                 │
+├──────────────────┬───────────────────────┤
+│  PROBABILITY     │  NON-PROBABILITY      │
+│  (Random)        │  (Non-Random)         │
+├──────────────────┼───────────────────────┤
+│ • Simple Random  │ • Convenience         │
+│ • Systematic     │ • Purposive           │
+│ • Stratified     │ • Quota               │
+│ • Cluster        │ • Snowball            │
+└──────────────────┴───────────────────────┘
+                        </pre>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>1. Simple Random Sampling</h4>
+                        <p><strong>Definition:</strong> Every individual has equal probability of being selected.</p>
+                        
+                        <div class="visual-example">
+                            <pre style="text-align: left;">
+Population (1000 students):
+○ ○ ○ ○ ○ ○ ○ ○ ○ ○
+○ ○ ○ ○ ○ ○ ○ ○ ○ ○
+○ ○ ○ ○ ○ ○ ○ ○ ○ ○
+        ↓
+   Random Draw
+        ↓
+Sample (50 students):
+● ● ● ● ●
+● ● ● ● ●
+
+Each student has 50/1000 = 5% chance
+                            </pre>
+                        </div>
+
+                        <p><strong>Methods:</strong></p>
+                        <ul>
+                            <li>Lottery method (draw names from hat)</li>
+                            <li>Random number table</li>
+                            <li>Computer random number generator</li>
+                        </ul>
+
+                        <p><strong>Advantages:</strong></p>
+                        <ul>
+                            <li>Unbiased</li>
+                            <li>Simple to understand</li>
+                            <li>Statistical inference possible</li>
+                        </ul>
+
+                        <p><strong>Disadvantages:</strong></p>
+                        <ul>
+                            <li>Requires complete list of population</li>
+                            <li>May miss important subgroups</li>
+                            <li>Can be expensive for large populations</li>
+                        </ul>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>2. Systematic Sampling</h4>
+                        <p><strong>Definition:</strong> Select every kth individual from a list.</p>
+                        
+                        <div class="formula-box">
+k = N / n
+
+Where:
+- N = population size
+- n = desired sample size
+- k = sampling interval
+                        </div>
+
+                        <div class="visual-example">
+                            <pre style="text-align: left;">
+Population list (1-100), want n=10:
+k = 100/10 = 10 (every 10th person)
+
+Start: Random number 1-10 (say, 3)
+Then: 3, 13, 23, 33, 43, 53, 63, 73, 83, 93
+
+1 2 ● 4 5 6 7 8 9 10 11 12 ● 14...
+        ↑              ↑
+      Start         Every 10th
+                            </pre>
+                        </div>
+
+                        <p><strong>Advantages:</strong></p>
+                        <ul>
+                            <li>Easier than simple random</li>
+                            <li>Ensures spread across population</li>
+                        </ul>
+
+                        <p><strong>Disadvantages:</strong></p>
+                        <ul>
+                            <li>Risk of periodicity (pattern in list)</li>
+                            <li>Not truly random</li>
+                        </ul>
+
+                        <div class="example-box">
+                            <strong>Example:</strong> Survey every 5th customer entering store
+                            <br>Every 5th house on a street
+                            <br>Every 100th product from assembly line
+                        </div>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>3. Stratified Sampling</h4>
+                        <p><strong>Definition:</strong> Divide population into homogeneous subgroups (strata), then sample from each stratum.</p>
+                        
+                        <div class="visual-example">
+                            <pre style="text-align: left;">
+Population (1000 students):
+┌────────────────────────────────┐
+│ Freshmen (400)      40%        │
+│ ○○○○○ → ●●● (20 sampled)      │
+├────────────────────────────────┤
+│ Sophomores (300)    30%        │
+│ ○○○○ → ●● (15 sampled)        │
+├────────────────────────────────┤
+│ Juniors (200)       20%        │
+│ ○○○ → ●● (10 sampled)         │
+├────────────────────────────────┤
+│ Seniors (100)       10%        │
+│ ○○ → ● (5 sampled)            │
+└────────────────────────────────┘
+Total Sample = 50
+Proportional to each stratum
+                            </pre>
+                        </div>
+
+                        <p><strong>Types:</strong></p>
+                        <ul>
+                            <li><strong>Proportional:</strong> Sample from each stratum proportional to size</li>
+                            <li><strong>Disproportional:</strong> Equal samples from each stratum (or based on variability)</li>
+                        </ul>
+
+                        <p><strong>Advantages:</strong></p>
+                        <ul>
+                            <li>Ensures representation of all subgroups</li>
+                            <li>More precise than simple random</li>
+                            <li>Can compare strata</li>
+                        </ul>
+
+                        <p><strong>Disadvantages:</strong></p>
+                        <ul>
+                            <li>Requires knowledge of population characteristics</li>
+                            <li>More complex</li>
+                        </ul>
+
+                        <div class="example-box">
+                            <strong>Example:</strong> Survey employees by department
+                            <br>Political poll by age group and gender
+                            <br>Medical study by disease severity level
+                        </div>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>4. Cluster Sampling</h4>
+                        <p><strong>Definition:</strong> Divide population into clusters, randomly select clusters, then sample ALL or some individuals from selected clusters.</p>
+                        
+                        <div class="visual-example">
+                            <pre style="text-align: left;">
+Population divided into 20 schools:
+
+School 1  School 2  School 3  School 4
+[○○○○○]  [○○○○○]  [○○○○○]  [○○○○○]
+   
+School 5  School 6  School 7  School 8
+[●●●●●]  [○○○○○]  [○○○○○]  [●●●●●]
+ ↑ Selected            Selected ↑
+
+School 9  School 10  etc...
+[○○○○○]  [●●●●●]
+          ↑ Selected
+
+Randomly select 5 schools
+Sample ALL students in those 5 schools
+                            </pre>
+                        </div>
+
+                        <p><strong>One-Stage:</strong> Select clusters, survey ALL in selected clusters</p>
+                        <p><strong>Two-Stage:</strong> Select clusters, then randomly sample within clusters</p>
+
+                        <p><strong>Advantages:</strong></p>
+                        <ul>
+                            <li>Economical for geographically dispersed populations</li>
+                            <li>Don't need complete population list</li>
+                            <li>Reduces travel/admin costs</li>
+                        </ul>
+
+                        <p><strong>Disadvantages:</strong></p>
+                        <ul>
+                            <li>Higher sampling error (clusters may be similar internally)</li>
+                            <li>Less precise than stratified</li>
+                        </ul>
+
+                        <div class="example-box">
+                            <strong>Example:</strong> National health survey by cities
+                            <br>Student survey by randomly selected schools
+                            <br>Agricultural study by selecting farms
+                        </div>
+                    </div>
+
+                    <div class="key-point">
+                        <strong>🎯 Stratified vs Cluster - KEY DIFFERENCE:</strong>
+                        <table class="comparison-table" style="margin-top: 15px;">
+                            <tr>
+                                <th>Aspect</th>
+                                <th>Stratified</th>
+                                <th>Cluster</th>
+                            </tr>
+                            <tr>
+                                <td><strong>Groups are</strong></td>
+                                <td>Homogeneous within (similar)</td>
+                                <td>Heterogeneous within (diverse)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sampling from</strong></td>
+                                <td>ALL strata</td>
+                                <td>SOME clusters</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Sample size per group</strong></td>
+                                <td>Few from each stratum</td>
+                                <td>All (or many) from selected clusters</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Goal</strong></td>
+                                <td>Precision (reduce variance)</td>
+                                <td>Efficiency (reduce cost)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Example</strong></td>
+                                <td>Sample 10 from each department</td>
+                                <td>Sample all people from 3 departments</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>Non-Probability Sampling Methods</h4>
+                        
+                        <p><strong>1. Convenience Sampling:</strong></p>
+                        <ul>
+                            <li>Sample whoever is easily accessible</li>
+                            <li>Example: Survey people at mall</li>
+                            <li>Advantage: Quick, cheap</li>
+                            <li>Disadvantage: Highly biased</li>
+                        </ul>
+
+                        <p><strong>2. Purposive/Judgmental Sampling:</strong></p>
+                        <ul>
+                            <li>Researcher selects specific individuals</li>
+                            <li>Example: Interview industry experts</li>
+                            <li>Used in qualitative research</li>
+                        </ul>
+
+                        <p><strong>3. Quota Sampling:</strong></p>
+                        <ul>
+                            <li>Like stratified but non-random selection</li>
+                            <li>Fill quotas for each subgroup</li>
+                            <li>Example: Interview 50 males, 50 females</li>
+                        </ul>
+
+                        <p><strong>4. Snowball Sampling:</strong></p>
+                        <ul>
+                            <li>Existing subjects recruit future subjects</li>
+                            <li>Example: Study rare disease - patients refer others</li>
+                            <li>Good for hard-to-reach populations</li>
+                        </ul>
+
+                        <div class="warning-box">
+                            <strong>⚠️ Non-Probability Sampling Limitations:</strong>
+                            <ul>
+                                <li>Cannot calculate sampling error</li>
+                                <li>Cannot generalize to population</li>
+                                <li>Selection bias</li>
+                                <li>No statistical inference possible</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="tip-box">
+                        <strong>💡 Interview Question:</strong>
+                        <br><br><strong>Q:</strong> "Which sampling method would you use for a nationwide health survey?"
+                        <br><br><strong>A:</strong> "I'd use stratified cluster sampling:
+                        <ul>
+                            <li>First, stratify by region (North, South, East, West) to ensure geographic representation</li>
+                            <li>Then, cluster by city within each region for cost efficiency</li>
+                            <li>Finally, randomly sample households within selected cities</li>
+                            <li>This balances precision (stratification) with practicality (clustering)"</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- CONFIDENCE INTERVALS -->
+                <div class="subsection">
+                    <h3>📏 Confidence Intervals</h3>
+                    
+                    <div class="definition-box">
+                        <strong>Confidence Interval (CI):</strong>
+                        <p>Range of values that likely contains the true population parameter with a certain level of confidence.</p>
+                    </div>
+
+                    <div class="visual-example">
+                        <strong>📊 Confidence Interval Concept:</strong>
+                        <pre style="text-align: left;">
+Population Parameter (μ) - UNKNOWN
+           ↓
+    ───────▼───────
+    ═══════════════  ← True value (we don't know this)
+
+Sample 1:  [─────■─────]     ✓ Contains μ
+Sample 2:  [─────■─────]     ✓ Contains μ
+Sample 3:      [─────■─────] ✓ Contains μ
+Sample 4:  [─────■─────]     ✓ Contains μ
+Sample 5:     [─────■─────]  ✗ Misses μ (rare!)
+Sample 6:  [─────■─────]     ✓ Contains μ
+
+95% CI means: If we repeat sampling 100 times,
+about 95 intervals will contain true μ
+                        </pre>
+                    </div>
+
+                    <div class="key-point">
+                        <strong>⚡ CRITICAL Understanding:</strong>
+                        <br><br>❌ <strong>WRONG:</strong> "There's 95% probability μ is in this interval"
+                        <br>(μ is fixed, not random!)
+                        <br><br>✅ <strong>CORRECT:</strong> "If we repeat this process many times, 95% of intervals will contain μ"
+                        <br>(The interval is random, not μ!)
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>Confidence Interval for Mean (σ known)</h4>
+                        <div class="formula-box">
+CI = x̄ ± Z(α/2) × (σ / √n)
+
+Components:
+- x̄ = sample mean (center of interval)
+- Z(α/2) = critical Z-value for confidence level
+- σ / √n = Standard Error (SE)
+- Margin of Error (ME) = Z(α/2) × SE
+
+Common Confidence Levels:
+┌───────────┬──────────┬────────────┐
+│Confidence │   α      │  Z(α/2)    │
+├───────────┼──────────┼────────────┤
+│   90%     │  0.10    │   1.645    │
+│   95%     │  0.05    │   1.96     │
+│   99%     │  0.01    │   2.576    │
+└───────────┴──────────┴────────────┘
+                        </div>
+
+                        <div class="visual-example">
+                            <strong>Visual Representation:</strong>
+                            <pre style="text-align: left;">
+Normal Distribution:
+         **
+        ****
+       ******
+      ********
+     **********
+    ************
+   **************
+  ****************
+ ║**************║
+ ║              ║
+2.5%          2.5%
+ ↓              ↓
+-1.96          +1.96
+
+95% of data between ±1.96 standard errors
+
+Confidence Interval:
+Lower Bound      x̄      Upper Bound
+    ├─────────────┼─────────────┤
+    x̄ - 1.96×SE  Sample  x̄ + 1.96×SE
+                  Mean
+                            </pre>
+                        </div>
+
+                        <div class="example-box">
+                            <strong>🔢 Complete Example:</strong>
+                            <br><br><strong>Problem:</strong> Sample of 36 students, x̄ = 75, σ = 12
+                            <br>Find 95% CI for population mean
+                            <br><br><strong>Solution:</strong>
+                            <br>Step 1: Calculate SE
+                            <br>SE = σ/√n = 12/√36 = 12/6 = 2
+                            <br><br>Step 2: Find Z-critical (95% → Z = 1.96)
+                            <br><br>Step 3: Calculate Margin of Error
+                            <br>ME = 1.96 × 2 = 3.92
+                            <br><br>Step 4: Build CI
+                            <br>CI = 75 ± 3.92
+                            <br>CI = [71.08, 78.92]
+                            <br><br><strong>Interpretation:</strong> "We are 95% confident that the true population mean lies between 71.08 and 78.92"
+                        </div>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>Confidence Interval for Mean (σ unknown)</h4>
+                        <p><strong>Use t-distribution instead of Z:</strong></p>
+                        <div class="formula-box">
+CI = x̄ ± t(α/2, df) × (s / √n)
+
+Where:
+- t = t-distribution critical value
+- df = degrees of freedom = n - 1
+- s = sample SD (since σ unknown)
+
+Why t-distribution?
+- When σ unknown, use sample SD (s)
+- Adds uncertainty → wider intervals
+- For small samples, t has heavier tails than Z
+                        </div>
+
+                        <div class="visual-example">
+                            <pre style="text-align: left;">
+t-distribution vs Normal:
+
+t (df=5):     Normal (Z):
+    *             **
+   ***           ****
+  *****         ******
+ *******       ********
+*********     **********
+
+t has heavier tails (more uncertainty)
+As df ↑, t → Z
+                            </pre>
+                        </div>
+
+                        <div class="example-box">
+                            <strong>🔢 Example with Unknown σ:</strong>
+                            <br><br><strong>Problem:</strong> n = 16, x̄ = 85, s = 8, find 95% CI
+                            <br><br><strong>Solution:</strong>
+                            <br>Step 1: df = n - 1 = 16 - 1 = 15
+                            <br><br>Step 2: From t-table: t(0.025, 15) = 2.131
+                            <br>(Compare to Z = 1.96 - t is larger!)
+                            <br><br>Step 3: SE = s/√n = 8/√16 = 8/4 = 2
+                            <br><br>Step 4: ME = 2.131 × 2 = 4.262
+                            <br><br>Step 5: CI = 85 ± 4.262 = [80.738, 89.262]
+                            <br><br><strong>Interpretation:</strong> "We are 95% confident the true mean is between 80.74 and 89.26"
+                        </div>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>Margin of Error</h4>
+                        <p><strong>Definition:</strong> Maximum expected difference between sample statistic and population parameter.</p>
+                        
+                        <div class="formula-box">
+Margin of Error (ME) = Critical Value × Standard Error
+
+For means (σ known):
+ME = Z(α/2) × (σ / √n)
+
+For means (σ unknown):
+ME = t(α/2, df) × (s / √n)
+
+For proportions:
+ME = Z(α/2) × √[p(1-p) / n]
+                        </div>
+
+                        <div class="visual-example">
+                            <pre style="text-align: left;">
+Confidence Interval Structure:
+
+    Lower        Point       Upper
+    Bound      Estimate      Bound
+      ├───────────┼───────────┤
+      │           │           │
+      │← Margin →│← Margin →│
+      │   of      │   of      │
+      │  Error    │  Error    │
+
+CI = Point Estimate ± Margin of Error
+                            </pre>
+                        </div>
+
+                        <p><strong>Factors Affecting Margin of Error:</strong></p>
+                        <ol>
+                            <li><strong>Confidence Level:</strong>
+                                <br>↑ Confidence → ↑ ME (wider interval)
+                                <br>90% CI: Narrower
+                                <br>95% CI: Medium
+                                <br>99% CI: Wider
+                            </li>
+                            <li><strong>Sample Size:</strong>
+                                <br>↑ n → ↓ ME (narrower interval)
+                                <br>n = 25: ME larger
+                                <br>n = 100: ME smaller
+                            </li>
+                            <li><strong>Variability:</strong>
+                                <br>↑ σ → ↑ ME (wider interval)
+                            </li>
+                        </ol>
+
+                        <div class="example-box">
+                            <strong>📊 Sample Size Effect:</strong>
+                            <br><br>Same data (x̄=100, σ=15), 95% CI:
+                            <br><br>n = 9:  ME = 1.96×(15/3) = 9.8  → [90.2, 109.8] (wide!)
+                            <br>n = 36: ME = 1.96×(15/6) = 4.9  → [95.1, 104.9]
+                            <br>n = 100: ME = 1.96×(15/10) = 2.94 → [97.06, 102.94]
+                            <br>n = 400: ME = 1.96×(15/20) = 1.47 → [98.53, 101.47] (narrow!)
+                            <br><br><strong>Pattern:</strong> 4× sample size → ½ margin of error
+                        </div>
+
+                        <div class="tip-box">
+                            <strong>💡 Trade-offs:</strong>
+                            <ul>
+                                <li><strong>Higher Confidence ↔ Wider Interval:</strong>
+                                    <br>More confident but less precise
+                                </li>
+                                <li><strong>Lower Confidence ↔ Narrower Interval:</strong>
+                                    <br>More precise but less confident
+                                </li>
+                                <li><strong>Solution:</strong> Increase sample size!
+                                    <br>Can have both high confidence AND narrow interval
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>Confidence Interval for Proportion</h4>
+                        <div class="formula-box">
+CI = p̂ ± Z(α/2) × √[p̂(1-p̂) / n]
+
+Where:
+- p̂ = sample proportion = x/n
+- x = number of successes
+- n = sample size
+
+Requirements:
+- np̂ ≥ 10
+- n(1-p̂) ≥ 10
+                        </div>
+
+                        <div class="example-box">
+                            <strong>🔢 Proportion Example:</strong>
+                            <br><br><strong>Problem:</strong> Survey 400 voters, 240 support candidate
+                            <br>Find 95% CI for true proportion
+                            <br><br><strong>Solution:</strong>
+                            <br>Step 1: p̂ = 240/400 = 0.60
+                            <br><br>Step 2: Check requirements:
+                            <br>np̂ = 400×0.6 = 240 ≥ 10 ✓
+                            <br>n(1-p̂) = 400×0.4 = 160 ≥ 10 ✓
+                            <br><br>Step 3: SE = √[0.6×0.4/400] = √0.0006 = 0.0245
+                            <br><br>Step 4: ME = 1.96 × 0.0245 = 0.048
+                            <br><br>Step 5: CI = 0.60 ± 0.048 = [0.552, 0.648]
+                            <br>Or: [55.2%, 64.8%]
+                            <br><br><strong>Interpretation:</strong> "We are 95% confident that between 55.2% and 64.8% of ALL voters support the candidate"
+                        </div>
+                    </div>
+
+                    <div class="warning-box">
+                        <strong>🎯 Common Interview Questions:</strong>
+                        <br><br><strong>Q1:</strong> "Why is a 95% CI wider than a 90% CI?"
+                        <br><strong>A:</strong> "To be more confident (95% vs 90%), we need a wider net to catch the true parameter. Higher confidence requires larger critical value (1.96 vs 1.645), which increases margin of error."
+                        <br><br><strong>Q2:</strong> "How does sample size affect CI?"
+                        <br><strong>A:</strong> "Larger sample → smaller standard error → narrower CI. Doubling sample size doesn't halve the interval; you need 4× the sample for ½ the width (because SE = σ/√n)."
+                        <br><br><strong>Q3:</strong> "Can you say 95% probability the true mean is in the interval?"
+                        <br><strong>A:</strong> "No! The true mean is fixed (though unknown). The INTERVAL is random. Correct interpretation: If we repeated this process 100 times, about 95 of the intervals would contain the true mean."
+                    </div>
+                </div>
+
+                <!-- HYPOTHESIS TESTING -->
+                <div class="subsection">
+                    <h3>🔬 Hypothesis Testing</h3>
+                    
+                    <div class="definition-box">
+                        <strong>Hypothesis Testing:</strong>
+                        <p>Statistical method to make decisions about population parameters based on sample data.</p>
+                    </div>
+
+                    <div class="visual-example">
+                        <strong>📊 Hypothesis Testing Process (Flowchart):</strong>
+                        <pre style="text-align: left; line-height: 1.4;">
+┌─────────────────────────────────────┐
+│  STEP 1: State Hypotheses           │
+│  H₀: μ = μ₀ (Null)                 │
+│  H₁: μ ≠ μ₀ (Alternative)          │
+└─────────────┬───────────────────────┘
+              ↓
+┌─────────────────────────────────────┐
+│  STEP 2: Choose Significance Level  │
+│  α = 0.05 (most common)            │
+│  α = 0.01 (more stringent)         │
+└─────────────┬───────────────────────┘
+              ↓
+┌─────────────────────────────────────┐
+│  STEP 3: Select & Calculate Test    │
+│  t-test, z-test, chi-square, etc.  │
+│  Calculate test statistic           │
+└─────────────┬───────────────────────┘
+              ↓
+┌─────────────────────────────────────┐
+│  STEP 4: Find p-value               │
+│  p = probability of results if H₀   │
+│  is true                            │
+└─────────────┬───────────────────────┘
+              ↓
+┌─────────────────────────────────────┐
+│  STEP 5: Make Decision              │
+│  If p < α → Reject H₀              │
+│  If p ≥ α → Fail to reject H₀      │
+└─────────────┬───────────────────────┘
+              ↓
+┌─────────────────────────────────────┐
+│  STEP 6: State Conclusion           │
+│  In context of original problem     │
+└─────────────────────────────────────┘
+                        </pre>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>Null and Alternative Hypotheses</h4>
+                        <ul>
+                            <li><strong>Null Hypothesis (H₀):</strong> No effect, no difference, status quo
+                                <br>- Assumes nothing has changed
+                                <br>- What we try to reject
+                                <br>- Example: H₀: μ = 100 (mean equals 100)
+                                <br>- Example: H₀: μ₁ = μ₂ (two means are equal)
+                            </li>
+                            <li><strong>Alternative Hypothesis (H₁ or Hₐ):</strong> What we want to prove
+                                <br>- Claims there IS an effect/difference
+                                <br>- Can be directional or non-directional
+                                <br>- Example: H₁: μ ≠ 100 (two-tailed)
+                                <br>- Example: H₁: μ > 100 (one-tailed, right)
+                                <br>- Example: H₁: μ < 100 (one-tailed, left)
+                            </li>
+                        </ul>
+
+                        <div class="example-box">
+                            <strong>📝 Hypothesis Examples:</strong>
+                            <br><br><strong>Example 1: New Drug</strong>
+                            <br>H₀: Drug has no effect on blood pressure
+                            <br>H₁: Drug lowers blood pressure
+                            <br><br><strong>Example 2: Teaching Method</strong>
+                            <br>H₀: New method produces same results as old method
+                            <br>H₁: New method produces different results
+                            <br><br><strong>Example 3: Quality Control</strong>
+                            <br>H₀: Mean weight = 500g (meeting specification)
+                            <br>H₁: Mean weight ≠ 500g (not meeting specification)
+                        </div>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>P-Value: The Most Important Concept</h4>
+                        <p><strong>Definition:</strong> Probability of obtaining results at least as extreme as observed, assuming H₀ is true.</p>
+                        
+                        <div class="visual-example">
+                            <strong>Visual Representation (Two-Tailed Test):</strong>
+                            <pre style="text-align: left;">
+Normal Distribution under H₀:
+
+         **
+        ****
+       ******
+      ********
+     **********
+    ************
+   **************
+  ****************
+        ↓ ↓ ↓
+       p/2  p/2
+    ←─────┴─────→
+    Rejection  Rejection
+     Region     Region
+   (α/2=.025) (α/2=.025)
+
+If your test statistic falls in shaded area:
+p-value < α → Reject H₀
+                            </pre>
+                        </div>
+
+                        <p><strong>Interpretation Guidelines:</strong></p>
+                        <table class="comparison-table">
+                            <tr>
+                                <th>p-value</th>
+                                <th>Interpretation</th>
+                                <th>Decision (α=0.05)</th>
+                            </tr>
+                            <tr>
+                                <td>< 0.01</td>
+                                <td>Very strong evidence against H₀</td>
+                                <td>Reject H₀</td>
+                            </tr>
+                            <tr>
+                                <td>0.01 - 0.05</td>
+                                <td>Strong evidence against H₀</td>
+                                <td>Reject H₀</td>
+                            </tr>
+                            <tr>
+                                <td>0.05 - 0.10</td>
+                                <td>Weak evidence against H₀</td>
+                                <td>Fail to reject H₀</td>
+                            </tr>
+                            <tr>
+                                <td>> 0.10</td>
+                                <td>Little to no evidence against H₀</td>
+                                <td>Fail to reject H₀</td>
+                            </tr>
+                        </table>
+
+                        <div class="example-box">
+                            <strong>📝 P-Value Examples:</strong>
+                            <br><br><strong>Scenario 1:</strong> Testing if coin is fair
+                            <br>Get 70 heads in 100 flips
+                            <br>p-value = 0.0003
+                            <br><strong>Interpretation:</strong> Only 0.03% chance of getting 70+ heads if coin were fair
+                            <br><strong>Conclusion:</strong> Strong evidence coin is NOT fair (reject H₀)
+                            <br><br><strong>Scenario 2:</strong> Testing new teaching method
+                            <br>Slight improvement in test scores
+                            <br>p-value = 0.12
+                            <br><strong>Interpretation:</strong> 12% chance of seeing this improvement by random chance
+                            <br><strong>Conclusion:</strong> Not enough evidence method works (fail to reject H₀)
+                        </div>
+
+                        <div class="warning-box">
+                            <strong>⚠️ Common P-Value Misconceptions:</strong>
+                            <ul>
+                                <li>❌ p-value is NOT the probability that H₀ is true</li>
+                                <li>❌ p-value is NOT the probability of making a mistake</li>
+                                <li>✅ p-value IS the probability of your data (or more extreme) given H₀ is true</li>
+                                <li>✅ Small p-value means data is unlikely under H₀</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>Significance Level (α)</h4>
+                        <p><strong>Definition:</strong> Threshold for rejecting H₀. Probability of Type I error we're willing to accept.</p>
+                        
+                        <p><strong>Common values:</strong></p>
+                        <ul>
+                            <li><strong>α = 0.05 (5%):</strong> Most common standard
+                                <br>- Accepts 5% chance of false positive
+                                <br>- 95% confidence level
+                            </li>
+                            <li><strong>α = 0.01 (1%):</strong> More stringent
+                                <br>- Only 1% chance of false positive
+                                <br>- Used when false positive is costly
+                                <br>- Example: Drug approval, medical testing
+                            </li>
+                            <li><strong>α = 0.10 (10%):</strong> More lenient
+                                <br>- 10% chance of false positive
+                                <br>- Used in exploratory research
+                            </li>
+                        </ul>
+
+                        <p><strong>Decision Rule:</strong></p>
+                        <div class="formula-box">
+If p-value < α  →  Reject H₀ (statistically significant)
+If p-value ≥ α  →  Fail to reject H₀ (not significant)
+
+Example with α = 0.05:
+- p = 0.03 → Reject H₀ (0.03 < 0.05)
+- p = 0.08 → Fail to reject H₀ (0.08 ≥ 0.05)
+                        </div>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>Type I and Type II Errors</h4>
+                        
+                        <div class="visual-example">
+                            <strong>📊 Error Types Visual:</strong>
+                            <pre style="text-align: left;">
+┌─────────────────────────────────────────────────┐
+│              REALITY (Unknown)                   │
+├────────────────┬──────────────┬─────────────────┤
+│ OUR DECISION   │ H₀ is TRUE   │ H₀ is FALSE     │
+├────────────────┼──────────────┼─────────────────┤
+│ Reject H₀      │ TYPE I ERROR │ CORRECT ✓       │
+│                │ (False +)    │ (True Positive) │
+│                │ α = 0.05     │ Power = 1-β     │
+├────────────────┼──────────────┼─────────────────┤
+│ Fail to        │ CORRECT ✓    │ TYPE II ERROR   │
+│ Reject H₀      │ (True -)     │ (False -)       │
+│                │ 1 - α = 0.95 │ β               │
+└────────────────┴──────────────┴─────────────────┘
+                            </pre>
+                        </div>
+
+                        <table class="comparison-table">
+                            <tr>
+                                <th>Error Type</th>
+                                <th>What Happened</th>
+                                <th>Consequence</th>
+                                <th>Probability</th>
+                            </tr>
+                            <tr>
+                                <td><strong>Type I (α)</strong></td>
+                                <td>Reject true H₀<br>(False Positive)</td>
+                                <td>Claim effect exists when it doesn't</td>
+                                <td>α (usually 0.05)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Type II (β)</strong></td>
+                                <td>Fail to reject false H₀<br>(False Negative)</td>
+                                <td>Miss real effect</td>
+                                <td>β (varies)</td>
+                            </tr>
+                        </table>
+
+                        <div class="example-box">
+                            <strong>🏥 Medical Testing Example:</strong>
+                            <br>H₀: Patient is healthy (no disease)
+                            <br>H₁: Patient has disease
+                            <br><br><strong>Type I Error (α):</strong>
+                            <br>- Diagnose healthy patient as sick
+                            <br>- False alarm / False positive
+                            <br>- Consequence: Unnecessary treatment, anxiety
+                            <br><br><strong>Type II Error (β):</strong>
+                            <br>- Diagnose sick patient as healthy
+                            <br>- Missed diagnosis / False negative
+                            <br>- Consequence: Disease goes untreated (WORSE!)
+                            <br><br><strong>Trade-off:</strong>
+                            <br>- Lower α (stricter) → Higher β (more misses)
+                            <br>- Higher α (lenient) → Lower β (fewer misses)
+                            <br>- In medicine: Often prefer Type I over Type II (better safe than sorry)
+                        </div>
+
+                        <div class="example-box">
+                            <strong>⚖️ Court Trial Analogy:</strong>
+                            <br>H₀: Defendant is innocent
+                            <br>H₁: Defendant is guilty
+                            <br><br><strong>Type I Error:</strong> Convict innocent person (tragic!)
+                            <br><strong>Type II Error:</strong> Acquit guilty person (also bad)
+                            <br><br>Legal system: "Better to let 10 guilty go free than convict 1 innocent"
+                            <br>→ Minimizes Type I error (very low α)
+                        </div>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>Statistical Power (1 - β)</h4>
+                        <p><strong>Definition:</strong> Probability of correctly rejecting a false null hypothesis. Ability to detect an effect when it exists.</p>
+                        
+                        <div class="formula-box">
+Power = 1 - β
+
+Where:
+- β = Probability of Type II error
+- Typical target: Power ≥ 0.80 (80%)
+
+This means: 80% chance of detecting a real effect
+                        </div>
+
+                        <p><strong>Factors Affecting Power:</strong></p>
+                        <ol>
+                            <li><strong>Sample Size (n):</strong>
+                                <br>↑ n → ↑ Power
+                                <br>Larger sample detects smaller effects
+                            </li>
+                            <li><strong>Effect Size:</strong>
+                                <br>↑ Effect size → ↑ Power
+                                <br>Bigger differences are easier to detect
+                            </li>
+                            <li><strong>Significance Level (α):</strong>
+                                <br>↑ α → ↑ Power (but ↑ Type I error)
+                                <br>Trade-off between errors
+                            </li>
+                            <li><strong>Variability (σ):</strong>
+                                <br>↓ σ → ↑ Power
+                                <br>Less noise makes signal clearer
+                            </li>
+                        </ol>
+
+                        <div class="example-box">
+                            <strong>Power Calculation Example:</strong>
+                            <br><br><strong>Scenario:</strong> Test if new drug lowers blood pressure
+                            <br>Expected difference: 10 mmHg
+                            <br>Standard deviation: 15 mmHg
+                            <br>α = 0.05
+                            <br><br><strong>Sample size needed for 80% power:</strong>
+                            <br>n ≈ 36 per group
+                            <br><br><strong>Interpretation:</strong> With 36 people in each group, we have 80% chance of detecting the 10 mmHg difference if it truly exists.
+                        </div>
+
+                        <div class="tip-box">
+                            <strong>💡 Power Analysis in Practice:</strong>
+                            <ul>
+                                <li><strong>Before study:</strong> Calculate sample size needed for desired power</li>
+                                <li><strong>After study:</strong> Calculate achieved power (retrospective)</li>
+                                <li><strong>Low power (<50%):</strong> Study likely to miss real effects</li>
+                                <li><strong>Target power (80%):</strong> Good balance</li>
+                                <li><strong>High power (>90%):</strong> Very likely to detect effect (but may need huge sample)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>One-Tailed vs Two-Tailed Tests</h4>
+                        
+                        <div class="visual-example">
+                            <strong>Visual Comparison:</strong>
+                            <pre style="text-align: left;">
+<strong>TWO-TAILED TEST (H₁: μ ≠ 100):</strong>
+Testing if mean is DIFFERENT (either direction)
+
+         **
+        ****
+       ******
+      ********
+     **********
+    ************
+   **************
+  ****************
+ *||************||*
+  ||            ||
+α/2=.025    α/2=.025
+  ↓              ↓
+Reject         Reject
+(too low)    (too high)
+
+Critical regions on BOTH sides
+
+
+<strong>ONE-TAILED TEST - RIGHT (H₁: μ > 100):</strong>
+Testing if mean is GREATER
+
+         **
+        ****
+       ******
+      ********
+     **********
+    ************
+   **************
+  ****************
+ ****************||*
+                  ||
+              α=.05
+                  ↓
+              Reject
+           (greater)
+
+Critical region on RIGHT only
+
+
+<strong>ONE-TAILED TEST - LEFT (H₁: μ < 100):</strong>
+Testing if mean is LESS
+
+         **
+        ****
+       ******
+      ********
+     **********
+    ************
+   **************
+  ****************
+ *||****************
+  ||
+α=.05
+  ↓
+Reject
+(less)
+
+Critical region on LEFT only
+                            </pre>
+                        </div>
+
+                        <table class="comparison-table">
+                            <tr>
+                                <th>Aspect</th>
+                                <th>One-Tailed</th>
+                                <th>Two-Tailed</th>
+                            </tr>
+                            <tr>
+                                <td><strong>Hypothesis</strong></td>
+                                <td>H₁: μ > k or μ < k</td>
+                                <td>H₁: μ ≠ k</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Direction</strong></td>
+                                <td>Specific direction predicted</td>
+                                <td>Any direction</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Rejection Region</strong></td>
+                                <td>One tail (all α in one side)</td>
+                                <td>Both tails (α/2 each side)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Critical Value (α=.05)</strong></td>
+                                <td>Z = ±1.645</td>
+                                <td>Z = ±1.96</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Power</strong></td>
+                                <td>Higher (for predicted direction)</td>
+                                <td>Lower</td>
+                            </tr>
+                            <tr>
+                                <td><strong>When to Use</strong></td>
+                                <td>Direction known beforehand</td>
+                                <td>Direction unknown (safer)</td>
+                            </tr>
+                        </table>
+
+                        <div class="example-box">
+                            <strong>When to Use Each:</strong>
+                            <br><br><strong>Two-Tailed (More Common):</strong>
+                            <ul>
+                                <li>"Is there a difference?" (either way matters)</li>
+                                <li>Quality control (too high OR too low is bad)</li>
+                                <li>Exploratory research</li>
+                                <li>Example: "Does drug affect blood pressure?" (increase or decrease)</li>
+                            </ul>
+                            <br><strong>One-Tailed (Specific Direction):</strong>
+                            <ul>
+                                <li>"Is it greater than?" or "Is it less than?"</li>
+                                <li>Theory predicts specific direction</li>
+                                <li>Only one direction matters</li>
+                                <li>Example: "Does drug LOWER blood pressure?" (only decrease matters)</li>
+                            </ul>
+                        </div>
+
+                        <div class="warning-box">
+                            <strong>⚠️ Important Notes:</strong>
+                            <ul>
+                                <li>One-tailed tests are more powerful BUT easier to abuse</li>
+                                <li>Must decide before seeing data (no switching after!)</li>
+                                <li>Two-tailed is safer and more conservative</li>
+                                <li>Most researchers default to two-tailed</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: PROBABILITY DISTRIBUTIONS -->
+            <div class="section" id="distributions">
+                <h2 class="section-title">
+                    <span class="section-icon">3</span>
+                    Probability Distributions
+                </h2>
+                
+                <div class="definition-box">
+                    <strong>Probability Distribution:</strong>
+                    <p>Function that shows all possible values a random variable can take and their associated probabilities.</p>
+                </div>
+
+                <!-- DISCRETE DISTRIBUTIONS -->
+                <div class="subsection">
+                    <h3>🎲 Discrete Probability Distributions</h3>
+                    
+                    <div class="distribution-card">
+                        <h4>1. Binomial Distribution</h4>
+                        <p><strong>Definition:</strong> Distribution of number of successes in n independent trials with constant probability p.</p>
+                        
+                        <p><strong>Conditions (MUST ALL BE MET):</strong></p>
+                        <ol>
+                            <li><strong>Fixed number of trials (n):</strong> Know exactly how many attempts</li>
+                            <li><strong>Two outcomes only:</strong> Success or Failure (binary)</li>
+                            <li><strong>Constant probability (p):</strong> Probability doesn't change between trials</li>
+                            <li><strong>Independent trials:</strong> Each trial doesn't affect others</li>
+                        </ol>
+
+                        <div class="tip-box">
+                            <strong>💡 Remember "BINS":</strong>
+                            <ul>
+                                <li><strong>B</strong>inary outcomes (success/failure)</li>
+                                <li><strong>I</strong>ndependent trials</li>
+                                <li><strong>N</strong>umber of trials is fixed</li>
+                                <li><strong>S</strong>ame probability for each trial</li>
+                            </ul>
+                        </div>
+
+                        <div class="visual-example">
+                            <strong>📊 Binomial Distribution Shapes:</strong>
+                            <pre style="text-align: left;">
+<strong>p = 0.5 (symmetric):</strong>
+n = 10, p = 0.5
+
+Probability
+    |     *
+0.25|    ***
+    |   *****
+0.20|  *******
+    | *********
+0.15|***********
+    |
+0.10|
+    |
+0.05|
+    |___________________________
+     0 1 2 3 4 5 6 7 8 9 10
+         Number of Successes
+
+Bell-shaped, centered at 5
+
+
+<strong>p = 0.3 (right-skewed):</strong>
+n = 10, p = 0.3
+
+Probability
+    |*
+0.25|**
+    |***
+0.20|****
+    |*****
+0.15|******
+    | *****
+0.10|  ****
+    |   ***
+0.05|     **
+    |       *
+    |___________________________
+     0 1 2 3 4 5 6 7 8 9 10
+
+Skewed right, peak at 2-3
+
+
+<strong>p = 0.7 (left-skewed):</strong>
+n = 10, p = 0.7
+
+Probability
+    |               *
+0.25|              **
+    |             ***
+0.20|            ****
+    |           *****
+0.15|          ******
+    |         *****
+0.10|        ****
+    |       ***
+0.05|      **
+    |     *
+    |___________________________
+     0 1 2 3 4 5 6 7 8 9 10
+
+Skewed left, peak at 7-8
+                            </pre>
+                        </div>
+
+                        <div class="formula-box">
+Probability Mass Function (PMF):
+P(X = k) = C(n,k) × p^k × (1-p)^(n-k)
+
+Where:
+- n = number of trials
+- k = number of successes (0, 1, 2, ..., n)
+- p = probability of success on single trial
+- C(n,k) = combinations = n! / (k!(n-k)!)
+
+Also written as:
+P(X = k) = (n choose k) × p^k × q^(n-k)
+where q = 1-p
+
+Parameters:
+Mean (μ) = n × p
+Variance (σ²) = n × p × (1-p)
+SD (σ) = √(n × p × (1-p))
+
+Notation: X ~ Binomial(n, p) or X ~ B(n, p)
+                        </div>
+
+                        <div class="example-box">
+                            <strong>🎲 Example 1: Coin Flips</strong>
+                            <br><br><strong>Problem:</strong> Flip fair coin 10 times. Find:
+                            <br>a) P(exactly 6 heads)
+                            <br>b) P(at least 8 heads)
+                            <br>c) Expected number of heads
+                            <br><br><strong>Given:</strong> n=10, p=0.5 (fair coin)
+                            <br><br><strong>Solution a:</strong> P(X = 6)
+                            <br>C(10,6) = 10!/(6!4!) = 210
+                            <br>P(X=6) = 210 × 0.5^6 × 0.5^4
+                            <br>P(X=6) = 210 × 0.015625 × 0.0625
+                            <br>P(X=6) = 0.205 (20.5%)
+                            <br><br><strong>Solution b:</strong> P(X ≥ 8) = P(8) + P(9) + P(10)
+                            <br>P(X=8) = C(10,8) × 0.5^10 = 45 × 0.000977 = 0.044
+                            <br>P(X=9) = C(10,9) × 0.5^10 = 10 × 0.000977 = 0.010
+                            <br>P(X=10) = C(10,10) × 0.5^10 = 1 × 0.000977 = 0.001
+                            <br>P(X ≥ 8) = 0.044 + 0.010 + 0.001 = 0.055 (5.5%)
+                            <br><br><strong>Solution c:</strong> Expected heads
+                            <br>μ = n × p = 10 × 0.5 = 5 heads
+                        </div>
+
+                        <div class="example-box">
+                            <strong>🏭 Example 2: Quality Control</strong>
+                            <br><br><strong>Problem:</strong> 5% of products are defective. Inspect 20 items.
+                            <br>What's the probability of finding exactly 2 defects?
+                            <br><br><strong>Given:</strong> n=20, p=0.05, k=2
+                            <br><br><strong>Solution:</strong>
+                            <br>P(X=2) = C(20,2) × 0.05^2 × 0.95^18
+                            <br>C(20,2) = 20!/(2!18!) = 190
+                            <br>P(X=2) = 190 × 0.0025 × 0.3972
+                            <br>P(X=2) = 0.189 (18.9%)
+                            <br><br><strong>Expected defects:</strong> μ = 20 × 0.05 = 1
+                        </div>
+
+                        <div class="example-box">
+                            <strong>📊 Example 3: Medical Test</strong>
+                            <br><br><strong>Problem:</strong> Test has 90% accuracy. Test 15 patients known to have disease.
+                            <br>Find probability that at least 12 test positive.
+                            <br><br><strong>Given:</strong> n=15, p=0.9
+                            <br><br><strong>Solution:</strong> P(X ≥ 12) = P(12) + P(13) + P(14) + P(15)
+                            <br>Mean = 15 × 0.9 = 13.5 expected positives
+                            <br>(Using calculator or software for exact values)
+                            <br>P(X ≥ 12) ≈ 0.944 (94.4%)
+                        </div>
+
+                        <div class="warning-box">
+                            <strong>⚠️ When NOT to Use Binomial:</strong>
+                            <ul>
+                                <li>❌ Sampling without replacement from small population (use Hypergeometric)</li>
+                                <li>❌ Probability changes between trials (not constant p)</li>
+                                <li>❌ Trials are not independent</li>
+                                <li>❌ More than two outcomes (use Multinomial)</li>
+                                <li>❌ Number of trials not fixed (use Negative Binomial or Geometric)</li>
+                            </ul>
+                        </div>
+
+                        <div class="tip-box">
+                            <strong>💡 Normal Approximation to Binomial:</strong>
+                            <br><br>When np ≥ 10 AND n(1-p) ≥ 10, binomial can be approximated by normal:
+                            <div class="formula-box">
+X ~ N(μ, σ²)
+where:
+μ = np
+σ = √(np(1-p))
+
+Use continuity correction:
+P(X = k) → P(k - 0.5 < X < k + 0.5)
+P(X ≤ k) → P(X < k + 0.5)
+P(X ≥ k) → P(X > k - 0.5)
+                            </div>
+                            <strong>Example:</strong> n=100, p=0.5
+                            <br>np = 50 ≥ 10 ✓
+                            <br>n(1-p) = 50 ≥ 10 ✓
+                            <br>Can use Normal(50, 25) instead of Binomial(100, 0.5)
+                        </div>
+
+                    <div class="distribution-card">
+                        <h4>2. Poisson Distribution</h4>
+                        <p><strong>Definition:</strong> Distribution of number of events occurring in a fixed interval of time or space when events occur independently at a constant average rate.</p>
+                        
+                        <p><strong>Conditions:</strong></p>
+                        <ul>
+                            <li><strong>Events occur independently:</strong> One event doesn't affect another</li>
+                            <li><strong>Average rate (λ) is constant:</strong> Same rate throughout the interval</li>
+                            <li><strong>Two events cannot occur simultaneously:</strong> Events are discrete</li>
+                            <li><strong>Events occur singly:</strong> One at a time</li>
+                        </ul>
+
+                        <div class="visual-example">
+                            <strong>📊 Poisson Distribution Shapes:</strong>
+                            <pre style="text-align: left;">
+<strong>λ = 1 (small rate):</strong>
+Probability
+    |*
+0.35|**
+    | **
+0.30|  *
+    |   *
+0.25|    *
+    |     *
+0.20|      *
+    |
+0.15|
+    |
+0.10|
+    |
+0.05|
+    |_____________________________
+     0 1 2 3 4 5 6 7 8 9 10
+         Number of Events
+
+Right-skewed, most probability at 0-2
+
+
+<strong>λ = 5 (medium rate):</strong>
+Probability
+    |
+0.20|      *
+    |     ***
+0.15|    *****
+    |   *******
+0.10|  *********
+    | ***********
+0.05|*************
+    |  ***********
+    |___________________________
+     0  2  4  6  8 10 12 14
+         Number of Events
+
+More symmetric, peak at 4-5
+
+
+<strong>λ = 10 (large rate):</strong>
+Probability
+    |
+0.15|           *
+    |          ***
+0.10|         *****
+    |        *******
+0.05|       *********
+    |      ***********
+    |     *************
+    |____________________________
+     0   5   10  15  20
+         Number of Events
+
+Approximately normal, peak at 10
+                            </pre>
+                        </div>
+
+                        <div class="formula-box">
+Probability Mass Function (PMF):
+P(X = k) = (λ^k × e^(-λ)) / k!
+
+Where:
+- λ (lambda) = average rate of occurrence per interval
+- k = number of events (0, 1, 2, 3, ...)
+- e = 2.71828... (Euler's number)
+- k! = k factorial
+
+Special Properties:
+Mean (μ) = λ
+Variance (σ²) = λ
+SD (σ) = √λ
+
+Important: Mean = Variance (unique property!)
+
+Notation: X ~ Poisson(λ) or X ~ Pois(λ)
+                        </div>
+
+                        <div class="example-box">
+                            <strong>📞 Example 1: Call Center</strong>
+                            <br><br><strong>Problem:</strong> Average 5 calls per hour. Find:
+                            <br>a) P(exactly 7 calls in next hour)
+                            <br>b) P(no calls in next hour)
+                            <br>c) P(more than 8 calls)
+                            <br><br><strong>Given:</strong> λ = 5
+                            <br><br><strong>Solution a:</strong> P(X = 7)
+                            <br>P(X=7) = (5^7 × e^(-5)) / 7!
+                            <br>P(X=7) = (78125 × 0.00674) / 5040
+                            <br>P(X=7) = 526.72 / 5040
+                            <br>P(X=7) = 0.104 (10.4%)
+                            <br><br><strong>Solution b:</strong> P(X = 0)
+                            <br>P(X=0) = (5^0 × e^(-5)) / 0!
+                            <br>P(X=0) = (1 × 0.00674) / 1
+                            <br>P(X=0) = 0.0067 (0.67% - very unlikely!)
+                            <br><br><strong>Solution c:</strong> P(X > 8) = 1 - P(X ≤ 8)
+                            <br>Need to sum P(0) through P(8) and subtract from 1
+                            <br>P(X > 8) ≈ 0.133 (13.3%)
+                        </div>
+
+                        <div class="example-box">
+                            <strong>🚗 Example 2: Traffic Accidents</strong>
+                            <br><br><strong>Problem:</strong> Average 2 accidents per day on a highway.
+                            <br>What's probability of exactly 3 accidents tomorrow?
+                            <br><br><strong>Given:</strong> λ = 2 per day
+                            <br><br><strong>Solution:</strong>
+                            <br>P(X=3) = (2^3 × e^(-2)) / 3!
+                            <br>P(X=3) = (8 × 0.1353) / 6
+                            <br>P(X=3) = 1.0824 / 6
+                            <br>P(X=3) = 0.180 (18.0%)
+                        </div>
+
+                        <div class="example-box">
+                            <strong>🌐 Example 3: Website Visits</strong>
+                            <br><br><strong>Problem:</strong> Website gets 120 visits per hour on average.
+                            <br>Find probability of getting 100-140 visits in next hour.
+                            <br><br><strong>Given:</strong> λ = 120
+                            <br><br><strong>Solution:</strong> Since λ is large (≥ 10), use normal approximation:
+                            <br>μ = λ = 120
+                            <br>σ = √λ = √120 = 10.95
+                            <br><br>Convert to Z-scores:
+                            <br>Z₁ = (100 - 120) / 10.95 = -1.83
+                            <br>Z₂ = (140 - 120) / 10.95 = 1.83
+                            <br>P(-1.83 < Z < 1.83) ≈ 0.933 (93.3%)
+                        </div>
+
+                        <div class="key-point">
+                            <strong>🎯 Key Insight: Mean = Variance</strong>
+                            <br><br>This is unique to Poisson! If you calculate:
+                            <ul>
+                                <li>Sample mean ≈ Sample variance → Data likely Poisson</li>
+                                <li>Variance >> Mean → Overdispersed (not Poisson)</li>
+                                <li>Variance << Mean → Underdispersed (not Poisson)</li>
+                            </ul>
+                        </div>
+
+                        <div class="tip-box">
+                            <strong>💡 Changing Time Intervals:</strong>
+                            <br><br>If λ = 5 events per hour, then:
+                            <ul>
+                                <li>Per minute: λ = 5/60 = 0.0833</li>
+                                <li>Per 30 minutes: λ = 5 × 0.5 = 2.5</li>
+                                <li>Per 2 hours: λ = 5 × 2 = 10</li>
+                                <li>Per day: λ = 5 × 24 = 120</li>
+                            </ul>
+                            <strong>Rule:</strong> λ scales linearly with time/space
+                        </div>
+
+                        <div class="example-box">
+                            <strong>📧 Real-World Applications:</strong>
+                            <ul>
+                                <li><strong>Customer Service:</strong> Number of calls per hour</li>
+                                <li><strong>Healthcare:</strong> Number of patients arriving at ER</li>
+                                <li><strong>Manufacturing:</strong> Number of defects per batch</li>
+                                <li><strong>Retail:</strong> Number of customers entering store per hour</li>
+                                <li><strong>Web Analytics:</strong> Number of page views per minute</li>
+                                <li><strong>Insurance:</strong> Number of claims per month</li>
+                                <li><strong>Biology:</strong> Number of bacteria in sample</li>
+                                <li><strong>Astronomy:</strong> Number of meteors per hour</li>
+                                <li><strong>Publishing:</strong> Number of typos per page</li>
+                            </ul>
+                        </div>
+
+                        <div class="warning-box">
+                            <strong>⚠️ When Poisson Applies vs Doesn't:</strong>
+                            <br><br><strong>✅ Use Poisson When:</strong>
+                            <ul>
+                                <li>Counting rare events</li>
+                                <li>Events occur randomly over time/space</li>
+                                <li>Average rate is known and constant</li>
+                                <li>Events are independent</li>
+                            </ul>
+                            <br><strong>❌ Don't Use Poisson When:</strong>
+                            <ul>
+                                <li>Rate changes over time (e.g., lunch rush vs night)</li>
+                                <li>Events cluster together (not independent)</li>
+                                <li>Events have patterns or cycles</li>
+                                <li>Sample size is small</li>
+                            </ul>
+                        </div>
+
+                        <div class="tip-box">
+                            <strong>💡 Poisson Approximation to Binomial:</strong>
+                            <br><br>When n is large (n ≥ 20) AND p is small (p ≤ 0.05), Binomial can be approximated by Poisson:
+                            <div class="formula-box">
+Binomial(n, p) ≈ Poisson(λ)
+where λ = n × p
+                            </div>
+                            <strong>Example:</strong> n = 1000, p = 0.003
+                            <br>Instead of Binomial(1000, 0.003)
+                            <br>Use Poisson(λ = 1000 × 0.003 = 3)
+                            <br>Much easier to calculate!
+                        </div>
+
+                    <div class="distribution-card">
+                        <h4>3. Geometric Distribution</h4>
+                        <p><strong>Definition:</strong> Distribution of number of trials needed to get first success.</p>
+                        <div class="formula-box">
+P(X = k) = (1-p)^(k-1) × p
+
+Mean (μ) = 1/p
+Variance (σ²) = (1-p) / p²
+                        </div>
+                        <div class="example-box">
+                            <strong>Example:</strong> Keep flipping until heads. P(first heads on 4th flip)
+                            <br>p = 0.5, k = 4
+                            <br>P(X=4) = 0.5^3 × 0.5 = 0.0625
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CONTINUOUS DISTRIBUTIONS -->
+                <div class="subsection">
+                    <h3>📈 Continuous Probability Distributions</h3>
+                    
+                    <div class="distribution-card">
+                        <h4>1. ⭐ Normal Distribution (Gaussian) - MOST IMPORTANT</h4>
+                        <p><strong>Definition:</strong> Symmetric, bell-shaped distribution defined by two parameters: mean (μ) and standard deviation (σ).</p>
+                        
+                        <div class="visual-example">
+                            <strong>📊 Normal Distribution Curve:</strong>
+                            <pre style="font-family: monospace; text-align: left; line-height: 1.2;">
+                    **
+                  ******
+                 ********
+                **********
+               ************
+              **************
+             ****************
+            ******************
+           ********************
+          **********************
+        **************************
+    ********************************
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━→
+        |    |    |    |    |    |
+       μ-3σ μ-2σ μ-1σ  μ  μ+1σ μ+2σ μ+3σ
+
+68.26%  ←─────────→
+        μ-1σ       μ+1σ
+
+95.44%  ←─────────────────→
+        μ-2σ              μ+2σ
+
+99.74%  ←─────────────────────────→
+        μ-3σ                     μ+3σ
+                            </pre>
+                        </div>
+
+                        <div class="key-point">
+                            <strong>🎯 Key Properties of Normal Distribution:</strong>
+                            <ol>
+                                <li><strong>Symmetry:</strong> Perfect mirror image around mean</li>
+                                <li><strong>Bell Shape:</strong> Unimodal (one peak at center)</li>
+                                <li><strong>Mean = Median = Mode:</strong> All at center</li>
+                                <li><strong>Asymptotic:</strong> Tails approach but never touch x-axis</li>
+                                <li><strong>Total Area = 1:</strong> Represents 100% probability</li>
+                                <li><strong>Determined by μ and σ:</strong> Only need two parameters</li>
+                            </ol>
+                        </div>
+
+                        <div class="formula-box">
+Probability Density Function (PDF):
+
+f(x) = (1 / (σ√(2π))) × e^(-(x-μ)²/(2σ²))
+
+Where:
+- μ = mean (center location)
+- σ = standard deviation (spread/width)
+- π = 3.14159...
+- e = 2.71828...
+
+Notation: X ~ N(μ, σ²)
+
+Standard Normal Distribution:
+- Mean (μ) = 0
+- Standard Deviation (σ) = 1
+- Notation: Z ~ N(0, 1)
+
+Z-Score Transformation:
+Z = (X - μ) / σ
+                        </div>
+
+                        <div class="key-point">
+                            <strong>⭐ Empirical Rule (68-95-99.7 Rule):</strong>
+                            <br>The most important rule in statistics!
+                            <div class="visual-example">
+                                <pre style="text-align: left;">
+68.26% within μ ± 1σ
+├────────────────────────┤
+      34.13%  34.13%
+        ←─────┼─────→
+             μ
+
+95.44% within μ ± 2σ
+├──────────────────────────────────┤
+  13.59%   34.13%  34.13%  13.59%
+    ←────────┼────────────────→
+
+99.74% within μ ± 3σ
+├────────────────────────────────────────────┤
+2.14% 13.59% 34.13% 34.13% 13.59% 2.14%
+                                </pre>
+                            </div>
+                        </div>
+
+                        <div class="example-box">
+                            <strong>📝 Example 1: IQ Scores</strong>
+                            <br><strong>Given:</strong> IQ ~ N(100, 15²)
+                            <br>Mean = 100, SD = 15
+                            <br><br><strong>Questions:</strong>
+                            <br><br>Q1: What % have IQ between 85 and 115?
+                            <br>A1: 85 = 100-15 (μ-1σ), 115 = 100+15 (μ+1σ)
+                            <br>Answer: <strong>68%</strong>
+                            <br><br>Q2: What % have IQ between 70 and 130?
+                            <br>A2: 70 = 100-30 (μ-2σ), 130 = 100+30 (μ+2σ)
+                            <br>Answer: <strong>95%</strong>
+                            <br><br>Q3: What % have IQ > 115?
+                            <br>A3: Above μ+1σ = (100% - 68%)/2 = 16%
+                            <br>Answer: <strong>16%</strong>
+                            <br><br>Q4: What % have IQ < 70?
+                            <br>A4: Below μ-2σ = (100% - 95%)/2 = 2.5%
+                            <br>Answer: <strong>2.5%</strong>
+                        </div>
+
+                        <div class="example-box">
+                            <strong>📝 Example 2: Height Distribution</strong>
+                            <br><strong>Given:</strong> Male heights ~ N(70 inches, 3²)
+                            <br>Mean = 70 inches, SD = 3 inches
+                            <br><br><strong>Distribution breakdown:</strong>
+                            <pre style="text-align: left;">
+Height Range        | Percentage
+────────────────────┼───────────
+< 61 inches (μ-3σ)  | 0.13%
+61-64 (μ-2σ to μ-3σ)| 2.14%
+64-67 (μ-1σ to μ-2σ)| 13.59%
+67-70 (μ-1σ to μ)   | 34.13%
+70-73 (μ to μ+1σ)   | 34.13%
+73-76 (μ+1σ to μ+2σ)| 13.59%
+76-79 (μ+2σ to μ+3σ)| 2.14%
+> 79 inches (μ+3σ)  | 0.13%
+                            </pre>
+                        </div>
+
+                        <div class="distribution-card" style="background: #f0f8ff;">
+                            <h4>Standard Normal Distribution (Z-Distribution)</h4>
+                            <p><strong>Definition:</strong> Normal distribution with μ=0, σ=1</p>
+                            
+                            <div class="visual-example">
+                                <pre style="text-align: left;">
+Z-Distribution:
+                    **
+                  ******
+                 ********
+                **********
+               ************
+              **************
+            ******************
+        **************************
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━→
+        |    |    |    |    |
+       -3   -2   -1    0   +1   +2   +3
+                         ↑
+                      Mean = 0
+                            </pre>
+                            </div>
+
+                            <div class="key-point">
+                                <strong>🎯 Why Standardize?</strong>
+                                <ul>
+                                    <li>Compare values from different distributions</li>
+                                    <li>Use standard normal table (Z-table)</li>
+                                    <li>Calculate probabilities easily</li>
+                                    <li>Identify outliers (|Z| > 3)</li>
+                                </ul>
+                            </div>
+
+                            <div class="example-box">
+                                <strong>Z-Score Example:</strong>
+                                <br>Student A: Score 85 on Test 1 (μ=75, σ=10)
+                                <br>Z = (85-75)/10 = 1.0
+                                <br><br>Student B: Score 92 on Test 2 (μ=80, σ=8)
+                                <br>Z = (92-80)/8 = 1.5
+                                <br><br><strong>Conclusion:</strong> Student B performed better relative to their class (higher Z-score)
+                            </div>
+                        </div>
+
+                        <div class="warning-box">
+                            <strong>📊 Important Z-Values to Memorize:</strong>
+                            <table style="width: 100%; margin-top: 10px;">
+                                <tr style="background: #fff;">
+                                    <th style="padding: 8px; border: 1px solid #ddd;">Percentile</th>
+                                    <th style="padding: 8px; border: 1px solid #ddd;">Z-Score</th>
+                                    <th style="padding: 8px; border: 1px solid #ddd;">Meaning</th>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">50th</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">0.00</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">Median</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">90th</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">1.28</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">Top 10%</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">95th</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">1.645</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">Top 5%</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">97.5th</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">1.96</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">95% CI cutoff</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">99th</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">2.33</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">Top 1%</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">99.5th</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">2.576</td>
+                                    <td style="padding: 8px; border: 1px solid #ddd;">99% CI cutoff</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="tip-box">
+                            <strong>💡 Real-World Applications:</strong>
+                            <ul>
+                                <li><strong>Heights & Weights:</strong> Human physical measurements</li>
+                                <li><strong>Test Scores:</strong> SAT, GRE, IQ tests</li>
+                                <li><strong>Measurement Errors:</strong> Scientific instruments</li>
+                                <li><strong>Blood Pressure:</strong> Medical measurements</li>
+                                <li><strong>Returns:</strong> Stock market daily returns (approximately)</li>
+                                <li><strong>Natural Phenomena:</strong> Rainfall, temperature variations</li>
+                                <li><strong>Manufacturing:</strong> Product dimensions, quality control</li>
+                            </ul>
+                        </div>
+
+                        <div class="example-box">
+                            <strong>🎯 Interview Scenarios:</strong>
+                            <br><br><strong>Q1:</strong> "What percentage of values fall within 1.5 standard deviations?"
+                            <br><strong>A:</strong> Not a standard value, but between 68% (1σ) and 95% (2σ). Using Z-table: approximately 86.6%
+                            <br><br><strong>Q2:</strong> "A value is at the 95th percentile. What's its Z-score?"
+                            <br><strong>A:</strong> Z ≈ 1.645 (memorize this for 95% CI)
+                            <br><br><strong>Q3:</strong> "How do you identify outliers using normal distribution?"
+                            <br><strong>A:</strong> Values beyond ±3σ (Z-score > 3 or < -3) are typically considered outliers. Only 0.26% of data should be beyond ±3σ in normal distribution.
+                        </div>
+
+                        <div class="visual-example">
+                            <strong>📊 Comparing Different Normal Distributions:</strong>
+                            <pre style="text-align: left;">
+Same Mean (μ=0), Different Standard Deviations:
+
+σ = 0.5 (narrow):
+        ****
+       ******
+      ********
+     **********
+    ************
+━━━━━━━━━━━━━━━━━→
+
+σ = 1 (medium):
+      ****
+     ******
+    ********
+   **********
+  ************
+━━━━━━━━━━━━━━━━━→
+
+σ = 2 (wide):
+    ****
+   ******
+  ********
+ **********
+************
+━━━━━━━━━━━━━━━━━→
+
+Smaller σ = Taller, Narrower (less spread)
+Larger σ = Shorter, Wider (more spread)
+                            </pre>
+                        </div>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>2. t-Distribution (Student's t)</h4>
+                        <p><strong>Definition:</strong> Similar to normal but with heavier tails. Used when sample size is small or σ unknown.</p>
+                        <p><strong>Properties:</strong></p>
+                        <ul>
+                            <li>Symmetric around 0</li>
+                            <li>Heavier tails than normal (more spread)</li>
+                            <li>Shape depends on degrees of freedom (df)</li>
+                            <li>As df increases, approaches normal distribution</li>
+                        </ul>
+                        <div class="formula-box">
+Degrees of freedom (df) = n - 1
+
+As n → ∞, t-distribution → Normal distribution
+                        </div>
+                        <div class="example-box">
+                            <strong>When to use:</strong>
+                            <ul>
+                                <li>Sample size < 30</li>
+                                <li>Population SD unknown (use sample SD)</li>
+                                <li>Constructing confidence intervals for mean</li>
+                                <li>t-tests</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>3. Chi-Square Distribution (χ²)</h4>
+                        <p><strong>Definition:</strong> Distribution of sum of squared standard normal variables.</p>
+                        <p><strong>Properties:</strong></p>
+                        <ul>
+                            <li>Always positive (≥ 0)</li>
+                            <li>Right-skewed</li>
+                            <li>Shape depends on degrees of freedom</li>
+                            <li>As df increases, becomes more symmetric</li>
+                        </ul>
+                        <div class="formula-box">
+If Z₁, Z₂, ..., Zₖ are standard normal:
+χ² = Z₁² + Z₂² + ... + Zₖ²
+
+df = k
+
+Mean = df
+Variance = 2 × df
+                        </div>
+                        <div class="example-box">
+                            <strong>Uses:</strong>
+                            <ul>
+                                <li>Chi-square test of independence</li>
+                                <li>Goodness of fit test</li>
+                                <li>Testing variance</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>4. F-Distribution</h4>
+                        <p><strong>Definition:</strong> Ratio of two chi-square distributions. Always positive.</p>
+                        <p><strong>Properties:</strong></p>
+                        <ul>
+                            <li>Right-skewed</li>
+                            <li>Always positive</li>
+                            <li>Two degrees of freedom (numerator and denominator)</li>
+                        </ul>
+                        <div class="formula-box">
+F = (χ₁²/df₁) / (χ₂²/df₂)
+                        </div>
+                        <div class="example-box">
+                            <strong>Uses:</strong>
+                            <ul>
+                                <li>ANOVA (comparing multiple means)</li>
+                                <li>Testing equality of variances</li>
+                                <li>Regression analysis</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>5. Uniform Distribution</h4>
+                        <p><strong>Definition:</strong> All values equally likely in a range.</p>
+                        <div class="formula-box">
+For continuous uniform on [a, b]:
+
+f(x) = 1/(b-a)    for a ≤ x ≤ b
+     = 0           otherwise
+
+Mean = (a + b) / 2
+Variance = (b - a)² / 12
+                        </div>
+                        <div class="example-box">
+                            <strong>Example:</strong> Random number between 0 and 10
+                            <br>All values equally likely
+                            <br>P(X ≤ 5) = 5/10 = 0.5
+                            <br><br><strong>Real-world:</strong> Random number generators, arrival times within interval
+                        </div>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>6. Exponential Distribution</h4>
+                        <p><strong>Definition:</strong> Time between events in Poisson process.</p>
+                        <div class="formula-box">
+f(x) = λe^(-λx)    for x ≥ 0
+
+Where λ = rate parameter
+
+Mean = 1/λ
+Variance = 1/λ²
+                        </div>
+                        <div class="example-box">
+                            <strong>Example:</strong> Time between customer arrivals
+                            <br>If average rate = 5 per hour (λ = 5)
+                            <br>Average time between arrivals = 1/5 = 0.2 hours = 12 minutes
+                            <br><br><strong>Real-world:</strong> Time between failures, waiting times, service times
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DISTRIBUTION COMPARISON -->
+                <div class="subsection">
+                    <h3>📊 Distribution Selection Guide</h3>
+                    
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Distribution</th>
+                            <th>Type</th>
+                            <th>When to Use</th>
+                            <th>Example</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Normal</strong></td>
+                            <td>Continuous</td>
+                            <td>Continuous data, many real-world phenomena</td>
+                            <td>Heights, weights, test scores</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Binomial</strong></td>
+                            <td>Discrete</td>
+                            <td>Fixed trials, binary outcomes</td>
+                            <td>Coin flips, defective items</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Poisson</strong></td>
+                            <td>Discrete</td>
+                            <td>Count events in fixed interval</td>
+                            <td>Customer arrivals, accidents</td>
+                        </tr>
+                        <tr>
+                            <td><strong>t-Distribution</strong></td>
+                            <td>Continuous</td>
+                            <td>Small sample, σ unknown</td>
+                            <td>Sample means with n < 30</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Chi-Square</strong></td>
+                            <td>Continuous</td>
+                            <td>Categorical data, variance tests</td>
+                            <td>Independence tests, goodness of fit</td>
+                        </tr>
+                        <tr>
+                            <td><strong>F-Distribution</strong></td>
+                            <td>Continuous</td>
+                            <td>Compare variances, multiple groups</td>
+                            <td>ANOVA, regression</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Uniform</strong></td>
+                            <td>Continuous</td>
+                            <td>All values equally likely</td>
+                            <td>Random numbers</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Exponential</strong></td>
+                            <td>Continuous</td>
+                            <td>Time between events</td>
+                            <td>Time to failure, waiting times</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <!-- SECTION 4: PARAMETRIC TESTS -->
+            <div class="section" id="parametric-tests">
+                <h2 class="section-title">
+                    <span class="section-icon">5</span>
+                    Statistical Tests - Parametric
+                </h2>
+                
+                <div class="definition-box">
+                    <strong>Parametric Tests:</strong>
+                    <p>Statistical tests that assume data follows certain distributions (usually normal). More powerful when assumptions are met.</p>
+                    <p><strong>Assumptions:</strong> Normality, homogeneity of variance, independence</p>
+                </div>
+
+                <!-- T-TESTS -->
+                <div class="subsection">
+                    <h3>🔬 t-Tests</h3>
+                    
+                    <div class="test-card">
+                        <h4>1. One-Sample t-Test</h4>
+                        <p><strong>Purpose:</strong> Compare sample mean to known population mean.</p>
+                        <p><strong>Hypotheses:</strong></p>
+                        <ul>
+                            <li>H₀: μ = μ₀ (sample mean equals population mean)</li>
+                            <li>H₁: μ ≠ μ₀ (two-tailed) or μ > μ₀ or μ < μ₀ (one-tailed)</li>
+                        </ul>
+                        <div class="formula-box">
+t = (x̄ - μ₀) / (s / √n)
+
+Where:
+- x̄ = sample mean
+- μ₀ = hypothesized population mean
+- s = sample standard deviation
+- n = sample size
+
+df = n - 1
+                        </div>
+                        <div class="example-box">
+                            <strong>Example:</strong> Test if average student score = 75
+                            <br>Sample: n=25, x̄=78, s=10
+                            <br>H₀: μ = 75
+                            <br>t = (78-75)/(10/√25) = 3/(10/5) = 3/2 = 1.5
+                            <br>df = 24
+                            <br>Compare to critical t-value or find p-value
+                        </div>
+                        <p><strong>When to use:</strong> One group, compare to known value</p>
+                    </div>
+
+                    <div class="test-card">
+                        <h4>2. Independent Two-Sample t-Test</h4>
+                        <p><strong>Purpose:</strong> Compare means of two independent groups.</p>
+                        <p><strong>Hypotheses:</strong></p>
+                        <ul>
+                            <li>H₀: μ₁ = μ₂ (no difference between groups)</li>
+                            <li>H₁: μ₁ ≠ μ₂</li>
+                        </ul>
+                        <div class="formula-box">
+t = (x̄₁ - x̄₂) / √(s₁²/n₁ + s₂²/n₂)
+
+Or with pooled variance:
+t = (x̄₁ - x̄₂) / (sp × √(1/n₁ + 1/n₂))
+
+Where sp² = ((n₁-1)s₁² + (n₂-1)s₂²) / (n₁ + n₂ - 2)
+
+df = n₁ + n₂ - 2
+                        </div>
+                        <div class="example-box">
+                            <strong>Example:</strong> Compare test scores: Male vs Female students
+                            <br>Males: n₁=30, x̄₁=75, s₁=8
+                            <br>Females: n₂=35, x̄₂=80, s₂=10
+                            <br>H₀: No difference in average scores
+                        </div>
+                        <p><strong>Assumptions:</strong> Independence, normality, equal variances (or use Welch's t-test)</p>
+                    </div>
+
+                    <div class="test-card">
+                        <h4>3. Paired t-Test (Dependent)</h4>
+                        <p><strong>Purpose:</strong> Compare means of same group at two different times or conditions.</p>
+                        <p><strong>Hypotheses:</strong></p>
+                        <ul>
+                            <li>H₀: μd = 0 (no difference)</li>
+                            <li>H₁: μd ≠ 0</li>
+                        </ul>
+                        <div class="formula-box">
+t = (d̄) / (sd / √n)
+
+Where:
+- d̄ = mean of differences
+- sd = standard deviation of differences
+- n = number of pairs
+
+df = n - 1
+                        </div>
+                        <div class="example-box">
+                            <strong>Example:</strong> Weight before and after diet
+                            <br>Measure each person twice
+                            <br>Calculate difference for each person
+                            <br>Test if average difference ≠ 0
+                            <br><br><strong>Real-world:</strong> Before/after studies, matched pairs
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ANOVA -->
+                <div class="subsection">
+                    <h3>📊 ANOVA (Analysis of Variance)</h3>
+                    
+                    <div class="test-card">
+                        <h4>1. One-Way ANOVA</h4>
+                        <p><strong>Purpose:</strong> Compare means of three or more independent groups.</p>
+                        <p><strong>Hypotheses:</strong></p>
+                        <ul>
+                            <li>H₀: μ₁ = μ₂ = μ₃ = ... (all means equal)</li>
+                            <li>H₁: At least one mean is different</li>
+                        </ul>
+                        <div class="formula-box">
+F = MSB / MSW
+
+Where:
+MSB = Mean Square Between groups = SSB / (k-1)
+MSW = Mean Square Within groups = SSW / (N-k)
+
+SSB = Σnᵢ(x̄ᵢ - x̄)²  (between-group variation)
+SSW = ΣΣ(xᵢⱼ - x̄ᵢ)²  (within-group variation)
+
+df₁ = k - 1 (numerator)
+df₂ = N - k (denominator)
+
+k = number of groups
+N = total sample size
+                        </div>
+                        <div class="example-box">
+                            <strong>Example:</strong> Compare average sales across 4 regions
+                            <br>Region A: 100, 110, 105
+                            <br>Region B: 120, 115, 125
+                            <br>Region C: 95, 100, 90
+                            <br>Region D: 130, 135, 140
+                            <br><br>H₀: All regions have same average sales
+                        </div>
+                        <p><strong>Post-hoc tests:</strong> If F is significant, use Tukey HSD, Bonferroni to find which pairs differ</p>
+                    </div>
+
+                    <div class="test-card">
+                        <h4>2. Two-Way ANOVA</h4>
+                        <p><strong>Purpose:</strong> Examine effects of two independent variables (factors) on dependent variable.</p>
+                        <p><strong>Tests:</strong></p>
+                        <ul>
+                            <li>Main effect of Factor A</li>
+                            <li>Main effect of Factor B</li>
+                            <li>Interaction effect (A × B)</li>
+                        </ul>
+                        <div class="example-box">
+                            <strong>Example:</strong> Effect of Teaching Method (Factor A) and Class Size (Factor B) on test scores
+                            <br>Can detect:
+                            <br>- Effect of method alone
+                            <br>- Effect of class size alone
+                            <br>- Whether effect of method depends on class size (interaction)
+                        </div>
+                    </div>
+
+                    <div class="test-card">
+                        <h4>3. Repeated Measures ANOVA</h4>
+                        <p><strong>Purpose:</strong> Compare means across three or more time points for same subjects.</p>
+                        <div class="example-box">
+                            <strong>Example:</strong> Blood pressure measured at baseline, 1 month, 3 months, 6 months
+                            <br>Same patients measured repeatedly
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CORRELATION & REGRESSION -->
+                <div class="subsection">
+                    <h3>📈 Correlation and Regression</h3>
+                    
+                    <div class="test-card">
+                        <h4>Pearson Correlation (r)</h4>
+                        <p><strong>Purpose:</strong> Measure strength and direction of linear relationship between two continuous variables.</p>
+                        <div class="formula-box">
+r = Σ[(xᵢ - x̄)(yᵢ - ȳ)] / √[Σ(xᵢ - x̄)² × Σ(yᵢ - ȳ)²]
+
+Range: -1 ≤ r ≤ 1
+
+r = 1:  Perfect positive correlation
+r = -1: Perfect negative correlation
+r = 0:  No linear correlation
+                        </div>
+                        <p><strong>Interpretation:</strong></p>
+                        <ul>
+                            <li>0.00-0.19: Very weak</li>
+                            <li>0.20-0.39: Weak</li>
+                            <li>0.40-0.59: Moderate</li>
+                            <li>0.60-0.79: Strong</li>
+                            <li>0.80-1.00: Very strong</li>
+                        </ul>
+                        <div class="example-box">
+                            <strong>Example:</strong> Correlation between study hours and test scores
+                            <br>r = 0.75 → Strong positive correlation
+                            <br>More study hours associated with higher scores
+                        </div>
+                        <p><strong>Assumptions:</strong> Linearity, normality, homoscedasticity</p>
+                    </div>
+
+                    <div class="test-card">
+                        <h4>Simple Linear Regression</h4>
+                        <p><strong>Purpose:</strong> Predict one variable (Y) from another (X).</p>
+                        <div class="formula-box">
+Y = a + bX + ε
+
+Where:
+- Y = dependent variable (outcome)
+- X = independent variable (predictor)
+- a = intercept
+- b = slope
+- ε = error term
+
+Slope (b) = r × (sy / sx)
+Intercept (a) = ȳ - b × x̄
+                        </div>
+                        <div class="example-box">
+                            <strong>Example:</strong> Predict salary from years of experience
+                            <br>Salary = 30000 + 5000 × Years
+                            <br>Intercept (30000) = starting salary
+                            <br>Slope (5000) = increase per year
+                        </div>
+                        <p><strong>R²:</strong> Proportion of variance in Y explained by X (0 to 1)</p>
+                    </div>
+
+                    <div class="test-card">
+                        <h4>Multiple Linear Regression</h4>
+                        <p><strong>Purpose:</strong> Predict Y from multiple predictors (X₁, X₂, ...).</p>
+                        <div class="formula-box">
+Y = a + b₁X₁ + b₂X₂ + ... + bₖXₖ + ε
+                        </div>
+                        <div class="example-box">
+                            <strong>Example:</strong> Predict house price from:
+                            <br>Price = 50000 + 100×SqFt + 20000×Bedrooms + 15000×Bathrooms
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Z-TEST -->
+                <div class="subsection">
+                    <h3>🎯 Z-Test</h3>
+                    
+                    <div class="test-card">
+                        <h4>Z-Test for Mean</h4>
+                        <p><strong>Purpose:</strong> Compare sample mean to population mean when σ is known.</p>
+                        <div class="formula-box">
+Z = (x̄ - μ₀) / (σ / √n)
+                        </div>
+                        <p><strong>When to use:</strong></p>
+                        <ul>
+                            <li>Large sample (n ≥ 30)</li>
+                            <li>Population SD (σ) is known</li>
+                            <li>Population is normally distributed</li>
+                        </ul>
+                        <div class="example-box">
+                            <strong>Example:</strong> National average IQ = 100, σ = 15
+                            <br>Sample of 50 students: x̄ = 105
+                            <br>Is this significantly different?
+                        </div>
+                    </div>
+
+                    <div class="test-card">
+                        <h4>Z-Test for Proportions</h4>
+                        <p><strong>Purpose:</strong> Compare sample proportion to population proportion.</p>
+                        <div class="formula-box">
+Z = (p̂ - p₀) / √(p₀(1-p₀)/n)
+
+Where:
+- p̂ = sample proportion
+- p₀ = hypothesized proportion
+                        </div>
+                        <div class="example-box">
+                            <strong>Example:</strong> Manufacturer claims 95% pass rate
+                            <br>Sample 200 items: 180 pass (p̂ = 0.90)
+                            <br>Test if actual rate = 95%
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 5: NON-PARAMETRIC TESTS -->
+            <div class="section" id="nonparametric-tests">
+                <h2 class="section-title">
+                    <span class="section-icon">6</span>
+                    Statistical Tests - Non-Parametric
+                </h2>
+                
+                <div class="definition-box">
+                    <strong>Non-Parametric Tests:</strong>
+                    <p>Distribution-free tests that don't assume normality. Use when parametric assumptions are violated or data is ordinal/ranked.</p>
+                </div>
+
+                <div class="subsection">
+                    <h3>📊 Common Non-Parametric Tests</h3>
+                    
+                    <div class="test-card">
+                        <h4>1. Mann-Whitney U Test (Wilcoxon Rank-Sum)</h4>
+                        <p><strong>Purpose:</strong> Non-parametric alternative to independent two-sample t-test.</p>
+                        <p><strong>Compares:</strong> Medians of two independent groups</p>
+                        <div class="example-box">
+                            <strong>When to use:</strong>
+                            <ul>
+                                <li>Two independent groups</li>
+                                <li>Data is ordinal or non-normal</li>
+                                <li>Small sample size</li>
+                            </ul>
+                            <strong>Example:</strong> Compare customer satisfaction (1-5 scale) between two stores
+                        </div>
+                        <p><strong>Parametric equivalent:</strong> Independent t-test</p>
+                    </div>
+
+                    <div class="test-card">
+                        <h4>2. Wilcoxon Signed-Rank Test</h4>
+                        <p><strong>Purpose:</strong> Non-parametric alternative to paired t-test.</p>
+                        <p><strong>Compares:</strong> Two related samples (before/after, matched pairs)</p>
+                        <div class="example-box">
+                            <strong>When to use:</strong>
+                            <ul>
+                                <li>Paired/matched data</li>
+                                <li>Non-normal differences</li>
+                                <li>Ordinal data</li>
+                            </ul>
+                            <strong>Example:</strong> Pain rating before and after treatment
+                        </div>
+                        <p><strong>Parametric equivalent:</strong> Paired t-test</p>
+                    </div>
+
+                    <div class="test-card">
+                        <h4>3. Kruskal-Wallis Test</h4>
+                        <p><strong>Purpose:</strong> Non-parametric alternative to one-way ANOVA.</p>
+                        <p><strong>Compares:</strong> Medians of three or more independent groups</p>
+                        <div class="formula-box">
+H = [12 / (N(N+1))] × Σ(Rᵢ² / nᵢ) - 3(N+1)
+
+Where:
+- N = total sample size
+- Rᵢ = sum of ranks for group i
+- nᵢ = sample size of group i
+                        </div>
+                        <div class="example-box">
+                            <strong>Example:</strong> Compare median income across 4 education levels
+                            <br>Groups: High School, Bachelor's, Master's, PhD
+                        </div>
+                        <p><strong>Parametric equivalent:</strong> One-way ANOVA</p>
+                    </div>
+
+                    <div class="test-card">
+                        <h4>4. Friedman Test</h4>
+                        <p><strong>Purpose:</strong> Non-parametric alternative to repeated measures ANOVA.</p>
+                        <p><strong>Compares:</strong> Three or more related groups</p>
+                        <div class="example-box">
+                            <strong>Example:</strong> Pain ratings at 4 time points (same patients)
+                            <br>Baseline, Week 1, Week 2, Week 3
+                        </div>
+                        <p><strong>Parametric equivalent:</strong> Repeated measures ANOVA</p>
+                    </div>
+
+                    <div class="test-card">
+                        <h4>5. Spearman's Rank Correlation (ρ)</h4>
+                        <p><strong>Purpose:</strong> Non-parametric alternative to Pearson correlation.</p>
+                        <p><strong>Measures:</strong> Monotonic relationship (not just linear)</p>
+                        <div class="formula-box">
+ρ = 1 - (6Σd²) / (n(n²-1))
+
+Where:
+- d = difference between ranks
+- n = number of pairs
+                        </div>
+                        <div class="example-box">
+                            <strong>When to use:</strong>
+                            <ul>
+                                <li>Non-linear monotonic relationship</li>
+                                <li>Ordinal data</li>
+                                <li>Outliers present</li>
+                            </ul>
+                            <strong>Example:</strong> Relationship between class rank and GPA
+                        </div>
+                        <p><strong>Parametric equivalent:</strong> Pearson correlation</p>
+                    </div>
+
+                    <div class="test-card">
+                        <h4>6. Chi-Square Test of Independence</h4>
+                        <p><strong>Purpose:</strong> Test relationship between two categorical variables.</p>
+                        <div class="formula-box">
+χ² = Σ[(Oᵢ - Eᵢ)² / Eᵢ]
+
+Where:
+- Oᵢ = observed frequency
+- Eᵢ = expected frequency
+- Eᵢ = (row total × column total) / grand total
+
+df = (rows - 1) × (columns - 1)
+                        </div>
+                        <div class="example-box">
+                            <strong>Example:</strong> Is gender related to product preference?
+                            <table style="margin-top: 10px; border-collapse: collapse;">
+                                <tr>
+                                    <th style="border: 1px solid #ddd; padding: 8px;"></th>
+                                    <th style="border: 1px solid #ddd; padding: 8px;">Product A</th>
+                                    <th style="border: 1px solid #ddd; padding: 8px;">Product B</th>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #ddd; padding: 8px;">Male</td>
+                                    <td style="border: 1px solid #ddd; padding: 8px;">60</td>
+                                    <td style="border: 1px solid #ddd; padding: 8px;">40</td>
+                                </tr>
+                                <tr>
+                                    <td style="border: 1px solid #ddd; padding: 8px;">Female</td>
+                                    <td style="border: 1px solid #ddd; padding: 8px;">30</td>
+                                    <td style="border: 1px solid #ddd; padding: 8px;">70</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="test-card">
+                        <h4>7. Chi-Square Goodness of Fit</h4>
+                        <p><strong>Purpose:</strong> Test if observed distribution matches expected distribution.</p>
+                        <div class="example-box">
+                            <strong>Example:</strong> Fair die should show each number 1/6 of time
+                            <br>Roll 600 times:
+                            <br>Observed: 1(90), 2(110), 3(95), 4(100), 5(105), 6(100)
+                            <br>Expected: Each should appear 100 times
+                            <br>Test if die is fair
+                        </div>
+                    </div>
+
+                    <div class="test-card">
+                        <h4>8. Sign Test</h4>
+                        <p><strong>Purpose:</strong> Simple test for paired data using only direction of change.</p>
+                        <div class="example-box">
+                            <strong>Example:</strong> Before/after treatment
+                            <br>Count: How many improved (+), how many worsened (-)
+                            <br>Test if significantly more improved than worsened
+                        </div>
+                        <p><strong>Simpler than:</strong> Wilcoxon signed-rank (doesn't use magnitude)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 6: TEST SELECTION GUIDE -->
+            <div class="section" id="test-selection">
+                <h2 class="section-title">
+                    <span class="section-icon">7</span>
+                    Test Selection Guide
+                </h2>
+
+                <div class="subsection">
+                    <h3>🎯 Choosing the Right Test</h3>
+                    
+                    <table class="comparison-table">
+                        <tr>
+                            <th>Research Question</th>
+                            <th>Parametric Test</th>
+                            <th>Non-Parametric Alternative</th>
+                        </tr>
+                        <tr>
+                            <td>Compare 1 sample mean to known value</td>
+                            <td>One-sample t-test</td>
+                            <td>Wilcoxon signed-rank</td>
+                        </tr>
+                        <tr>
+                            <td>Compare 2 independent groups</td>
+                            <td>Independent t-test</td>
+                            <td>Mann-Whitney U</td>
+                        </tr>
+                        <tr>
+                            <td>Compare 2 related groups (paired)</td>
+                            <td>Paired t-test</td>
+                            <td>Wilcoxon signed-rank</td>
+                        </tr>
+                        <tr>
+                            <td>Compare 3+ independent groups</td>
+                            <td>One-way ANOVA</td>
+                            <td>Kruskal-Wallis</td>
+                        </tr>
+                        <tr>
+                            <td>Compare 3+ related groups</td>
+                            <td>Repeated measures ANOVA</td>
+                            <td>Friedman test</td>
+                        </tr>
+                        <tr>
+                            <td>Relationship between 2 continuous variables</td>
+                            <td>Pearson correlation</td>
+                            <td>Spearman correlation</td>
+                        </tr>
+                        <tr>
+                            <td>Relationship between 2 categorical variables</td>
+                            <td colspan="2">Chi-square test of independence</td>
+                        </tr>
+                        <tr>
+                            <td>Predict continuous outcome</td>
+                            <td>Linear regression</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>Predict categorical outcome</td>
+                            <td>Logistic regression</td>
+                            <td>-</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="subsection">
+                    <h3>✅ Assumption Checking</h3>
+                    
+                    <div class="key-point">
+                        <strong>Parametric Test Assumptions:</strong>
+                        <ol style="margin-left: 20px;">
+                            <li><strong>Normality:</strong> Data follows normal distribution
+                                <br>- Check: Histogram, Q-Q plot, Shapiro-Wilk test
+                                <br>- If violated & n < 30: Use non-parametric
+                                <br>- If violated & n ≥ 30: CLT applies, parametric OK
+                            </li>
+                            <li><strong>Independence:</strong> Observations are independent
+                                <br>- Check: Study design (random sampling, no pairing)
+                            </li>
+                            <li><strong>Homogeneity of Variance:</strong> Equal variances across groups
+                                <br>- Check: Levene's test, F-test
+                                <br>- If violated: Use Welch's t-test or non-parametric
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="subsection">
+                    <h3>📊 Decision Tree</h3>
+                    
+                    <div class="distribution-card">
+                        <h4>Step 1: What type of data?</h4>
+                        <ul>
+                            <li><strong>Continuous/Interval:</strong> → Parametric or non-parametric</li>
+                            <li><strong>Ordinal:</strong> → Non-parametric</li>
+                            <li><strong>Nominal/Categorical:</strong> → Chi-square tests</li>
+                        </ul>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>Step 2: How many groups?</h4>
+                        <ul>
+                            <li><strong>1 group:</strong> One-sample test</li>
+                            <li><strong>2 groups:</strong> Two-sample test (t-test or Mann-Whitney)</li>
+                            <li><strong>3+ groups:</strong> ANOVA or Kruskal-Wallis</li>
+                        </ul>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>Step 3: Independent or Related?</h4>
+                        <ul>
+                            <li><strong>Independent:</strong> Different subjects in each group</li>
+                            <li><strong>Related:</strong> Same subjects measured multiple times</li>
+                        </ul>
+                    </div>
+
+                    <div class="distribution-card">
+                        <h4>Step 4: Check Assumptions</h4>
+                        <ul>
+                            <li><strong>Normality:</strong> Shapiro-Wilk, Q-Q plot</li>
+                            <li><strong>Equal variance:</strong> Levene's test</li>
+                            <li><strong>Sample size:</strong> n ≥ 30 for CLT</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="warning-box">
+                    <strong>⚠️ Common Mistakes to Avoid:</strong>
+                    <ul>
+                        <li>Using multiple t-tests instead of ANOVA (inflates Type I error)</li>
+                        <li>Using parametric tests on non-normal data with small sample</li>
+                        <li>Treating ordinal data as continuous</li>
+                        <li>Ignoring paired nature of data</li>
+                        <li>Not checking assumptions before testing</li>
+                    </ul>
+                </div>
+
+                <div class="tip-box">
+                    <strong>💡 Quick Reference:</strong>
+                    <ul>
+                        <li><strong>Normal + 2 groups:</strong> t-test</li>
+                        <li><strong>Normal + 3+ groups:</strong> ANOVA</li>
+                        <li><strong>Non-normal or ordinal + 2 groups:</strong> Mann-Whitney</li>
+                        <li><strong>Non-normal or ordinal + 3+ groups:</strong> Kruskal-Wallis</li>
+                        <li><strong>Categorical variables:</strong> Chi-square</li>
+                        <li><strong>Correlation:</strong> Pearson (normal) or Spearman (not normal)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- SUMMARY -->
+            <div class="key-point" style="margin-top: 50px; padding: 30px;">
+                <h3 style="margin-bottom: 20px;">🎯 Key Takeaways for Interviews</h3>
+                <ul>
+                    <li><strong>Descriptive Stats:</strong> Summarize data (mean, median, SD, range)</li>
+                    <li><strong>Inferential Stats:</strong> Make conclusions about population from sample</li>
+                    <li><strong>Normal Distribution:</strong> Bell curve, 68-95-99.7 rule</li>
+                    <li><strong>t-test:</strong> Compare means (1 or 2 groups)</li>
+                    <li><strong>ANOVA:</strong> Compare 3+ group means</li>
+                    <li><strong>Chi-square:</strong> Test relationships between categorical variables</li>
+                    <li><strong>p-value < α:</strong> Reject null hypothesis</li>
+                    <li><strong>Type I Error:</strong> False positive (reject true H₀)</li>
+                    <li><strong>Type II Error:</strong> False negative (fail to reject false H₀)</li>
+                    <li><strong>Check assumptions:</strong> Normality, independence, equal variance</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

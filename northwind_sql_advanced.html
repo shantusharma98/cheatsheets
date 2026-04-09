@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Northwind SQL — Advanced Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Outfit:wght@400;600;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f5f0e8;
+  --ink: #1a1410;
+  --card: #fff;
+  --border: #d9d0c0;
+  --accent: #c0392b;
+  --accent2: #2c7be5;
+  --green: #1a7f4e;
+  --purple: #6b3fa0;
+  --orange: #e67e22;
+  --muted: #7a6e60;
+  --tag-bg: #f0ebe0;
+  --code-bg: #1a1410;
+  --code-text: #f0ebe0;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Outfit',sans-serif;
+  min-height:100vh;
+}
+body::before{
+  content:'';
+  position:fixed;top:0;left:0;right:0;height:6px;
+  background:repeating-linear-gradient(90deg,var(--accent) 0,var(--accent) 25%,var(--accent2) 25%,var(--accent2) 50%,var(--green) 50%,var(--green) 75%,var(--purple) 75%,var(--purple) 100%);
+  z-index:100;
+}
+/* HEADER */
+header{
+  padding:3rem 2rem 2rem;
+  border-bottom:2px solid var(--ink);
+  display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1.5rem;
+  background:var(--card);
+}
+.header-left{}
+.eyebrow{
+  font-size:0.65rem;font-weight:800;letter-spacing:3px;text-transform:uppercase;
+  color:var(--accent);margin-bottom:0.5rem;
+}
+h1{font-size:clamp(1.8rem,4vw,3rem);font-weight:900;line-height:1.1;letter-spacing:-1px;}
+h1 em{font-style:normal;color:var(--accent);}
+.subtitle{margin-top:0.5rem;font-size:0.9rem;color:var(--muted);max-width:480px;line-height:1.5;}
+.header-stats{
+  display:flex;gap:0;border:2px solid var(--ink);border-radius:0;overflow:hidden;
+  align-self:flex-start;margin-top:1rem;
+}
+.hstat{
+  padding:0.75rem 1.25rem;text-align:center;border-right:2px solid var(--ink);
+}
+.hstat:last-child{border-right:none;}
+.hstat-val{font-size:1.8rem;font-weight:900;font-family:'IBM Plex Mono',monospace;line-height:1;}
+.hstat-lbl{font-size:0.6rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted);font-weight:600;}
+/* CONTROLS */
+.controls{
+  padding:1.25rem 2rem;
+  background:var(--ink);
+  display:flex;gap:0.5rem;flex-wrap:wrap;align-items:center;
+  position:sticky;top:6px;z-index:50;
+}
+.filter-btn{
+  padding:0.35rem 0.85rem;
+  border:1.5px solid rgba(255,255,255,0.25);
+  background:transparent;color:rgba(255,255,255,0.6);
+  font-family:'Outfit',sans-serif;font-size:0.72rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:0.5px;cursor:pointer;
+  border-radius:3px;transition:all 0.15s;
+}
+.filter-btn:hover{border-color:white;color:white;}
+.filter-btn.active{background:var(--accent);border-color:var(--accent);color:white;}
+.filter-btn.active-blue{background:var(--accent2);border-color:var(--accent2);color:white;}
+.filter-btn[data-filter="case"].active{background:#c0392b;}
+.filter-btn[data-filter="join"].active{background:#2c7be5;}
+.filter-btn[data-filter="cte"].active{background:#1a7f4e;}
+.filter-btn[data-filter="window"].active{background:#6b3fa0;}
+.filter-btn[data-filter="date"].active{background:#e67e22;}
+.filter-btn[data-filter="misc"].active{background:#7a6e60;}
+.controls-right{margin-left:auto;font-size:0.72rem;color:rgba(255,255,255,0.4);font-weight:600;}
+
+/* PROGRESS */
+.progress-area{
+  padding:0.75rem 2rem;
+  background:var(--card);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:1.25rem;
+}
+.prog-bar{flex:1;height:5px;background:var(--border);border-radius:0;}
+.prog-fill{height:100%;background:var(--accent);transition:width 0.4s;border-radius:0;}
+.prog-label{font-size:0.72rem;font-weight:700;color:var(--muted);white-space:nowrap;font-family:'IBM Plex Mono',monospace;}
+
+/* MAIN */
+.main{max-width:1000px;margin:0 auto;padding:2rem 1.5rem 5rem;}
+.section-header{
+  margin:2.5rem 0 1rem;
+  display:flex;align-items:center;gap:1rem;
+}
+.section-header h2{
+  font-size:0.65rem;font-weight:800;text-transform:uppercase;letter-spacing:2px;
+  white-space:nowrap;
+}
+.sh-line{flex:1;height:2px;background:var(--border);}
+.sh-dot{
+  width:10px;height:10px;border-radius:50%;flex-shrink:0;
+}
+
+/* CARDS */
+.q-card{
+  background:var(--card);
+  border:2px solid var(--ink);
+  border-radius:0;
+  margin-bottom:1rem;
+  transition:transform 0.15s,box-shadow 0.15s;
+  box-shadow:3px 3px 0 var(--ink);
+}
+.q-card:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--ink);}
+.q-card.open{border-color:var(--accent);box-shadow:3px 3px 0 var(--accent);}
+
+.q-head{
+  display:flex;gap:1rem;align-items:flex-start;
+  padding:1.1rem 1.25rem;cursor:pointer;
+}
+.q-num{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.65rem;font-weight:600;
+  background:var(--ink);color:var(--bg);
+  padding:0.2rem 0.45rem;border-radius:2px;
+  white-space:nowrap;margin-top:3px;flex-shrink:0;
+}
+.q-body{flex:1;}
+.q-tags{display:flex;gap:0.35rem;flex-wrap:wrap;margin-bottom:0.45rem;}
+.tag{
+  font-size:0.6rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;
+  padding:0.15rem 0.45rem;border:1.5px solid;border-radius:2px;
+}
+.tag-case{color:var(--accent);border-color:var(--accent);background:rgba(192,57,43,0.07);}
+.tag-join{color:var(--accent2);border-color:var(--accent2);background:rgba(44,123,229,0.07);}
+.tag-cte{color:var(--green);border-color:var(--green);background:rgba(26,127,78,0.07);}
+.tag-window{color:var(--purple);border-color:var(--purple);background:rgba(107,63,160,0.07);}
+.tag-agg{color:#7a6e60;border-color:#7a6e60;background:rgba(122,110,96,0.07);}
+.tag-date{color:var(--orange);border-color:var(--orange);background:rgba(230,126,34,0.07);}
+.tag-misc{color:#2d6a4f;border-color:#2d6a4f;background:rgba(45,106,79,0.07);}
+.tag-cross{color:#9b1d20;border-color:#9b1d20;background:rgba(155,29,32,0.07);}
+.tag-union{color:#1d4e89;border-color:#1d4e89;background:rgba(29,78,137,0.07);}
+
+.q-text{font-size:0.92rem;line-height:1.55;color:var(--ink);}
+.q-reveal-btn{
+  padding:0.35rem 0.8rem;
+  border:1.5px solid var(--border);
+  background:var(--bg);color:var(--muted);
+  font-family:'Outfit',sans-serif;font-size:0.7rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:0.5px;
+  cursor:pointer;border-radius:2px;transition:all 0.15s;
+  flex-shrink:0;margin-top:2px;
+}
+.q-reveal-btn:hover{border-color:var(--ink);color:var(--ink);}
+.open .q-reveal-btn{background:var(--accent);border-color:var(--accent);color:white;}
+
+/* ANSWER PANEL */
+.q-answer{
+  display:none;
+  border-top:2px solid var(--border);
+  padding:1.25rem;
+  animation:fadeSlide 0.2s ease;
+}
+.q-answer.show{display:block;}
+@keyframes fadeSlide{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+.ans-lbl{
+  font-size:0.6rem;font-weight:800;text-transform:uppercase;letter-spacing:2px;
+  color:var(--accent);margin-bottom:0.75rem;display:flex;align-items:center;gap:0.5rem;
+}
+.ans-lbl::before{content:'▶';font-size:0.5rem;}
+pre{
+  background:var(--code-bg);
+  color:var(--code-text);
+  border-radius:4px;
+  padding:1rem 1.25rem;
+  overflow-x:auto;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.78rem;
+  line-height:1.75;
+  margin-bottom:0.75rem;
+}
+.kw{color:#f97316;font-weight:600;}
+.fn{color:#a78bfa;}
+.str{color:#86efac;}
+.num{color:#fbbf24;}
+.cm{color:#6b7280;font-style:italic;}
+.tbl{color:#f9a8d4;}
+.op{color:#67e8f9;}
+
+.tip{
+  font-size:0.82rem;color:var(--muted);line-height:1.6;
+  border-left:3px solid var(--accent);padding-left:0.75rem;
+}
+.tip strong{color:var(--ink);}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <div class="eyebrow">Northwind DB · Advanced Practice Set 2</div>
+    <h1>Master Your<br><em>Query Skills</em></h1>
+    <p class="subtitle">Covers CASE WHEN, multi-table JOINs, CROSS JOIN, UNION, CTEs with aggregation, Window functions, Date functions, COALESCE & more.</p>
+  </div>
+  <div class="header-stats">
+    <div class="hstat"><div class="hstat-val" id="total-v">0</div><div class="hstat-lbl">Questions</div></div>
+    <div class="hstat"><div class="hstat-val" id="done-v">0</div><div class="hstat-lbl">Solved</div></div>
+    <div class="hstat"><div class="hstat-val" id="pct-v">0%</div><div class="hstat-lbl">Done</div></div>
+  </div>
+</header>
+
+<div class="controls" id="controls">
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="case">CASE WHEN</button>
+  <button class="filter-btn" data-filter="join">Advanced JOINs</button>
+  <button class="filter-btn" data-filter="cte">CTE + Joins</button>
+  <button class="filter-btn" data-filter="window">Window Funcs</button>
+  <button class="filter-btn" data-filter="date">Date Funcs</button>
+  <button class="filter-btn" data-filter="misc">COALESCE / NULL</button>
+  <div class="controls-right" id="ctrl-label">Showing all 42 questions</div>
+</div>
+
+<div class="progress-area">
+  <span class="prog-label" id="prog-label">0 / 0</span>
+  <div class="prog-bar"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+</div>
+
+<div class="main" id="main"></div>
+
+<script>
+const Q = [
+// ── CASE WHEN ──────────────────────────────────────────────────────────
+{id:1,tags:['case'],
+q:'Classify each product into "Cheap" (price < 20), "Mid" (20–100), or "Expensive" (> 100) using CASE WHEN.',
+sql:`<span class="kw">SELECT</span> productname,
+       price,
+       <span class="kw">CASE</span>
+         <span class="kw">WHEN</span> price <span class="op">&lt;</span> <span class="num">20</span>  <span class="kw">THEN</span> <span class="str">'Cheap'</span>
+         <span class="kw">WHEN</span> price <span class="op">&lt;=</span> <span class="num">100</span> <span class="kw">THEN</span> <span class="str">'Mid'</span>
+         <span class="kw">ELSE</span> <span class="str">'Expensive'</span>
+       <span class="kw">END</span> <span class="kw">AS</span> price_tier
+<span class="kw">FROM</span>  <span class="tbl">products</span>
+<span class="kw">ORDER BY</span> price;`,
+tip:'CASE is evaluated top-down; once a WHEN matches, remaining branches are skipped.'},
+
+{id:2,tags:['case'],
+q:'Count how many products fall into each price tier ("Cheap", "Mid", "Expensive") in a single query.',
+sql:`<span class="kw">SELECT</span>
+  <span class="fn">COUNT</span>(<span class="kw">CASE WHEN</span> price <span class="op">&lt;</span> <span class="num">20</span>             <span class="kw">THEN</span> <span class="num">1</span> <span class="kw">END</span>) <span class="kw">AS</span> cheap_count,
+  <span class="fn">COUNT</span>(<span class="kw">CASE WHEN</span> price <span class="kw">BETWEEN</span> <span class="num">20</span> <span class="kw">AND</span> <span class="num">100</span> <span class="kw">THEN</span> <span class="num">1</span> <span class="kw">END</span>) <span class="kw">AS</span> mid_count,
+  <span class="fn">COUNT</span>(<span class="kw">CASE WHEN</span> price <span class="op">&gt;</span> <span class="num">100</span>             <span class="kw">THEN</span> <span class="num">1</span> <span class="kw">END</span>) <span class="kw">AS</span> expensive_count
+<span class="kw">FROM</span> <span class="tbl">products</span>;`,
+tip:'CASE inside COUNT — NULLs are ignored by COUNT, so only matching rows are tallied.'},
+
+{id:3,tags:['case','agg'],
+q:'Per category, show total revenue split into "High-value" orders (quantity ≥ 10) vs "Low-value" (quantity < 10) using conditional aggregation.',
+sql:`<span class="kw">SELECT</span> c.categoryname,
+  <span class="fn">SUM</span>(<span class="kw">CASE WHEN</span> od.quantity <span class="op">&gt;=</span> <span class="num">10</span>
+            <span class="kw">THEN</span> p.price <span class="op">*</span> od.quantity <span class="kw">ELSE</span> <span class="num">0</span> <span class="kw">END</span>) <span class="kw">AS</span> high_val_rev,
+  <span class="fn">SUM</span>(<span class="kw">CASE WHEN</span> od.quantity <span class="op">&lt;</span> <span class="num">10</span>
+            <span class="kw">THEN</span> p.price <span class="op">*</span> od.quantity <span class="kw">ELSE</span> <span class="num">0</span> <span class="kw">END</span>) <span class="kw">AS</span> low_val_rev
+<span class="kw">FROM</span>   <span class="tbl">orderdetails</span> od
+<span class="kw">JOIN</span>   <span class="tbl">products</span>    p  <span class="kw">ON</span> p.productid  <span class="op">=</span> od.productid
+<span class="kw">JOIN</span>   <span class="tbl">categories</span>  c  <span class="kw">ON</span> c.categoryid <span class="op">=</span> p.categoryid
+<span class="kw">GROUP BY</span> c.categoryname;`,
+tip:'Conditional aggregation: SUM(CASE…) is a pivot-without-PIVOT technique.'},
+
+{id:4,tags:['case'],
+q:'Label each order as "Recent" (within last 180 days from max date in table) or "Old" using CASE WHEN with a date comparison.',
+sql:`<span class="kw">SELECT</span> orderid,
+       orderdate,
+       <span class="kw">CASE</span>
+         <span class="kw">WHEN</span> orderdate <span class="op">&gt;=</span> (<span class="kw">SELECT</span> <span class="fn">MAX</span>(orderdate) <span class="op">-</span> <span class="kw">INTERVAL</span> <span class="str">'180 days'</span>
+                             <span class="kw">FROM</span> <span class="tbl">orders</span>)
+         <span class="kw">THEN</span> <span class="str">'Recent'</span>
+         <span class="kw">ELSE</span> <span class="str">'Old'</span>
+       <span class="kw">END</span> <span class="kw">AS</span> recency
+<span class="kw">FROM</span> <span class="tbl">orders</span>;`,
+tip:'Scalar subquery inside CASE condition is perfectly valid.'},
+
+{id:5,tags:['case','agg'],
+q:'For each employee, show how many orders they handled in Q1 vs Q2 (first half of the year) using CASE inside COUNT.',
+sql:`<span class="kw">SELECT</span>
+  e.firstname <span class="op">||</span> <span class="str">' '</span> <span class="op">||</span> e.lastname <span class="kw">AS</span> employee,
+  <span class="fn">COUNT</span>(<span class="kw">CASE WHEN</span> <span class="fn">EXTRACT</span>(<span class="kw">MONTH FROM</span> o.orderdate) <span class="kw">BETWEEN</span> <span class="num">1</span> <span class="kw">AND</span> <span class="num">3</span>
+              <span class="kw">THEN</span> <span class="num">1</span> <span class="kw">END</span>) <span class="kw">AS</span> q1_orders,
+  <span class="fn">COUNT</span>(<span class="kw">CASE WHEN</span> <span class="fn">EXTRACT</span>(<span class="kw">MONTH FROM</span> o.orderdate) <span class="kw">BETWEEN</span> <span class="num">4</span> <span class="kw">AND</span> <span class="num">6</span>
+              <span class="kw">THEN</span> <span class="num">1</span> <span class="kw">END</span>) <span class="kw">AS</span> q2_orders
+<span class="kw">FROM</span>   <span class="tbl">employees</span> e
+<span class="kw">JOIN</span>   <span class="tbl">orders</span>    o <span class="kw">ON</span> o.employeeid <span class="op">=</span> e.employeeid
+<span class="kw">GROUP BY</span> e.employeeid, e.firstname, e.lastname;`,
+tip:'Classic pivot pattern: EXTRACT(MONTH) inside CASE selects quarter.'},
+
+// ── ADVANCED JOINs ─────────────────────────────────────────────────────
+{id:6,tags:['join'],
+q:'INNER JOIN: Show all orders with customer name, employee full name, and shipper name.',
+sql:`<span class="kw">SELECT</span> o.orderid,
+       c.customername,
+       e.firstname <span class="op">||</span> <span class="str">' '</span> <span class="op">||</span> e.lastname <span class="kw">AS</span> employee,
+       s.shippername,
+       o.orderdate
+<span class="kw">FROM</span>   <span class="tbl">orders</span>    o
+<span class="kw">JOIN</span>   <span class="tbl">customers</span>  c <span class="kw">ON</span> c.customerid <span class="op">=</span> o.customerid
+<span class="kw">JOIN</span>   <span class="tbl">employees</span>  e <span class="kw">ON</span> e.employeeid <span class="op">=</span> o.employeeid
+<span class="kw">JOIN</span>   <span class="tbl">shippers</span>   s <span class="kw">ON</span> s.shipperid  <span class="op">=</span> o.shipperid;`,
+tip:'Four-table join: orders is the central hub connecting three lookup tables.'},
+
+{id:7,tags:['join'],
+q:'LEFT JOIN: Show all customers and their total order count — including customers with zero orders.',
+sql:`<span class="kw">SELECT</span> c.customername,
+       <span class="fn">COUNT</span>(o.orderid) <span class="kw">AS</span> order_count
+<span class="kw">FROM</span>   <span class="tbl">customers</span> c
+<span class="kw">LEFT JOIN</span> <span class="tbl">orders</span> o <span class="kw">ON</span> o.customerid <span class="op">=</span> c.customerid
+<span class="kw">GROUP BY</span> c.customerid, c.customername
+<span class="kw">ORDER BY</span> order_count <span class="kw">DESC</span>;`,
+tip:'LEFT JOIN keeps rows from the left table even when no match exists on the right.'},
+
+{id:8,tags:['join'],
+q:'TABLE INNER JOIN: Get each order detail with product name, category name, supplier name, and unit.',
+sql:`<span class="kw">SELECT</span> od.orderdetailid,
+       p.productname,
+       c.categoryname,
+       s.suppliername,
+       p.unit,
+       od.quantity
+<span class="kw">FROM</span>   <span class="tbl">orderdetails</span> od
+<span class="kw">JOIN</span>   <span class="tbl">products</span>    p  <span class="kw">ON</span> p.productid  <span class="op">=</span> od.productid
+<span class="kw">JOIN</span>   <span class="tbl">categories</span>  c  <span class="kw">ON</span> c.categoryid <span class="op">=</span> p.categoryid
+<span class="kw">JOIN</span>   <span class="tbl">suppliers</span>   s  <span class="kw">ON</span> s.supplierid  <span class="op">=</span> p.supplierid;`,
+tip:'Five-table join: orderdetails → products → categories and products → suppliers.'},
+
+{id:9,tags:['join','agg'],
+q:'INNER JOIN with HAVING: Find employees who handled orders worth more than $5000 total. Show employee name and total.',
+sql:`<span class="kw">SELECT</span> e.firstname <span class="op">||</span> <span class="str">' '</span> <span class="op">||</span> e.lastname <span class="kw">AS</span> employee,
+       <span class="fn">SUM</span>(p.price <span class="op">*</span> od.quantity) <span class="kw">AS</span> total_handled
+<span class="kw">FROM</span>   <span class="tbl">employees</span>    e
+<span class="kw">JOIN</span>   <span class="tbl">orders</span>       o  <span class="kw">ON</span> o.employeeid  <span class="op">=</span> e.employeeid
+<span class="kw">JOIN</span>   <span class="tbl">orderdetails</span> od <span class="kw">ON</span> od.orderid    <span class="op">=</span> o.orderid
+<span class="kw">JOIN</span>   <span class="tbl">products</span>     p  <span class="kw">ON</span> p.productid   <span class="op">=</span> od.productid
+<span class="kw">GROUP BY</span> e.employeeid, e.firstname, e.lastname
+<span class="kw">HAVING</span>   <span class="fn">SUM</span>(p.price <span class="op">*</span> od.quantity) <span class="op">&gt;</span> <span class="num">5000</span>
+<span class="kw">ORDER BY</span> total_handled <span class="kw">DESC</span>;`,
+tip:'HAVING filters after GROUP BY; cannot use WHERE for aggregated values.'},
+
+{id:10,tags:['join'],
+q:'Multi-Column Aggregation with Multiple JOINs: Show each category with number of products, number of distinct suppliers, and average price.',
+sql:`<span class="kw">SELECT</span> c.categoryname,
+       <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> p.productid)  <span class="kw">AS</span> product_count,
+       <span class="fn">COUNT</span>(<span class="kw">DISTINCT</span> p.supplierid) <span class="kw">AS</span> supplier_count,
+       <span class="fn">ROUND</span>(<span class="fn">AVG</span>(p.price), <span class="num">2</span>)        <span class="kw">AS</span> avg_price
+<span class="kw">FROM</span>   <span class="tbl">categories</span> c
+<span class="kw">JOIN</span>   <span class="tbl">products</span>   p <span class="kw">ON</span> p.categoryid <span class="op">=</span> c.categoryid
+<span class="kw">GROUP BY</span> c.categoryname
+<span class="kw">ORDER BY</span> product_count <span class="kw">DESC</span>;`,
+tip:'COUNT(DISTINCT col) counts unique values — avoid duplicates from joins.'},
+
+{id:11,tags:['join'],
+q:'Advanced INNER JOIN: Crossing Multiple Aggregated Tables — find customers whose average order value (revenue per order) is above $200.',
+sql:`<span class="kw">SELECT</span> c.customername,
+       <span class="fn">ROUND</span>(<span class="fn">AVG</span>(order_val.order_revenue), <span class="num">2</span>) <span class="kw">AS</span> avg_order_value
+<span class="kw">FROM</span>   <span class="tbl">customers</span> c
+<span class="kw">JOIN</span>   <span class="tbl">orders</span>    o <span class="kw">ON</span> o.customerid <span class="op">=</span> c.customerid
+<span class="kw">JOIN</span> (
+  <span class="kw">SELECT</span> od.orderid,
+         <span class="fn">SUM</span>(p.price <span class="op">*</span> od.quantity) <span class="kw">AS</span> order_revenue
+  <span class="kw">FROM</span>   <span class="tbl">orderdetails</span> od
+  <span class="kw">JOIN</span>   <span class="tbl">products</span> p <span class="kw">ON</span> p.productid <span class="op">=</span> od.productid
+  <span class="kw">GROUP BY</span> od.orderid
+) order_val <span class="kw">ON</span> order_val.orderid <span class="op">=</span> o.orderid
+<span class="kw">GROUP BY</span> c.customerid, c.customername
+<span class="kw">HAVING</span>   <span class="fn">AVG</span>(order_val.order_revenue) <span class="op">&gt;</span> <span class="num">200</span>
+<span class="kw">ORDER BY</span> avg_order_value <span class="kw">DESC</span>;`,
+tip:'Join to a derived table (subquery) to pre-aggregate order revenue before the outer GROUP BY.'},
+
+{id:12,tags:['join'],
+q:'Advanced INNER JOIN — Two CTEs Aggregated Tables: Compare each employee\'s revenue against the company average in one query.',
+sql:`<span class="kw">WITH</span> emp_rev <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> e.employeeid,
+         e.firstname <span class="op">||</span> <span class="str">' '</span> <span class="op">||</span> e.lastname <span class="kw">AS</span> name,
+         <span class="fn">SUM</span>(p.price <span class="op">*</span> od.quantity) <span class="kw">AS</span> revenue
+  <span class="kw">FROM</span>   <span class="tbl">employees</span>    e
+  <span class="kw">JOIN</span>   <span class="tbl">orders</span>       o  <span class="kw">ON</span> o.employeeid  <span class="op">=</span> e.employeeid
+  <span class="kw">JOIN</span>   <span class="tbl">orderdetails</span> od <span class="kw">ON</span> od.orderid    <span class="op">=</span> o.orderid
+  <span class="kw">JOIN</span>   <span class="tbl">products</span>     p  <span class="kw">ON</span> p.productid   <span class="op">=</span> od.productid
+  <span class="kw">GROUP BY</span> e.employeeid, e.firstname, e.lastname
+),
+company_avg <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> <span class="fn">AVG</span>(revenue) <span class="kw">AS</span> avg_rev <span class="kw">FROM</span> emp_rev
+)
+<span class="kw">SELECT</span> er.name,
+       er.revenue,
+       <span class="fn">ROUND</span>(ca.avg_rev, <span class="num">2</span>) <span class="kw">AS</span> company_avg,
+       <span class="kw">CASE</span> <span class="kw">WHEN</span> er.revenue <span class="op">&gt;</span> ca.avg_rev <span class="kw">THEN</span> <span class="str">'Above'</span> <span class="kw">ELSE</span> <span class="str">'Below'</span> <span class="kw">END</span> <span class="kw">AS</span> vs_avg
+<span class="kw">FROM</span>   emp_rev er
+<span class="kw">CROSS JOIN</span> company_avg ca
+<span class="kw">ORDER BY</span> er.revenue <span class="kw">DESC</span>;`,
+tip:'CROSS JOIN with a single-row CTE is a clean way to broadcast a scalar value to every row.'},
+
+// ── CROSS JOIN & UNION ──────────────────────────────────────────────────
+{id:13,tags:['join'],
+q:'CROSS JOIN: Generate all possible combinations of products and shippers (a classic cross join use case).',
+sql:`<span class="kw">SELECT</span> p.productname,
+       s.shippername
+<span class="kw">FROM</span>   <span class="tbl">products</span>  p
+<span class="kw">CROSS JOIN</span> <span class="tbl">shippers</span> s
+<span class="kw">ORDER BY</span> p.productname, s.shippername;`,
+tip:'CROSS JOIN returns M × N rows (cartesian product). No ON clause needed.'},
+
+{id:14,tags:['join'],
+q:'Triple CROSS JOIN — Generate All Possible Combinations From Three Tables: all combinations of category, shipper, and country (from customers).',
+sql:`<span class="kw">SELECT</span> c.categoryname,
+       s.shippername,
+       cu.country
+<span class="kw">FROM</span>   <span class="tbl">categories</span>  c
+<span class="kw">CROSS JOIN</span> <span class="tbl">shippers</span>   s
+<span class="kw">CROSS JOIN</span> (
+  <span class="kw">SELECT DISTINCT</span> country <span class="kw">FROM</span> <span class="tbl">customers</span>
+) cu
+<span class="kw">ORDER BY</span> <span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>;`,
+tip:'Useful for generating "coverage" tables or missing-combination detection.'},
+
+{id:15,tags:['join'],
+q:'UNION Operations — Combining Results: List all contact names from customers and all employee names in a single result set.',
+sql:`<span class="kw">SELECT</span> contactname <span class="kw">AS</span> name, <span class="str">'Customer'</span> <span class="kw">AS</span> type
+<span class="kw">FROM</span>   <span class="tbl">customers</span>
+
+<span class="kw">UNION ALL</span>
+
+<span class="kw">SELECT</span> firstname <span class="op">||</span> <span class="str">' '</span> <span class="op">||</span> lastname, <span class="str">'Employee'</span>
+<span class="kw">FROM</span>   <span class="tbl">employees</span>
+<span class="kw">ORDER BY</span> name;`,
+tip:'UNION removes duplicates; UNION ALL is faster and keeps duplicates. Column count and types must match.'},
+
+{id:16,tags:['join'],
+q:'UNION Operations — Combining Summary Rows: Show revenue per category AND a grand total row below using UNION.',
+sql:`<span class="kw">SELECT</span> c.categoryname <span class="kw">AS</span> label,
+       <span class="fn">SUM</span>(p.price <span class="op">*</span> od.quantity) <span class="kw">AS</span> revenue
+<span class="kw">FROM</span>   <span class="tbl">orderdetails</span> od
+<span class="kw">JOIN</span>   <span class="tbl">products</span>    p  <span class="kw">ON</span> p.productid  <span class="op">=</span> od.productid
+<span class="kw">JOIN</span>   <span class="tbl">categories</span>  c  <span class="kw">ON</span> c.categoryid <span class="op">=</span> p.categoryid
+<span class="kw">GROUP BY</span> c.categoryname
+
+<span class="kw">UNION ALL</span>
+
+<span class="kw">SELECT</span> <span class="str">'GRAND TOTAL'</span>,
+       <span class="fn">SUM</span>(p.price <span class="op">*</span> od.quantity)
+<span class="kw">FROM</span>   <span class="tbl">orderdetails</span> od
+<span class="kw">JOIN</span>   <span class="tbl">products</span> p <span class="kw">ON</span> p.productid <span class="op">=</span> od.productid
+<span class="kw">ORDER BY</span> label;`,
+tip:'Append a summary row using UNION ALL with a hardcoded label string.'},
+
+// ── CTE + JOINS ─────────────────────────────────────────────────────────
+{id:17,tags:['cte','join'],
+q:'Inline CTE Aggregated Tables: Use a CTE to pre-compute each order\'s total, then join back to orders and customers.',
+sql:`<span class="kw">WITH</span> order_totals <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> od.orderid,
+         <span class="fn">SUM</span>(p.price <span class="op">*</span> od.quantity) <span class="kw">AS</span> total
+  <span class="kw">FROM</span>   <span class="tbl">orderdetails</span> od
+  <span class="kw">JOIN</span>   <span class="tbl">products</span> p <span class="kw">ON</span> p.productid <span class="op">=</span> od.productid
+  <span class="kw">GROUP BY</span> od.orderid
+)
+<span class="kw">SELECT</span> c.customername,
+       o.orderdate,
+       ot.total
+<span class="kw">FROM</span>   <span class="tbl">orders</span>       o
+<span class="kw">JOIN</span>   <span class="tbl">customers</span>    c  <span class="kw">ON</span> c.customerid <span class="op">=</span> o.customerid
+<span class="kw">JOIN</span>   order_totals  ot <span class="kw">ON</span> ot.orderid   <span class="op">=</span> o.orderid
+<span class="kw">ORDER BY</span> ot.total <span class="kw">DESC</span>;`,
+tip:'CTEs can be joined just like regular tables, making complex queries readable.'},
+
+{id:18,tags:['cte','join'],
+q:'Inline CTE Tables with JOIN and Aggregation: Find the top supplier by revenue using a CTE.',
+sql:`<span class="kw">WITH</span> supplier_rev <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> s.supplierid,
+         s.suppliername,
+         <span class="fn">SUM</span>(p.price <span class="op">*</span> od.quantity) <span class="kw">AS</span> revenue
+  <span class="kw">FROM</span>   <span class="tbl">suppliers</span>    s
+  <span class="kw">JOIN</span>   <span class="tbl">products</span>     p  <span class="kw">ON</span> p.supplierid  <span class="op">=</span> s.supplierid
+  <span class="kw">JOIN</span>   <span class="tbl">orderdetails</span> od <span class="kw">ON</span> od.productid  <span class="op">=</span> p.productid
+  <span class="kw">GROUP BY</span> s.supplierid, s.suppliername
+)
+<span class="kw">SELECT</span> suppliername, revenue
+<span class="kw">FROM</span>   supplier_rev
+<span class="kw">ORDER BY</span> revenue <span class="kw">DESC</span>
+<span class="kw">LIMIT</span> <span class="num">1</span>;`,
+tip:'Aggregate in the CTE, then SELECT from it cleanly.'},
+
+// ── WINDOW FUNCTIONS ────────────────────────────────────────────────────
+{id:19,tags:['window'],
+q:'Rank Functions on Single Columns: Rank all products globally by price using ROW_NUMBER, RANK, and DENSE_RANK — show difference when prices tie.',
+sql:`<span class="kw">SELECT</span> productname,
+       price,
+       <span class="fn">ROW_NUMBER</span>()  <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> price <span class="kw">DESC</span>) <span class="kw">AS</span> row_num,
+       <span class="fn">RANK</span>()        <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> price <span class="kw">DESC</span>) <span class="kw">AS</span> rnk,
+       <span class="fn">DENSE_RANK</span>()  <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> price <span class="kw">DESC</span>) <span class="kw">AS</span> dense_rnk
+<span class="kw">FROM</span> <span class="tbl">products</span>
+<span class="kw">ORDER BY</span> price <span class="kw">DESC</span>;`,
+tip:'ROW_NUMBER: always unique. RANK: gaps on ties. DENSE_RANK: no gaps.'},
+
+{id:20,tags:['window','agg'],
+q:'Rank batch functions on columns of aggregated table using CTE: Rank customers by their total spend using DENSE_RANK on aggregated data.',
+sql:`<span class="kw">WITH</span> spend <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> c.customername,
+         <span class="fn">SUM</span>(p.price <span class="op">*</span> od.quantity) <span class="kw">AS</span> total_spend
+  <span class="kw">FROM</span>   <span class="tbl">customers</span>    c
+  <span class="kw">JOIN</span>   <span class="tbl">orders</span>       o  <span class="kw">ON</span> o.customerid  <span class="op">=</span> c.customerid
+  <span class="kw">JOIN</span>   <span class="tbl">orderdetails</span> od <span class="kw">ON</span> od.orderid    <span class="op">=</span> o.orderid
+  <span class="kw">JOIN</span>   <span class="tbl">products</span>     p  <span class="kw">ON</span> p.productid   <span class="op">=</span> od.productid
+  <span class="kw">GROUP BY</span> c.customerid, c.customername
+)
+<span class="kw">SELECT</span> customername,
+       total_spend,
+       <span class="fn">DENSE_RANK</span>() <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> total_spend <span class="kw">DESC</span>) <span class="kw">AS</span> rank
+<span class="kw">FROM</span>   spend;`,
+tip:'Window functions cannot be applied directly in a GROUP BY query — wrap in a CTE first.'},
+
+{id:21,tags:['window','join'],
+q:'Rank batch functions on columns of aggregated table using JOINs: For each product, show its rank within its supplier\'s catalog by price.',
+sql:`<span class="kw">SELECT</span> s.suppliername,
+       p.productname,
+       p.price,
+       <span class="fn">RANK</span>() <span class="kw">OVER</span> (
+         <span class="kw">PARTITION BY</span> p.supplierid
+         <span class="kw">ORDER BY</span> p.price <span class="kw">DESC</span>
+       ) <span class="kw">AS</span> price_rank_in_supplier
+<span class="kw">FROM</span>   <span class="tbl">products</span>  p
+<span class="kw">JOIN</span>   <span class="tbl">suppliers</span> s <span class="kw">ON</span> s.supplierid <span class="op">=</span> p.supplierid
+<span class="kw">ORDER BY</span> s.suppliername, price_rank_in_supplier;`,
+tip:'PARTITION BY groups the ranking window — here, one window per supplier.'},
+
+{id:22,tags:['window'],
+q:'LAG/LEAD on Single Column: Show each order\'s date and the number of days since the previous order (for the same customer).',
+sql:`<span class="kw">SELECT</span> customerid,
+       orderid,
+       orderdate,
+       <span class="fn">LAG</span>(orderdate) <span class="kw">OVER</span> (
+         <span class="kw">PARTITION BY</span> customerid <span class="kw">ORDER BY</span> orderdate
+       ) <span class="kw">AS</span> prev_date,
+       orderdate <span class="op">-</span> <span class="fn">LAG</span>(orderdate) <span class="kw">OVER</span> (
+         <span class="kw">PARTITION BY</span> customerid <span class="kw">ORDER BY</span> orderdate
+       ) <span class="kw">AS</span> days_since_prev
+<span class="kw">FROM</span> <span class="tbl">orders</span>
+<span class="kw">ORDER BY</span> customerid, orderdate;`,
+tip:'Subtracting two DATE/TIMESTAMP columns gives an INTERVAL; cast to integer if needed.'},
+
+{id:23,tags:['window'],
+q:'Ranking with Partitions and Filtering: Show only the top-2 products per category by total quantity sold.',
+sql:`<span class="kw">WITH</span> ranked <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> c.categoryname,
+         p.productname,
+         <span class="fn">SUM</span>(od.quantity) <span class="kw">AS</span> total_qty,
+         <span class="fn">RANK</span>() <span class="kw">OVER</span> (
+           <span class="kw">PARTITION BY</span> p.categoryid
+           <span class="kw">ORDER BY</span> <span class="fn">SUM</span>(od.quantity) <span class="kw">DESC</span>
+         ) <span class="kw">AS</span> rnk
+  <span class="kw">FROM</span>   <span class="tbl">orderdetails</span> od
+  <span class="kw">JOIN</span>   <span class="tbl">products</span>    p  <span class="kw">ON</span> p.productid  <span class="op">=</span> od.productid
+  <span class="kw">JOIN</span>   <span class="tbl">categories</span>  c  <span class="kw">ON</span> c.categoryid <span class="op">=</span> p.categoryid
+  <span class="kw">GROUP BY</span> p.categoryid, p.productid, p.productname, c.categoryname
+)
+<span class="kw">SELECT</span> categoryname, productname, total_qty
+<span class="kw">FROM</span>   ranked
+<span class="kw">WHERE</span>  rnk <span class="op">&lt;=</span> <span class="num">2</span>;`,
+tip:'Aggregate in CTE, apply window on the aggregate, then filter in outer query.'},
+
+{id:24,tags:['window'],
+q:'Running Totals: Show a running total of revenue ordered by date across all orders.',
+sql:`<span class="kw">WITH</span> daily <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> o.orderdate,
+         <span class="fn">SUM</span>(p.price <span class="op">*</span> od.quantity) <span class="kw">AS</span> daily_rev
+  <span class="kw">FROM</span>   <span class="tbl">orders</span>       o
+  <span class="kw">JOIN</span>   <span class="tbl">orderdetails</span> od <span class="kw">ON</span> od.orderid  <span class="op">=</span> o.orderid
+  <span class="kw">JOIN</span>   <span class="tbl">products</span>     p  <span class="kw">ON</span> p.productid <span class="op">=</span> od.productid
+  <span class="kw">GROUP BY</span> o.orderdate
+)
+<span class="kw">SELECT</span> orderdate,
+       daily_rev,
+       <span class="fn">SUM</span>(daily_rev) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> orderdate
+                            <span class="kw">ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW</span>)
+         <span class="kw">AS</span> running_total
+<span class="kw">FROM</span>   daily
+<span class="kw">ORDER BY</span> orderdate;`,
+tip:'ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW is the default frame for running totals.'},
+
+{id:25,tags:['window'],
+q:'Advance Concepts — Moving Averages: Calculate a 3-order moving average of daily revenue.',
+sql:`<span class="kw">WITH</span> daily <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> o.orderdate,
+         <span class="fn">SUM</span>(p.price <span class="op">*</span> od.quantity) <span class="kw">AS</span> rev
+  <span class="kw">FROM</span>   <span class="tbl">orders</span> o
+  <span class="kw">JOIN</span>   <span class="tbl">orderdetails</span> od <span class="kw">ON</span> od.orderid  <span class="op">=</span> o.orderid
+  <span class="kw">JOIN</span>   <span class="tbl">products</span>     p  <span class="kw">ON</span> p.productid <span class="op">=</span> od.productid
+  <span class="kw">GROUP BY</span> o.orderdate
+)
+<span class="kw">SELECT</span> orderdate,
+       rev,
+       <span class="fn">ROUND</span>(
+         <span class="fn">AVG</span>(rev) <span class="kw">OVER</span> (
+           <span class="kw">ORDER BY</span> orderdate
+           <span class="kw">ROWS BETWEEN</span> <span class="num">2</span> <span class="kw">PRECEDING AND CURRENT ROW</span>
+         ), <span class="num">2</span>
+       ) <span class="kw">AS</span> moving_avg_3
+<span class="kw">FROM</span>   daily
+<span class="kw">ORDER BY</span> orderdate;`,
+tip:'"2 PRECEDING AND CURRENT ROW" creates a 3-row window (2 before + current).'},
+
+// ── DATE FUNCTIONS ──────────────────────────────────────────────────────
+{id:26,tags:['date'],
+q:'Date Functions on Single Columns: Extract year, month, day, and day-of-week from orderdate.',
+sql:`<span class="kw">SELECT</span> orderid,
+       orderdate,
+       <span class="fn">EXTRACT</span>(<span class="kw">YEAR  FROM</span> orderdate) <span class="kw">AS</span> yr,
+       <span class="fn">EXTRACT</span>(<span class="kw">MONTH FROM</span> orderdate) <span class="kw">AS</span> mo,
+       <span class="fn">EXTRACT</span>(<span class="kw">DAY   FROM</span> orderdate) <span class="kw">AS</span> dy,
+       <span class="fn">TO_CHAR</span>(orderdate, <span class="str">'Day'</span>)       <span class="kw">AS</span> weekday
+<span class="kw">FROM</span> <span class="tbl">orders</span>
+<span class="kw">ORDER BY</span> orderdate;`,
+tip:'TO_CHAR(date, \'Day\') returns the full weekday name; \'Dy\' for abbreviation.'},
+
+{id:27,tags:['date'],
+q:'Date Functions on Aggregated CTE Table: Find month-wise revenue and format month as "Mon-YYYY".',
+sql:`<span class="kw">WITH</span> monthly <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> <span class="fn">DATE_TRUNC</span>(<span class="str">'month'</span>, o.orderdate) <span class="kw">AS</span> month_start,
+         <span class="fn">SUM</span>(p.price <span class="op">*</span> od.quantity) <span class="kw">AS</span> revenue
+  <span class="kw">FROM</span>   <span class="tbl">orders</span>       o
+  <span class="kw">JOIN</span>   <span class="tbl">orderdetails</span> od <span class="kw">ON</span> od.orderid  <span class="op">=</span> o.orderid
+  <span class="kw">JOIN</span>   <span class="tbl">products</span>     p  <span class="kw">ON</span> p.productid <span class="op">=</span> od.productid
+  <span class="kw">GROUP BY</span> <span class="num">1</span>
+)
+<span class="kw">SELECT</span> <span class="fn">TO_CHAR</span>(month_start, <span class="str">'Mon-YYYY'</span>) <span class="kw">AS</span> month_label,
+       <span class="fn">ROUND</span>(revenue, <span class="num">2</span>) <span class="kw">AS</span> revenue
+<span class="kw">FROM</span>   monthly
+<span class="kw">ORDER BY</span> month_start;`,
+tip:'DATE_TRUNC truncates to the start of the period — great for monthly bucketing.'},
+
+{id:28,tags:['date'],
+q:'TO_CHAR Function — Converting Dates and Numbers to Formatted Strings: Format orderdate as "DD Month YYYY" and price as "$9,999.99".',
+sql:`<span class="kw">SELECT</span> orderid,
+       <span class="fn">TO_CHAR</span>(o.orderdate, <span class="str">'DD Month YYYY'</span>)  <span class="kw">AS</span> formatted_date,
+       p.productname,
+       <span class="fn">TO_CHAR</span>(p.price, <span class="str">'FM$999,999.00'</span>)      <span class="kw">AS</span> formatted_price
+<span class="kw">FROM</span>   <span class="tbl">orders</span>       o
+<span class="kw">JOIN</span>   <span class="tbl">orderdetails</span> od <span class="kw">ON</span> od.orderid  <span class="op">=</span> o.orderid
+<span class="kw">JOIN</span>   <span class="tbl">products</span>     p  <span class="kw">ON</span> p.productid <span class="op">=</span> od.productid
+<span class="kw">LIMIT</span> <span class="num">10</span>;`,
+tip:'FM prefix removes leading spaces. TO_CHAR works on both dates and numbers in PostgreSQL.'},
+
+{id:29,tags:['date'],
+q:'Date Functions: Find the number of days between the order date and the employee\'s birth date (employee age at order time).',
+sql:`<span class="kw">SELECT</span> o.orderid,
+       e.firstname <span class="op">||</span> <span class="str">' '</span> <span class="op">||</span> e.lastname <span class="kw">AS</span> employee,
+       o.orderdate,
+       e.birthdate,
+       <span class="fn">EXTRACT</span>(<span class="kw">YEAR FROM</span> <span class="fn">AGE</span>(o.orderdate, e.birthdate)) <span class="kw">AS</span> age_at_order
+<span class="kw">FROM</span>   <span class="tbl">orders</span>    o
+<span class="kw">JOIN</span>   <span class="tbl">employees</span> e <span class="kw">ON</span> e.employeeid <span class="op">=</span> o.employeeid
+<span class="kw">LIMIT</span> <span class="num">20</span>;`,
+tip:'AGE(date1, date2) returns an interval; EXTRACT(YEAR FROM …) pulls the years.'},
+
+// ── COALESCE / NULL / MISC ───────────────────────────────────────────────
+{id:30,tags:['misc'],
+q:'COALESCE — Handling NULL Values Gracefully: Show product name and its description from categories; replace NULL description with "No description".',
+sql:`<span class="kw">SELECT</span> p.productname,
+       <span class="fn">COALESCE</span>(c.description, <span class="str">'No description'</span>) <span class="kw">AS</span> category_desc
+<span class="kw">FROM</span>   <span class="tbl">products</span>   p
+<span class="kw">JOIN</span>   <span class="tbl">categories</span> c <span class="kw">ON</span> c.categoryid <span class="op">=</span> p.categoryid;`,
+tip:'COALESCE returns the first non-NULL argument. Ideal for fallback values.'},
+
+{id:31,tags:['misc'],
+q:'COALESCE on Aggregated CTS table: When computing average order value per customer, replace NULL (no orders) with 0 using COALESCE.',
+sql:`<span class="kw">SELECT</span> c.customername,
+       <span class="fn">COALESCE</span>(<span class="fn">SUM</span>(p.price <span class="op">*</span> od.quantity), <span class="num">0</span>) <span class="kw">AS</span> total_spent
+<span class="kw">FROM</span>   <span class="tbl">customers</span>    c
+<span class="kw">LEFT JOIN</span> <span class="tbl">orders</span>       o  <span class="kw">ON</span> o.customerid  <span class="op">=</span> c.customerid
+<span class="kw">LEFT JOIN</span> <span class="tbl">orderdetails</span> od <span class="kw">ON</span> od.orderid    <span class="op">=</span> o.orderid
+<span class="kw">LEFT JOIN</span> <span class="tbl">products</span>     p  <span class="kw">ON</span> p.productid   <span class="op">=</span> od.productid
+<span class="kw">GROUP BY</span> c.customerid, c.customername
+<span class="kw">ORDER BY</span> total_spent <span class="kw">DESC</span>;`,
+tip:'SUM of NULLs returns NULL — wrap with COALESCE(SUM(…), 0) to get 0 instead.'},
+
+{id:32,tags:['misc'],
+q:'Binary Classification: Classify customers as "VIP" (total spend > $1000) or "Regular" using CASE, then count each class.',
+sql:`<span class="kw">WITH</span> customer_spend <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> c.customerid,
+         c.customername,
+         <span class="fn">COALESCE</span>(<span class="fn">SUM</span>(p.price <span class="op">*</span> od.quantity), <span class="num">0</span>) <span class="kw">AS</span> spend
+  <span class="kw">FROM</span>   <span class="tbl">customers</span>    c
+  <span class="kw">LEFT JOIN</span> <span class="tbl">orders</span>       o  <span class="kw">ON</span> o.customerid  <span class="op">=</span> c.customerid
+  <span class="kw">LEFT JOIN</span> <span class="tbl">orderdetails</span> od <span class="kw">ON</span> od.orderid    <span class="op">=</span> o.orderid
+  <span class="kw">LEFT JOIN</span> <span class="tbl">products</span>     p  <span class="kw">ON</span> p.productid   <span class="op">=</span> od.productid
+  <span class="kw">GROUP BY</span> c.customerid, c.customername
+)
+<span class="kw">SELECT</span>
+  <span class="fn">COUNT</span>(<span class="kw">CASE WHEN</span> spend <span class="op">&gt;</span> <span class="num">1000</span> <span class="kw">THEN</span> <span class="num">1</span> <span class="kw">END</span>) <span class="kw">AS</span> vip_count,
+  <span class="fn">COUNT</span>(<span class="kw">CASE WHEN</span> spend <span class="op">&lt;=</span> <span class="num">1000</span> <span class="kw">THEN</span> <span class="num">1</span> <span class="kw">END</span>) <span class="kw">AS</span> regular_count
+<span class="kw">FROM</span>   customer_spend;`,
+tip:'Combine COALESCE for NULL-safety and CASE for classification in one pipeline.'},
+
+{id:33,tags:['misc'],
+q:'Multi-Category CASE MATCH — Creating Detailed Conditions on Multiple Columns: Label each order as "International-High", "International-Low", "Domestic-High", or "Domestic-Low" based on country and order value.',
+sql:`<span class="kw">WITH</span> order_vals <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> o.orderid,
+         c.country,
+         <span class="fn">SUM</span>(p.price <span class="op">*</span> od.quantity) <span class="kw">AS</span> val
+  <span class="kw">FROM</span>   <span class="tbl">orders</span>       o
+  <span class="kw">JOIN</span>   <span class="tbl">customers</span>    c  <span class="kw">ON</span> c.customerid  <span class="op">=</span> o.customerid
+  <span class="kw">JOIN</span>   <span class="tbl">orderdetails</span> od <span class="kw">ON</span> od.orderid    <span class="op">=</span> o.orderid
+  <span class="kw">JOIN</span>   <span class="tbl">products</span>     p  <span class="kw">ON</span> p.productid   <span class="op">=</span> od.productid
+  <span class="kw">GROUP BY</span> o.orderid, c.country
+)
+<span class="kw">SELECT</span> orderid,
+       country,
+       val,
+       <span class="kw">CASE</span>
+         <span class="kw">WHEN</span> country <span class="op">!=</span> <span class="str">'USA'</span> <span class="kw">AND</span> val <span class="op">&gt;</span> <span class="num">500</span> <span class="kw">THEN</span> <span class="str">'International-High'</span>
+         <span class="kw">WHEN</span> country <span class="op">!=</span> <span class="str">'USA'</span> <span class="kw">AND</span> val <span class="op">&lt;=</span> <span class="num">500</span> <span class="kw">THEN</span> <span class="str">'International-Low'</span>
+         <span class="kw">WHEN</span> country <span class="op">=</span> <span class="str">'USA'</span>  <span class="kw">AND</span> val <span class="op">&gt;</span> <span class="num">500</span> <span class="kw">THEN</span> <span class="str">'Domestic-High'</span>
+         <span class="kw">ELSE</span> <span class="str">'Domestic-Low'</span>
+       <span class="kw">END</span> <span class="kw">AS</span> segment
+<span class="kw">FROM</span>   order_vals;`,
+tip:'CASE WHEN with AND allows multi-column conditions — order your branches from most to least specific.'},
+
+{id:34,tags:['misc','agg'],
+q:'Conditional Aggregation Using CASE WHEN: For each country, show how many orders were "High Value" (>$500) vs "Low Value".',
+sql:`<span class="kw">WITH</span> order_vals <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> c.country,
+         o.orderid,
+         <span class="fn">SUM</span>(p.price <span class="op">*</span> od.quantity) <span class="kw">AS</span> val
+  <span class="kw">FROM</span>   <span class="tbl">orders</span>       o
+  <span class="kw">JOIN</span>   <span class="tbl">customers</span>    c  <span class="kw">ON</span> c.customerid  <span class="op">=</span> o.customerid
+  <span class="kw">JOIN</span>   <span class="tbl">orderdetails</span> od <span class="kw">ON</span> od.orderid    <span class="op">=</span> o.orderid
+  <span class="kw">JOIN</span>   <span class="tbl">products</span>     p  <span class="kw">ON</span> p.productid   <span class="op">=</span> od.productid
+  <span class="kw">GROUP BY</span> c.country, o.orderid
+)
+<span class="kw">SELECT</span> country,
+  <span class="fn">COUNT</span>(<span class="kw">CASE WHEN</span> val <span class="op">&gt;</span>  <span class="num">500</span> <span class="kw">THEN</span> <span class="num">1</span> <span class="kw">END</span>) <span class="kw">AS</span> high_value,
+  <span class="fn">COUNT</span>(<span class="kw">CASE WHEN</span> val <span class="op">&lt;=</span> <span class="num">500</span> <span class="kw">THEN</span> <span class="num">1</span> <span class="kw">END</span>) <span class="kw">AS</span> low_value
+<span class="kw">FROM</span>   order_vals
+<span class="kw">GROUP BY</span> country
+<span class="kw">ORDER BY</span> high_value <span class="kw">DESC</span>;`,
+tip:'Two-level aggregation: first aggregate per order in CTE, then pivot by country.'},
+
+{id:35,tags:['misc'],
+q:'Ranking on Aggregated Columns Using CASE: Label employees as "Top", "Mid", or "Low" performer based on their order count rank.',
+sql:`<span class="kw">WITH</span> emp_rank <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> e.firstname <span class="op">||</span> <span class="str">' '</span> <span class="op">||</span> e.lastname <span class="kw">AS</span> name,
+         <span class="fn">COUNT</span>(o.orderid) <span class="kw">AS</span> orders,
+         <span class="fn">NTILE</span>(<span class="num">3</span>) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> <span class="fn">COUNT</span>(o.orderid) <span class="kw">DESC</span>) <span class="kw">AS</span> tier
+  <span class="kw">FROM</span>   <span class="tbl">employees</span> e
+  <span class="kw">LEFT JOIN</span> <span class="tbl">orders</span> o <span class="kw">ON</span> o.employeeid <span class="op">=</span> e.employeeid
+  <span class="kw">GROUP BY</span> e.employeeid, e.firstname, e.lastname
+)
+<span class="kw">SELECT</span> name,
+       orders,
+       <span class="kw">CASE</span> tier <span class="kw">WHEN</span> <span class="num">1</span> <span class="kw">THEN</span> <span class="str">'Top'</span>
+                  <span class="kw">WHEN</span> <span class="num">2</span> <span class="kw">THEN</span> <span class="str">'Mid'</span>
+                  <span class="kw">ELSE</span> <span class="str">'Low'</span>
+       <span class="kw">END</span> <span class="kw">AS</span> performance
+<span class="kw">FROM</span>   emp_rank;`,
+tip:'CASE on NTILE output translates numeric buckets into human-readable labels.'},
+
+{id:36,tags:['date','agg'],
+q:'Date Functions: Which day of the week generates the most orders? (Use EXTRACT or TO_CHAR)',
+sql:`<span class="kw">SELECT</span> <span class="fn">TO_CHAR</span>(orderdate, <span class="str">'Day'</span>)       <span class="kw">AS</span> weekday,
+       <span class="fn">EXTRACT</span>(<span class="kw">DOW FROM</span> orderdate)       <span class="kw">AS</span> dow_num,
+       <span class="fn">COUNT</span>(<span class="op">*</span>)                           <span class="kw">AS</span> order_count
+<span class="kw">FROM</span>   <span class="tbl">orders</span>
+<span class="kw">GROUP BY</span> weekday, dow_num
+<span class="kw">ORDER BY</span> order_count <span class="kw">DESC</span>;`,
+tip:'DOW (day-of-week): 0=Sunday, 6=Saturday in PostgreSQL.'},
+
+{id:37,tags:['date'],
+q:'Date Functions on Aggregated CTE — Running Totals: Show cumulative orders placed month by month.',
+sql:`<span class="kw">WITH</span> monthly_orders <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> <span class="fn">DATE_TRUNC</span>(<span class="str">'month'</span>, orderdate) <span class="kw">AS</span> month,
+         <span class="fn">COUNT</span>(<span class="op">*</span>) <span class="kw">AS</span> orders
+  <span class="kw">FROM</span> <span class="tbl">orders</span>
+  <span class="kw">GROUP BY</span> <span class="num">1</span>
+)
+<span class="kw">SELECT</span> <span class="fn">TO_CHAR</span>(month, <span class="str">'Mon YYYY'</span>) <span class="kw">AS</span> month_label,
+       orders,
+       <span class="fn">SUM</span>(orders) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> month) <span class="kw">AS</span> cumulative
+<span class="kw">FROM</span>   monthly_orders;`,
+tip:'Combine DATE_TRUNC, TO_CHAR, and SUM() OVER in one clean pipeline.'},
+
+// ── EXTRA MIXED CHALLENGE ─────────────────────────────────────────────
+{id:38,tags:['cte','window','case'],
+q:'CHALLENGE: Bucket customers into quartiles (Q1–Q4) by spend using NTILE, then show average spend per quartile.',
+sql:`<span class="kw">WITH</span> spend <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> c.customerid,
+         c.customername,
+         <span class="fn">COALESCE</span>(<span class="fn">SUM</span>(p.price <span class="op">*</span> od.quantity), <span class="num">0</span>) <span class="kw">AS</span> total
+  <span class="kw">FROM</span>   <span class="tbl">customers</span>    c
+  <span class="kw">LEFT JOIN</span> <span class="tbl">orders</span>       o  <span class="kw">ON</span> o.customerid  <span class="op">=</span> c.customerid
+  <span class="kw">LEFT JOIN</span> <span class="tbl">orderdetails</span> od <span class="kw">ON</span> od.orderid    <span class="op">=</span> o.orderid
+  <span class="kw">LEFT JOIN</span> <span class="tbl">products</span>     p  <span class="kw">ON</span> p.productid   <span class="op">=</span> od.productid
+  <span class="kw">GROUP BY</span> c.customerid, c.customername
+),
+bucketed <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> customername, total,
+         <span class="fn">NTILE</span>(<span class="num">4</span>) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> total) <span class="kw">AS</span> quartile
+  <span class="kw">FROM</span>   spend
+)
+<span class="kw">SELECT</span>
+  <span class="str">'Q'</span> <span class="op">||</span> quartile <span class="kw">AS</span> bucket,
+  <span class="fn">COUNT</span>(<span class="op">*</span>)              <span class="kw">AS</span> customers,
+  <span class="fn">ROUND</span>(<span class="fn">AVG</span>(total), <span class="num">2</span>)  <span class="kw">AS</span> avg_spend,
+  <span class="fn">ROUND</span>(<span class="fn">MIN</span>(total), <span class="num">2</span>)  <span class="kw">AS</span> min_spend,
+  <span class="fn">ROUND</span>(<span class="fn">MAX</span>(total), <span class="num">2</span>)  <span class="kw">AS</span> max_spend
+<span class="kw">FROM</span>   bucketed
+<span class="kw">GROUP BY</span> quartile
+<span class="kw">ORDER BY</span> quartile;`,
+tip:'Two CTEs: first aggregate spend, then NTILE to bucket, then aggregate by bucket.'},
+
+{id:39,tags:['join','case','agg'],
+q:'CHALLENGE: Show a product performance matrix — product name, total revenue, quantity sold, and whether it\'s in the "Top 25%" or "Bottom 75%" by revenue.',
+sql:`<span class="kw">WITH</span> prod_rev <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> p.productname,
+         <span class="fn">SUM</span>(od.quantity)                <span class="kw">AS</span> qty_sold,
+         <span class="fn">SUM</span>(p.price <span class="op">*</span> od.quantity)      <span class="kw">AS</span> revenue,
+         <span class="fn">NTILE</span>(<span class="num">4</span>) <span class="kw">OVER</span> (
+           <span class="kw">ORDER BY</span> <span class="fn">SUM</span>(p.price <span class="op">*</span> od.quantity) <span class="kw">DESC</span>
+         ) <span class="kw">AS</span> rev_quartile
+  <span class="kw">FROM</span>   <span class="tbl">orderdetails</span> od
+  <span class="kw">JOIN</span>   <span class="tbl">products</span>     p  <span class="kw">ON</span> p.productid <span class="op">=</span> od.productid
+  <span class="kw">GROUP BY</span> p.productid, p.productname
+)
+<span class="kw">SELECT</span> productname,
+       qty_sold,
+       <span class="fn">ROUND</span>(revenue, <span class="num">2</span>) <span class="kw">AS</span> revenue,
+       <span class="kw">CASE WHEN</span> rev_quartile <span class="op">=</span> <span class="num">1</span> <span class="kw">THEN</span> <span class="str">'Top 25%'</span> <span class="kw">ELSE</span> <span class="str">'Bottom 75%'</span> <span class="kw">END</span> <span class="kw">AS</span> tier
+<span class="kw">FROM</span>   prod_rev
+<span class="kw">ORDER BY</span> revenue <span class="kw">DESC</span>;`,
+tip:'NTILE on aggregated window — aggregate with GROUP BY in CTE, window in the same CTE.'},
+
+{id:40,tags:['date','window'],
+q:'CHALLENGE: Show the first order date and latest order date per customer, plus the total lifespan in days.',
+sql:`<span class="kw">SELECT</span> c.customername,
+       <span class="fn">MIN</span>(o.orderdate)                          <span class="kw">AS</span> first_order,
+       <span class="fn">MAX</span>(o.orderdate)                          <span class="kw">AS</span> last_order,
+       <span class="fn">MAX</span>(o.orderdate) <span class="op">-</span> <span class="fn">MIN</span>(o.orderdate)        <span class="kw">AS</span> lifespan,
+       <span class="fn">COUNT</span>(o.orderid)                           <span class="kw">AS</span> total_orders
+<span class="kw">FROM</span>   <span class="tbl">customers</span> c
+<span class="kw">JOIN</span>   <span class="tbl">orders</span>    o <span class="kw">ON</span> o.customerid <span class="op">=</span> c.customerid
+<span class="kw">GROUP BY</span> c.customerid, c.customername
+<span class="kw">ORDER BY</span> lifespan <span class="kw">DESC</span>;`,
+tip:'MAX(date) - MIN(date) gives an INTERVAL in PostgreSQL; cast to integer for days.'},
+
+{id:41,tags:['misc','join'],
+q:'COALESCE: For products with no orders, show 0 as total quantity sold and "Never Ordered" as status.',
+sql:`<span class="kw">SELECT</span> p.productname,
+       <span class="fn">COALESCE</span>(<span class="fn">SUM</span>(od.quantity), <span class="num">0</span>)              <span class="kw">AS</span> total_qty,
+       <span class="kw">CASE</span> <span class="kw">WHEN</span> <span class="fn">SUM</span>(od.quantity) <span class="kw">IS NULL</span>
+            <span class="kw">THEN</span> <span class="str">'Never Ordered'</span>
+            <span class="kw">ELSE</span> <span class="str">'Has Orders'</span>
+       <span class="kw">END</span> <span class="kw">AS</span> status
+<span class="kw">FROM</span>   <span class="tbl">products</span>     p
+<span class="kw">LEFT JOIN</span> <span class="tbl">orderdetails</span> od <span class="kw">ON</span> od.productid <span class="op">=</span> p.productid
+<span class="kw">GROUP BY</span> p.productid, p.productname
+<span class="kw">ORDER BY</span> total_qty;`,
+tip:'LEFT JOIN ensures products with no orderdetails are included; COALESCE handles the NULL SUM.'},
+
+{id:42,tags:['cte','date','window'],
+q:'FINAL BOSS: Month-over-month revenue growth %, ranked by growth rate, with CASE label (Growing / Declining).',
+sql:`<span class="kw">WITH</span> monthly <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> <span class="fn">DATE_TRUNC</span>(<span class="str">'month'</span>, o.orderdate) <span class="kw">AS</span> month,
+         <span class="fn">SUM</span>(p.price <span class="op">*</span> od.quantity) <span class="kw">AS</span> rev
+  <span class="kw">FROM</span>   <span class="tbl">orders</span>       o
+  <span class="kw">JOIN</span>   <span class="tbl">orderdetails</span> od <span class="kw">ON</span> od.orderid  <span class="op">=</span> o.orderid
+  <span class="kw">JOIN</span>   <span class="tbl">products</span>     p  <span class="kw">ON</span> p.productid <span class="op">=</span> od.productid
+  <span class="kw">GROUP BY</span> <span class="num">1</span>
+),
+growth <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> month,
+         rev,
+         <span class="fn">LAG</span>(rev) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> month) <span class="kw">AS</span> prev_rev,
+         <span class="fn">ROUND</span>(
+           (rev <span class="op">-</span> <span class="fn">LAG</span>(rev) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> month))
+           <span class="op">*</span> <span class="num">100.0</span>
+           <span class="op">/</span> <span class="fn">NULLIF</span>(<span class="fn">LAG</span>(rev) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> month), <span class="num">0</span>)
+         , <span class="num">2</span>) <span class="kw">AS</span> growth_pct
+  <span class="kw">FROM</span>   monthly
+)
+<span class="kw">SELECT</span> <span class="fn">TO_CHAR</span>(month, <span class="str">'Mon YYYY'</span>) <span class="kw">AS</span> month_label,
+       <span class="fn">ROUND</span>(rev, <span class="num">2</span>)              <span class="kw">AS</span> revenue,
+       growth_pct,
+       <span class="fn">DENSE_RANK</span>() <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> growth_pct <span class="kw">DESC</span> <span class="kw">NULLS LAST</span>) <span class="kw">AS</span> growth_rank,
+       <span class="kw">CASE</span>
+         <span class="kw">WHEN</span> growth_pct <span class="op">&gt;</span> <span class="num">0</span> <span class="kw">THEN</span> <span class="str">'📈 Growing'</span>
+         <span class="kw">WHEN</span> growth_pct <span class="op">&lt;</span> <span class="num">0</span> <span class="kw">THEN</span> <span class="str">'📉 Declining'</span>
+         <span class="kw">ELSE</span> <span class="str">'➡ Flat'</span>
+       <span class="kw">END</span> <span class="kw">AS</span> trend
+<span class="kw">FROM</span>   growth
+<span class="kw">WHERE</span>  prev_rev <span class="kw">IS NOT NULL</span>
+<span class="kw">ORDER BY</span> month;`,
+tip:'Three CTEs chained together + window + CASE + NULLIF — the ultimate combo query.'},
+];
+
+// ── RENDER ENGINE ──────────────────────────────────────────────────────
+let activeFilter = 'all';
+const revealed = new Set();
+
+const tagColors = {case:'case',join:'join',cte:'cte',window:'window',agg:'agg',date:'date',misc:'misc',cross:'cross',union:'union'};
+
+function tagHtml(tags){
+  return tags.map(t=>`<span class="tag tag-${tagColors[t]||'misc'}">${t}</span>`).join('');
+}
+
+const sectionMeta = {
+  case:  {label:'⚡ CASE WHEN & Conditional Aggregation', color:'#c0392b'},
+  join:  {label:'🔗 Advanced JOINs, CROSS JOIN & UNION',  color:'#2c7be5'},
+  cte:   {label:'🧩 CTE + JOINs',                         color:'#1a7f4e'},
+  window:{label:'🪟 Window Functions',                     color:'#6b3fa0'},
+  date:  {label:'📅 Date Functions & TO_CHAR',             color:'#e67e22'},
+  misc:  {label:'🔧 COALESCE, NULL, Binary Classification',color:'#7a6e60'},
+};
+const sectionOrder = ['case','join','cte','window','date','misc'];
+
+function render(filter){
+  const container = document.getElementById('main');
+  container.innerHTML = '';
+
+  const visible = filter==='all' ? Q : Q.filter(q=>q.tags.includes(filter));
+
+  // group by primary tag
+  const groups = {};
+  visible.forEach(q=>{
+    // find first matching sectionOrder tag
+    const primary = sectionOrder.find(s=>q.tags.includes(s)) || q.tags[0];
+    if(!groups[primary]) groups[primary]=[];
+    groups[primary].push(q);
+  });
+
+  sectionOrder.forEach(sec=>{
+    if(!groups[sec]) return;
+    const meta = sectionMeta[sec]||{label:sec,color:'#666'};
+    const sh = document.createElement('div');
+    sh.className='section-header';
+    sh.innerHTML=`<div class="sh-dot" style="background:${meta.color}"></div><h2 style="color:${meta.color}">${meta.label}</h2><div class="sh-line"></div>`;
+    container.appendChild(sh);
+
+    groups[sec].forEach(q=>{
+      const card = document.createElement('div');
+      card.className = 'q-card' + (revealed.has(q.id)?' open':'');
+      card.innerHTML=`
+        <div class="q-head" onclick="toggle(${q.id},this)">
+          <span class="q-num">Q${String(q.id).padStart(2,'0')}</span>
+          <div class="q-body">
+            <div class="q-tags">${tagHtml(q.tags)}</div>
+            <div class="q-text">${q.q}</div>
+          </div>
+          <button class="q-reveal-btn" id="rb-${q.id}">${revealed.has(q.id)?'Hide':'Answer'}</button>
+        </div>
+        <div class="q-answer${revealed.has(q.id)?' show':''}" id="a-${q.id}">
+          <div class="ans-lbl">SQL Solution</div>
+          <pre>${q.sql}</pre>
+          <p class="tip"><strong>💡 Tip:</strong> ${q.tip}</p>
+        </div>`;
+      container.appendChild(card);
+    });
+  });
+
+  updateStats(visible);
+  document.getElementById('ctrl-label').textContent =
+    `Showing ${visible.length} question${visible.length!==1?'s':''}`;
+}
+
+function toggle(id, headEl){
+  const ans = document.getElementById(`a-${id}`);
+  const btn = document.getElementById(`rb-${id}`);
+  const card = headEl.closest('.q-card');
+  if(ans.classList.contains('show')){
+    ans.classList.remove('show'); btn.textContent='Answer';
+    card.classList.remove('open'); revealed.delete(id);
+  } else {
+    ans.classList.add('show'); btn.textContent='Hide';
+    card.classList.add('open'); revealed.add(id);
+  }
+  updateStats();
+}
+
+function updateStats(vis){
+  const all = activeFilter==='all' ? Q : Q.filter(q=>q.tags.includes(activeFilter));
+  const t = all.length;
+  const d = all.filter(q=>revealed.has(q.id)).length;
+  document.getElementById('total-v').textContent = t;
+  document.getElementById('done-v').textContent  = d;
+  document.getElementById('pct-v').textContent   = t ? Math.round(d/t*100)+'%' : '0%';
+  document.getElementById('prog-label').textContent = `${d} / ${t}`;
+  document.getElementById('prog-fill').style.width = t ? `${d/t*100}%` : '0%';
+}
+
+document.getElementById('controls').addEventListener('click',e=>{
+  if(!e.target.matches('.filter-btn')) return;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  e.target.classList.add('active');
+  activeFilter = e.target.dataset.filter;
+  render(activeFilter);
+});
+
+render('all');
+</script>
+</body>
+</html>

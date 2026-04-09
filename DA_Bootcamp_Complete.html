@@ -1,0 +1,2283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Analytics Bootcamp — Complete Interview & Exam Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Playfair+Display:ital,wght@0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#07090f;--bg2:#0c0f1a;--bg3:#111627;--card:#0f1320;
+  --border:#1a2035;--border2:#232d47;
+  --sql:#22d3ee;--excel:#34d399;--pbi:#fbbf24;--py:#a78bfa;--stats:#f87171;--biz:#fb923c;
+  --text:#cbd5e1;--muted:#475569;--head:#f1f5f9;
+  --grad1:linear-gradient(135deg,#22d3ee22,#a78bfa22);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--text);font-size:14.5px;line-height:1.75}
+
+/* ── TOPBAR ── */
+.topbar{position:sticky;top:0;z-index:200;background:rgba(7,9,15,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;gap:0;height:52px}
+.topbar-logo{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--head);margin-right:32px;white-space:nowrap}
+.topbar-logo span{font-style:italic;color:var(--sql)}
+.topnav{display:flex;gap:2px;overflow-x:auto;flex:1}
+.topnav::-webkit-scrollbar{height:0}
+.tnav{padding:6px 14px;border-radius:6px;font-size:12px;font-family:'JetBrains Mono',monospace;font-weight:500;color:var(--muted);text-decoration:none;white-space:nowrap;transition:all .2s;border:1px solid transparent}
+.tnav:hover{color:var(--head);background:var(--bg3)}
+.tnav.sql{color:var(--sql)} .tnav.excel{color:var(--excel)} .tnav.pbi{color:var(--pbi)} .tnav.py{color:var(--py)} .tnav.stats{color:var(--stats)} .tnav.biz{color:var(--biz)}
+.progress-bar{height:2px;background:linear-gradient(90deg,var(--sql),var(--excel),var(--pbi),var(--py),var(--stats),var(--biz));position:absolute;bottom:0;left:0;right:0}
+
+/* ── LAYOUT ── */
+.layout{display:flex;min-height:calc(100vh - 52px)}
+.sidebar{width:240px;min-width:240px;background:var(--bg2);border-right:1px solid var(--border);height:calc(100vh - 52px);position:sticky;top:52px;overflow-y:auto;padding:16px 0 40px}
+.sidebar::-webkit-scrollbar{width:3px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.sb-sect{padding:14px 16px 4px;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted)}
+.sb-link{display:flex;align-items:center;gap:8px;padding:7px 16px;font-size:12px;color:var(--muted);text-decoration:none;transition:all .15s;border-left:2px solid transparent;font-family:'JetBrains Mono',monospace}
+.sb-link:hover{color:var(--text);background:rgba(255,255,255,0.03)}
+.sb-link.active,.sb-link:hover{border-left-color:currentColor}
+.sb-link.sql{--c:var(--sql)} .sb-link.excel{--c:var(--excel)} .sb-link.pbi{--c:var(--pbi)} .sb-link.py{--c:var(--py)} .sb-link.stats{--c:var(--stats)} .sb-link.biz{--c:var(--biz)}
+.sb-link:hover{color:var(--c,var(--text))}
+.sb-dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0}
+
+/* ── MAIN ── */
+.main{flex:1;padding:40px 44px 100px;max-width:calc(100% - 240px);overflow-x:hidden}
+
+/* ── HERO ── */
+.hero{background:linear-gradient(135deg,#0c1020 0%,#070b18 100%);border:1px solid var(--border);border-radius:16px;padding:48px;margin-bottom:48px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-60px;right:-60px;width:300px;height:300px;background:radial-gradient(circle,rgba(34,211,238,.07),transparent 70%);pointer-events:none}
+.hero::after{content:'';position:absolute;bottom:-60px;left:20%;width:300px;height:300px;background:radial-gradient(circle,rgba(167,139,250,.07),transparent 70%);pointer-events:none}
+.hero-eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--sql);margin-bottom:12px}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3rem);color:var(--head);line-height:1.15;margin-bottom:16px}
+.hero h1 em{font-style:italic;color:var(--py)}
+.hero p{color:var(--muted);max-width:560px;margin-bottom:28px;font-size:15px}
+.hero-chips{display:flex;flex-wrap:wrap;gap:8px}
+.hchip{font-family:'JetBrains Mono',monospace;font-size:11px;padding:5px 14px;border-radius:20px;border:1px solid;opacity:.85}
+.hchip.sql{border-color:var(--sql);color:var(--sql);background:rgba(34,211,238,.07)}
+.hchip.excel{border-color:var(--excel);color:var(--excel);background:rgba(52,211,153,.07)}
+.hchip.pbi{border-color:var(--pbi);color:var(--pbi);background:rgba(251,191,36,.07)}
+.hchip.py{border-color:var(--py);color:var(--py);background:rgba(167,139,250,.07)}
+.hchip.stats{border-color:var(--stats);color:var(--stats);background:rgba(248,113,113,.07)}
+.hchip.biz{border-color:var(--biz);color:var(--biz);background:rgba(251,146,60,.07)}
+
+/* ── SECTION HEADER ── */
+.sec-hdr{display:flex;align-items:center;gap:16px;margin-bottom:32px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.sec-icon{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.sec-icon.sql{background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.2)}
+.sec-icon.excel{background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.2)}
+.sec-icon.pbi{background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.2)}
+.sec-icon.py{background:rgba(167,139,250,.1);border:1px solid rgba(167,139,250,.2)}
+.sec-icon.stats{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.2)}
+.sec-icon.biz{background:rgba(251,146,60,.1);border:1px solid rgba(251,146,60,.2)}
+.sec-info h2{font-family:'Playfair Display',serif;font-size:1.7rem;color:var(--head)}
+.sec-info p{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-top:2px}
+
+/* ── TOPIC ── */
+.topic{margin-bottom:44px;scroll-margin-top:64px}
+.topic-hdr{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.topic-hdr h3{font-size:1.05rem;font-weight:600;color:var(--head)}
+.badge{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 8px;border-radius:3px;letter-spacing:.5px;text-transform:uppercase;font-weight:600}
+.b-concept{background:rgba(71,85,105,.25);color:#94a3b8}
+.b-practice{background:rgba(52,211,153,.12);color:var(--excel)}
+.b-interview{background:rgba(251,191,36,.12);color:var(--pbi)}
+.b-trick{background:rgba(248,113,113,.12);color:var(--stats)}
+.b-advanced{background:rgba(167,139,250,.12);color:var(--py)}
+
+/* ── CONCEPT BOX ── */
+.cbox{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px 22px;margin-bottom:14px}
+.cbox h4{font-size:13px;font-weight:600;color:var(--head);margin-bottom:10px}
+.cbox p,.cbox li{font-size:13.5px;color:var(--text)}
+.cbox ul,.cbox ol{padding-left:18px}
+.cbox li{margin-bottom:3px}
+
+/* ── CODE ── */
+pre{background:#050810;border:1px solid var(--border);border-radius:8px;padding:18px 20px;overflow-x:auto;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.65;color:#c9d1d9;margin:10px 0}
+pre.sql-c{border-left:3px solid var(--sql)}
+pre.excel-c{border-left:3px solid var(--excel)}
+pre.pbi-c{border-left:3px solid var(--pbi)}
+pre.py-c{border-left:3px solid var(--py)}
+pre.stats-c{border-left:3px solid var(--stats)}
+.kw{color:#f97583}.fn{color:#b392f0}.st{color:#9ecbff}.nm{color:#79b8ff}.cm{color:#3d4f6b;font-style:italic}.op{color:#f97583}.vr{color:#ffab70}.cl{color:#e3b341}
+
+/* ── EXERCISE ── */
+.ex{background:var(--bg3);border:1px solid var(--border);border-radius:10px;margin-bottom:12px;overflow:hidden;transition:border-color .2s}
+.ex:hover{border-color:var(--border2)}
+.ex-h{display:flex;align-items:center;gap:10px;padding:13px 16px;cursor:pointer;user-select:none}
+.ex-n{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;width:30px;height:30px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ex-n.sql{background:rgba(34,211,238,.12);color:var(--sql)}
+.ex-n.excel{background:rgba(52,211,153,.12);color:var(--excel)}
+.ex-n.pbi{background:rgba(251,191,36,.12);color:var(--pbi)}
+.ex-n.py{background:rgba(167,139,250,.12);color:var(--py)}
+.ex-n.stats{background:rgba(248,113,113,.12);color:var(--stats)}
+.ex-n.biz{background:rgba(251,146,60,.12);color:var(--biz)}
+.ex-q{flex:1;font-size:13.5px;color:var(--text);font-weight:500;line-height:1.45}
+.diff{font-family:'JetBrains Mono',monospace;font-size:9px;padding:3px 8px;border-radius:3px;font-weight:600;white-space:nowrap}
+.d-e{background:rgba(52,211,153,.12);color:var(--excel)}
+.d-m{background:rgba(251,191,36,.12);color:var(--pbi)}
+.d-h{background:rgba(248,113,113,.12);color:var(--stats)}
+.d-t{background:rgba(167,139,250,.12);color:var(--py)}
+.ex-arr{color:var(--muted);font-size:12px;transition:transform .2s;flex-shrink:0}
+.ex-arr.open{transform:rotate(180deg)}
+.ex-body{border-top:1px solid var(--border);padding:14px 16px 16px;display:none}
+.ex-body.show{display:block}
+.ans-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+
+/* ── INTERVIEW Q ── */
+.iq{background:rgba(251,191,36,.03);border:1px solid rgba(251,191,36,.18);border-radius:10px;padding:18px 20px;margin-bottom:12px}
+.iq-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--pbi);margin-bottom:6px}
+.iq-q{font-size:14px;font-weight:600;color:var(--head);margin-bottom:10px;line-height:1.4}
+.iq-a{font-size:13px;color:var(--text);line-height:1.75}
+.iq-a strong{color:var(--head)}
+.iq-a code{font-family:'JetBrains Mono',monospace;font-size:11.5px;background:#0d1120;padding:1px 6px;border-radius:3px;color:var(--sql)}
+
+/* ── TRICK Q ── */
+.tq{background:rgba(248,113,113,.03);border:1px solid rgba(248,113,113,.2);border-radius:10px;padding:18px 20px;margin-bottom:12px}
+.tq-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--stats);margin-bottom:6px}
+.tq-q{font-size:14px;font-weight:600;color:var(--head);margin-bottom:10px}
+.tq-trap{background:rgba(248,113,113,.07);border-left:3px solid var(--stats);border-radius:0 6px 6px 0;padding:10px 14px;margin-bottom:8px;font-size:13px;color:#fca5a5}
+.tq-ans{font-size:13px;color:var(--text);line-height:1.75}
+
+/* ── TABLE ── */
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:12.5px}
+th{background:var(--bg3);color:var(--head);padding:9px 13px;text-align:left;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.5px;text-transform:uppercase}
+td{padding:8px 13px;border:1px solid var(--border);color:var(--text);vertical-align:top;line-height:1.5}
+tr:nth-child(even) td{background:rgba(255,255,255,.015)}
+
+/* ── FORMULA ── */
+.formula{background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.2);border-radius:6px;padding:10px 16px;font-family:'JetBrains Mono',monospace;font-size:13px;color:#c4b5fd;text-align:center;margin:8px 0}
+
+/* ── HINT / NOTE ── */
+.hint{background:rgba(251,191,36,.05);border:1px solid rgba(251,191,36,.2);border-radius:6px;padding:10px 14px;font-size:13px;color:#d4a21a;margin:8px 0}
+.note{background:rgba(34,211,238,.05);border:1px solid rgba(34,211,238,.18);border-radius:6px;padding:10px 14px;font-size:13px;color:#67e8f9;margin:8px 0}
+.warn{background:rgba(248,113,113,.05);border:1px solid rgba(248,113,113,.18);border-radius:6px;padding:10px 14px;font-size:13px;color:#fca5a5;margin:8px 0}
+
+/* ── GRID ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:12px 0}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:12px 0}
+
+/* ── CHIPS ── */
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.chip{font-family:'JetBrains Mono',monospace;font-size:11px;padding:3px 9px;border-radius:4px;background:var(--bg3);border:1px solid var(--border);color:var(--muted)}
+
+/* ── DIVIDER ── */
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);margin:48px 0}
+
+/* ── BACK TOP ── */
+.back-top{position:fixed;bottom:24px;right:24px;width:40px;height:40px;background:var(--py);border:none;border-radius:50%;color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(167,139,250,.35);z-index:300;transition:all .2s}
+.back-top:hover{transform:translateY(-2px)}
+
+/* ── MILESTONE TAG ── */
+.ms{display:inline-flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 10px;border-radius:4px;background:var(--bg3);border:1px solid var(--border);color:var(--muted);margin-bottom:12px}
+
+strong{color:var(--head);font-weight:600}
+ul,ol{padding-left:20px}
+li{margin-bottom:3px;font-size:13.5px}
+section{scroll-margin-top:64px}
+.topic{scroll-margin-top:64px}
+
+@media(max-width:900px){.sidebar{display:none}.main{max-width:100%;padding:20px}}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-logo">DA <span>Bootcamp</span></div>
+  <nav class="topnav">
+    <a class="tnav sql" href="#excel">📊 Excel</a>
+    <a class="tnav sql" href="#sql">🗄️ SQL</a>
+    <a class="tnav pbi" href="#powerbi">📈 Power BI</a>
+    <a class="tnav py" href="#python">🐍 Python</a>
+    <a class="tnav stats" href="#stats">📐 Statistics</a>
+    <a class="tnav biz" href="#biz">💼 Business Analytics</a>
+    <a class="tnav" href="#tricks">🎯 Trick Questions</a>
+  </nav>
+  <div class="progress-bar"></div>
+</div>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sb-sect">Excel</div>
+  <a class="sb-link excel" href="#excel-basics"><span class="sb-dot"></span>Basics & Interface</a>
+  <a class="sb-link excel" href="#excel-formulas"><span class="sb-dot"></span>Formulas Deep Dive</a>
+  <a class="sb-link excel" href="#excel-lookup"><span class="sb-dot"></span>Lookup Functions</a>
+  <a class="sb-link excel" href="#excel-charts"><span class="sb-dot"></span>Charts & Visualization</a>
+  <a class="sb-link excel" href="#excel-pivot"><span class="sb-dot"></span>Pivot Tables</a>
+  <a class="sb-link excel" href="#excel-dashboard"><span class="sb-dot"></span>Dashboard Design</a>
+  <a class="sb-link excel" href="#excel-interview"><span class="sb-dot"></span>Interview + Trick Qs</a>
+
+  <div class="sb-sect">SQL</div>
+  <a class="sb-link sql" href="#sql-basics"><span class="sb-dot"></span>Fundamentals</a>
+  <a class="sb-link sql" href="#sql-agg"><span class="sb-dot"></span>Aggregation</a>
+  <a class="sb-link sql" href="#sql-joins"><span class="sb-dot"></span>JOINs</a>
+  <a class="sb-link sql" href="#sql-sub"><span class="sb-dot"></span>Subqueries & CTEs</a>
+  <a class="sb-link sql" href="#sql-window"><span class="sb-dot"></span>Window Functions</a>
+  <a class="sb-link sql" href="#sql-advanced"><span class="sb-dot"></span>Advanced SQL</a>
+  <a class="sb-link sql" href="#sql-interview"><span class="sb-dot"></span>Interview + Trick Qs</a>
+
+  <div class="sb-sect">Power BI</div>
+  <a class="sb-link pbi" href="#pbi-ui"><span class="sb-dot"></span>Interface & ETL</a>
+  <a class="sb-link pbi" href="#pbi-model"><span class="sb-dot"></span>Data Modeling</a>
+  <a class="sb-link pbi" href="#pbi-dax"><span class="sb-dot"></span>DAX Fundamentals</a>
+  <a class="sb-link pbi" href="#pbi-timeintel"><span class="sb-dot"></span>Time Intelligence</a>
+  <a class="sb-link pbi" href="#pbi-visuals"><span class="sb-dot"></span>Visuals & Design</a>
+  <a class="sb-link pbi" href="#pbi-interview"><span class="sb-dot"></span>Interview + Trick Qs</a>
+
+  <div class="sb-sect">Python</div>
+  <a class="sb-link py" href="#py-core"><span class="sb-dot"></span>Core Python</a>
+  <a class="sb-link py" href="#py-pandas"><span class="sb-dot"></span>Pandas</a>
+  <a class="sb-link py" href="#py-numpy"><span class="sb-dot"></span>NumPy</a>
+  <a class="sb-link py" href="#py-viz"><span class="sb-dot"></span>Visualization</a>
+  <a class="sb-link py" href="#py-eda"><span class="sb-dot"></span>EDA Workflow</a>
+  <a class="sb-link py" href="#py-interview"><span class="sb-dot"></span>Interview + Trick Qs</a>
+
+  <div class="sb-sect">Statistics</div>
+  <a class="sb-link stats" href="#stats-desc"><span class="sb-dot"></span>Descriptive Stats</a>
+  <a class="sb-link stats" href="#stats-prob"><span class="sb-dot"></span>Probability</a>
+  <a class="sb-link stats" href="#stats-dist"><span class="sb-dot"></span>Distributions</a>
+  <a class="sb-link stats" href="#stats-inf"><span class="sb-dot"></span>Inferential Stats</a>
+  <a class="sb-link stats" href="#stats-reg"><span class="sb-dot"></span>Regression</a>
+  <a class="sb-link stats" href="#stats-interview"><span class="sb-dot"></span>Interview + Trick Qs</a>
+
+  <div class="sb-sect">Business Analytics</div>
+  <a class="sb-link biz" href="#biz-funnel"><span class="sb-dot"></span>Funnel Analysis</a>
+  <a class="sb-link biz" href="#biz-cohort"><span class="sb-dot"></span>Cohort Analysis</a>
+  <a class="sb-link biz" href="#biz-metrics"><span class="sb-dot"></span>Key Metrics & KPIs</a>
+  <a class="sb-link biz" href="#biz-cases"><span class="sb-dot"></span>Case Studies</a>
+  <a class="sb-link biz" href="#tricks"><span class="sb-dot"></span>🎯 Trick Questions</a>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Skillovilla Data Analytics · Complete Bootcamp Guide</div>
+  <h1>From Zero to <em>Interview-Ready</em><br>Data Analyst</h1>
+  <p>Every milestone from your course — plus everything beyond. Exercises, concepts, interview prep, and the trick questions interviewers love to ask.</p>
+  <div class="hero-chips">
+    <span class="hchip excel">📊 Excel · Milestones 1–3</span>
+    <span class="hchip sql">🗄️ SQL · Milestones 4–7</span>
+    <span class="hchip pbi">📈 Power BI · Milestones 12–13</span>
+    <span class="hchip py">🐍 Python · Milestones 14–17</span>
+    <span class="hchip stats">📐 Statistics · Milestones 8–9</span>
+    <span class="hchip biz">💼 Business Analytics · Milestones 10–11</span>
+  </div>
+</div>
+
+<!-- ════════════════════════ EXCEL ════════════════════════ -->
+<section id="excel">
+<div class="sec-hdr">
+  <div class="sec-icon excel">📊</div>
+  <div class="sec-info">
+    <h2>Excel — Beginner to Advanced</h2>
+    <p>Milestones 1–3 · Formulas · Pivot Tables · Charts · Dashboard</p>
+  </div>
+</div>
+
+<!-- BASICS -->
+<div class="topic" id="excel-basics">
+<div class="topic-hdr"><h3>Excel Interface, Data Entry & Basic Functions</h3><span class="badge b-concept">CONCEPT</span><span class="ms">Milestone 1</span></div>
+<div class="cbox">
+<h4>Essential Shortcuts Every Analyst Must Know</h4>
+<table>
+<tr><th>Action</th><th>Shortcut</th><th>Why it matters</th></tr>
+<tr><td>Select entire column</td><td>Ctrl+Space</td><td>Quick range selection</td></tr>
+<tr><td>Select entire row</td><td>Shift+Space</td><td>Quick range selection</td></tr>
+<tr><td>Go to last cell in range</td><td>Ctrl+Arrow</td><td>Navigate large datasets fast</td></tr>
+<tr><td>Select to last cell</td><td>Ctrl+Shift+Arrow</td><td>Highlight entire column of data</td></tr>
+<tr><td>Insert row/column</td><td>Ctrl+Shift+Plus</td><td>Faster than right-click</td></tr>
+<tr><td>AutoSum</td><td>Alt+= </td><td>Instant SUM formula</td></tr>
+<tr><td>Format as Table</td><td>Ctrl+T</td><td>Dynamic ranges for pivots/lookups</td></tr>
+<tr><td>Flash Fill</td><td>Ctrl+E</td><td>Auto-detect and fill patterns</td></tr>
+<tr><td>Paste Special</td><td>Ctrl+Alt+V</td><td>Paste values, formats, transpose</td></tr>
+<tr><td>Absolute reference toggle</td><td>F4</td><td>Lock rows/columns in formulas</td></tr>
+<tr><td>Name Manager</td><td>Ctrl+F3</td><td>Create named ranges</td></tr>
+<tr><td>Evaluate formula step</td><td>F9 (in formula bar)</td><td>Debug complex formulas</td></tr>
+</table>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n excel">E1</span>
+  <span class="ex-q">You have 50,000 rows of data. How do you quickly find and select all blank cells in column B to fill them with "Unknown"?</span>
+  <span class="diff d-m">Medium</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+  <div class="hint">Select column B → Ctrl+G (Go To) → Special → Blanks → OK. All blank cells selected. Type "Unknown" → Ctrl+Enter (fills ALL selected cells simultaneously). This technique works on any column and is much faster than filtering.</div>
+  <div class="note">💡 Ctrl+Enter vs Enter: Regular Enter moves to next cell. Ctrl+Enter fills all selected cells with the same value.</div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n excel">E2</span>
+  <span class="ex-q">What is the difference between "Delete" key and right-click → Delete on a row? Trick question commonly asked!</span>
+  <span class="diff d-t">TRICK</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+  <div class="tq-trap">Common confusion: Delete key and Delete row are completely different operations</div>
+  <div class="tq-ans"><strong>Delete key</strong> only clears the CONTENTS of a cell (the cell still exists, row count unchanged).<br><br><strong>Right-click → Delete → Entire Row</strong> removes the row entirely and shifts rows up — row count decreases by 1.<br><br>This matters when formulas reference specific row numbers, or when you have data below that needs to shift up.</div>
+</div>
+</div>
+</div>
+
+<!-- FORMULAS -->
+<div class="topic" id="excel-formulas">
+<div class="topic-hdr"><h3>Formulas — Logical, Text, Date, Math, Array</h3><span class="badge b-practice">PRACTICE</span><span class="ms">Milestone 1–2</span></div>
+
+<div class="cbox">
+<h4>Text Functions Reference</h4>
+<pre class="excel-c">=LEFT("Hello World", 5)        → "Hello"
+=RIGHT("Hello World", 5)       → "World"  
+=MID("Hello World", 7, 5)      → "World"
+=LEN("Hello")                  → 5
+=FIND("o","Hello World")       → 5      <span class="cm">-- case-sensitive, returns position</span>
+=SEARCH("o","Hello World")     → 5      <span class="cm">-- case-INsensitive</span>
+=TRIM("  Hello  ")             → "Hello"
+=SUBSTITUTE("Hi Hi","Hi","Bye") → "Bye Bye"
+=TEXT(42567,"DD-MMM-YYYY")     → "15-Jan-2016"
+=TEXTJOIN(", ",TRUE,A1:A5)     → "a, b, c, d, e" (skips blanks if TRUE)</pre>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n excel">E3</span>
+  <span class="ex-q">Column A has full names like "Smith, John" (Last, First format). Write formulas to extract First Name and Last Name into separate columns.</span>
+  <span class="diff d-m">Medium</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+<pre class="excel-c"><span class="cm">-- Last Name (everything before the comma)</span>
+=LEFT(A2, FIND(",", A2) - 1)
+
+<span class="cm">-- First Name (everything after ", ")</span>
+=MID(A2, FIND(",", A2) + 2, LEN(A2))
+
+<span class="cm">-- Or combine back: "John Smith"</span>
+=TRIM(MID(A2,FIND(",",A2)+1,99)) & " " & LEFT(A2,FIND(",",A2)-1)</pre>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n excel">E4</span>
+  <span class="ex-q">Calculate the number of working days between two dates excluding weekends AND a list of holidays in E2:E15.</span>
+  <span class="diff d-h">Hard</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+<pre class="excel-c">=NETWORKDAYS(start_date, end_date, E2:E15)
+<span class="cm">-- NETWORKDAYS automatically excludes Saturdays & Sundays</span>
+<span class="cm">-- Third argument = holiday range to also exclude</span>
+<span class="cm">-- Returns count inclusive of both start and end dates</span>
+
+<span class="cm">-- For custom weekend (e.g., Fri+Sat instead of Sat+Sun):</span>
+=NETWORKDAYS.INTL(start_date, end_date, 7, holidays)
+<span class="cm">-- weekend codes: 1=Sat+Sun, 7=Fri+Sat, 11=Sun only, etc.</span></pre>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n excel">E5</span>
+  <span class="ex-q">You have a column of numbers. Write a single formula (no helper columns) to count how many values are above average.</span>
+  <span class="diff d-m">Medium</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+<pre class="excel-c">=COUNTIF(A2:A100, ">"&AVERAGE(A2:A100))
+<span class="cm">-- The & joins ">" with the calculated average value</span>
+<span class="cm">-- Note: criteria must be text + number concatenated, not just >AVERAGE()</span>
+
+<span class="cm">-- Alternative using SUMPRODUCT (works for complex conditions):</span>
+=SUMPRODUCT((A2:A100 > AVERAGE(A2:A100)) * 1)</pre>
+  <div class="warn">⚠️ Common mistake: =COUNTIF(A2:A100, >AVERAGE(A2:A100)) will ERROR. The criterion must be a string: ">"&AVERAGE()</div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n excel">E6</span>
+  <span class="ex-q">TRICK: What does =A1="" return if A1 contains a space " "? What about if A1 is truly empty?</span>
+  <span class="diff d-t">TRICK</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+  <div class="tq-trap">Many people assume =A1="" catches all "empty" cells — it doesn't!</div>
+  <div class="tq-ans">
+    If A1 = " " (space): <strong>=A1="" returns FALSE</strong> — a space is a character, not empty.<br>
+    If A1 is truly empty: <strong>=A1="" returns TRUE</strong><br><br>
+    <strong>Better approach:</strong> =TRIM(A1)="" catches spaces too.<br>
+    <strong>Even better:</strong> =ISBLANK(A1) only returns TRUE for genuinely empty cells (not formula cells that return "").
+  </div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n excel">E7</span>
+  <span class="ex-q">Use SUMPRODUCT to count unique values in range A2:A100 (without removing duplicates).</span>
+  <span class="diff d-h">Hard</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+<pre class="excel-c">=SUMPRODUCT(1/COUNTIF(A2:A100, A2:A100))
+<span class="cm">-- How it works: COUNTIF returns how many times each value appears</span>
+<span class="cm">-- 1/count gives: if value appears 3 times → 1/3 + 1/3 + 1/3 = 1</span>
+<span class="cm">-- So each unique value contributes exactly 1 to the total</span>
+
+<span class="cm">-- If range has blanks, protect against divide-by-zero:</span>
+=SUMPRODUCT((A2:A100<>"")/COUNTIF(A2:A100, A2:A100&""))</pre>
+</div>
+</div>
+
+<div class="g2">
+<div class="cbox">
+<h4>Conditional Functions</h4>
+<pre class="excel-c">=SUMIF(range, criteria, sum_range)
+=COUNTIF(range, criteria)
+=AVERAGEIF(range, criteria, avg_range)
+
+<span class="cm">-- Multi-criteria versions:</span>
+=SUMIFS(sum_r, r1, c1, r2, c2, ...)
+=COUNTIFS(r1, c1, r2, c2, ...)
+=AVERAGEIFS(avg_r, r1, c1, r2, c2)</pre>
+</div>
+<div class="cbox">
+<h4>IFERROR / Error Handling</h4>
+<pre class="excel-c">=IFERROR(formula, value_if_error)
+<span class="cm">-- Catches ALL errors: #N/A #DIV/0! #VALUE! etc.</span>
+
+=IFNA(formula, value_if_na)
+<span class="cm">-- Only catches #N/A (preferred for VLOOKUPs)</span>
+
+=IF(ISERROR(formula), alt, formula)
+<span class="cm">-- Old-school equivalent</span></pre>
+</div>
+</div>
+</div>
+
+<!-- LOOKUP -->
+<div class="topic" id="excel-lookup">
+<div class="topic-hdr"><h3>Lookup Functions — VLOOKUP, INDEX-MATCH, XLOOKUP</h3><span class="badge b-practice">PRACTICE</span><span class="ms">Milestone 3</span></div>
+
+<div class="cbox">
+<h4>The Lookup Hierarchy</h4>
+<table>
+<tr><th>Function</th><th>Direction</th><th>Multiple Returns</th><th>Error Handling</th><th>Performance</th></tr>
+<tr><td>VLOOKUP</td><td>Right only</td><td>No (one col at a time)</td><td>Wrap in IFERROR</td><td>Slow on large data</td></tr>
+<tr><td>INDEX+MATCH</td><td>Any direction</td><td>One col at a time</td><td>Wrap in IFERROR</td><td>Faster</td></tr>
+<tr><td>XLOOKUP</td><td>Any direction</td><td>Yes (spills)</td><td>Built-in 4th arg</td><td>Fastest</td></tr>
+</table>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n excel">E8</span>
+  <span class="ex-q">VLOOKUP returns the WRONG value even though the data exists. Name 5 common reasons this happens.</span>
+  <span class="diff d-t">TRICK</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer — 5 Silent VLOOKUP Killers</div>
+  <div class="tq-trap">This is a classic interview question. Most people only know 1-2 reasons.</div>
+  <div class="tq-ans">
+    1. <strong>Last argument missing / TRUE</strong> — Default is approximate match (sorted data assumed). Always use FALSE/0 for exact match.<br>
+    2. <strong>Numbers stored as text</strong> — "123" (text) ≠ 123 (number). VLOOKUP won't find it. Fix: multiply by 1 or use VALUE().<br>
+    3. <strong>Trailing/leading spaces</strong> — "Smith " ≠ "Smith". Fix: wrap lookup value in TRIM().<br>
+    4. <strong>Lookup column not leftmost</strong> — VLOOKUP can only look RIGHT from column 1. Use INDEX+MATCH instead.<br>
+    5. <strong>Range not locked ($)</strong> — When copying formula down, the table_array shifts. Always use $A$2:$D$100.
+  </div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n excel">E9</span>
+  <span class="ex-q">Two-way lookup: find the value at the intersection of a row label (in A column) and a column header (in row 1). Use INDEX+MATCH+MATCH.</span>
+  <span class="diff d-h">Hard</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+<pre class="excel-c"><span class="cm">-- Lookup value: row label in E2, column label in F2</span>
+<span class="cm">-- Data table: B2:D10, row headers in A2:A10, col headers in B1:D1</span>
+=INDEX(B2:D10,
+    MATCH(E2, A2:A10, 0),   <span class="cm">-- finds the row</span>
+    MATCH(F2, B1:D1, 0)     <span class="cm">-- finds the column</span>
+)
+
+<span class="cm">-- XLOOKUP version (cleaner):</span>
+=XLOOKUP(E2, A2:A10, XLOOKUP(F2, B1:D1, B2:D10))</pre>
+  <div class="note">💡 Two-way lookup with XLOOKUP nests one inside the other: inner XLOOKUP returns the matching column, outer XLOOKUP finds the row.</div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n excel">E10</span>
+  <span class="ex-q">TRICK: What's wrong with =VLOOKUP(A2,B:D,3,FALSE) — will it work? Is it good practice?</span>
+  <span class="diff d-t">TRICK</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+  <div class="tq-trap">It WORKS but is bad practice — whole column references are inefficient</div>
+  <div class="tq-ans">
+    <strong>It works</strong> — using B:D as the table_array is valid syntax.<br><br>
+    <strong>But it's bad practice because:</strong> It scans the ENTIRE column (1,048,576 rows) instead of just your data range. On large files this causes serious slowdowns. Excel also includes the header row in the lookup, which can cause false matches.<br><br>
+    <strong>Better:</strong> =VLOOKUP(A2, $B$2:$D$1000, 3, FALSE) — bounded range, locked with $.
+  </div>
+</div>
+</div>
+</div>
+
+<!-- CHARTS -->
+<div class="topic" id="excel-charts">
+<div class="topic-hdr"><h3>Charts & Data Visualization in Excel</h3><span class="badge b-practice">PRACTICE</span><span class="ms">Milestone 3</span></div>
+
+<div class="cbox">
+<h4>Chart Selection Guide</h4>
+<table>
+<tr><th>Chart Type</th><th>Best For</th><th>Avoid When</th></tr>
+<tr><td>Column / Bar</td><td>Comparing categories, rankings</td><td>Too many categories (>10)</td></tr>
+<tr><td>Line</td><td>Trends over time, continuous data</td><td>Non-continuous categories</td></tr>
+<tr><td>Pie / Donut</td><td>Part-to-whole (max 5-6 slices)</td><td>Many slices, comparing sizes</td></tr>
+<tr><td>Scatter</td><td>Correlation between 2 numeric variables</td><td>Categorical X-axis</td></tr>
+<tr><td>Combo (Bar+Line)</td><td>Two different scales (e.g., revenue + growth%)</td><td>Same scale metrics</td></tr>
+<tr><td>Waterfall</td><td>Bridge charts, P&L, cumulative changes</td><td>Simple totals</td></tr>
+<tr><td>Histogram</td><td>Distribution of a numeric variable</td><td>Categorical data</td></tr>
+<tr><td>Heatmap (cond. format)</td><td>Correlation matrix, calendar views</td><td>Precise comparisons needed</td></tr>
+</table>
+</div>
+
+<div class="iq">
+  <div class="iq-lbl">Interview Question</div>
+  <div class="iq-q">Why should you almost never use a 3D chart in a professional report?</div>
+  <div class="iq-a"><strong>3D charts distort perception</strong> — the depth adds visual complexity that makes it hard to accurately read values. The bars/slices at the back appear smaller than those at the front due to perspective, misleading the reader. They also print poorly and are inaccessible for people with depth perception issues. Always use 2D charts for accuracy and clarity in analytics.</div>
+</div>
+</div>
+
+<!-- PIVOT -->
+<div class="topic" id="excel-pivot">
+<div class="topic-hdr"><h3>Pivot Tables — Power User Techniques</h3><span class="badge b-practice">PRACTICE</span><span class="ms">Milestone 3</span></div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n excel">E11</span>
+  <span class="ex-q">Create a pivot table showing % of parent row total (not % of grand total) — e.g., each product's % within its own category.</span>
+  <span class="diff d-h">Hard</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+  <div class="hint">
+    1. Add Revenue to Values twice<br>
+    2. On second Revenue: right-click → Show Values As → % of Parent Row Total<br>
+    3. This shows each product's share within its own category — the category totals = 100%<br><br>
+    <strong>vs % of Grand Total</strong> = each product as % of everything (all categories sum to 100%)
+  </div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n excel">E12</span>
+  <span class="ex-q">TRICK: Your pivot table shows incorrect totals — the Grand Total doesn't match the sum of visible items. Why?</span>
+  <span class="diff d-t">TRICK</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+  <div class="tq-trap">Pivot Grand Totals can seem wrong — here's why they're actually correct</div>
+  <div class="tq-ans">
+    This happens when you use a <strong>Calculated Field</strong> that performs a non-additive operation (like averages or ratios). The Grand Total recalculates the formula on all underlying data — it does NOT sum the displayed row values.<br><br>
+    Example: A calculated field = Revenue/Units. The Grand Total = Total Revenue / Total Units (correct), NOT the sum of each row's ratio (which would be wrong).<br><br>
+    <strong>Fix:</strong> If you need a sum of ratios, use a helper column in your source data, not a calculated field.
+  </div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n excel">E13</span>
+  <span class="ex-q">You have monthly data for 3 years. How do you group a date field in a pivot table to show quarters automatically?</span>
+  <span class="diff d-e">Easy</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+  <div class="hint">
+    1. Add date field to Rows area<br>
+    2. Right-click any date in the pivot → Group<br>
+    3. Select: Quarters (hold Ctrl to also select Years for year-quarter breakdown)<br>
+    4. Click OK<br><br>
+    <strong>Important:</strong> The date field must be recognized as a date — if stored as text it won't group. Check with =ISNUMBER(A2) — should return TRUE for real dates.
+  </div>
+</div>
+</div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="topic" id="excel-dashboard">
+<div class="topic-hdr"><h3>Dashboard Design Principles</h3><span class="badge b-advanced">ADVANCED</span><span class="ms">Milestone 3</span></div>
+<div class="cbox">
+<h4>Excel Dashboard Checklist</h4>
+<ul>
+<li>Use a <strong>separate "Data" sheet</strong> and a "Dashboard" sheet — never mix raw data with presentation</li>
+<li><strong>Dynamic Charts</strong>: Link charts to pivot tables or named ranges so they auto-update</li>
+<li><strong>Slicers</strong>: Connect one slicer to multiple pivot tables (right-click slicer → Report Connections)</li>
+<li><strong>Conditional Formatting</strong>: Data bars, color scales, icon sets to add visual encoding</li>
+<li><strong>Sparklines</strong>: Mini charts in cells (Insert → Sparklines) for trend-at-a-glance</li>
+<li><strong>Form Controls</strong>: Dropdowns, scroll bars for interactivity without VBA</li>
+<li><strong>Camera Tool</strong>: Takes a live "photo" of a range — lets you position charts freely</li>
+<li><strong>Hide gridlines & headers</strong>: View → uncheck Gridlines and Headings for clean look</li>
+</ul>
+</div>
+</div>
+
+<!-- EXCEL INTERVIEW -->
+<div class="topic" id="excel-interview">
+<div class="topic-hdr"><h3>Excel Interview & Trick Questions</h3><span class="badge b-trick">TRICK</span><span class="badge b-interview">INTERVIEW</span></div>
+
+<div class="tq">
+  <div class="tq-lbl">Trick Question</div>
+  <div class="tq-q">What does VLOOKUP return if the match_type argument is TRUE (or omitted) and the data is NOT sorted?</div>
+  <div class="tq-trap">Wrong answer: "It finds the exact match anyway." Reality: it returns WRONG data silently</div>
+  <div class="tq-ans"><strong>It returns an incorrect value with no error.</strong> Approximate match (TRUE) assumes the first column is sorted ascending. On unsorted data it uses binary search and stops early, returning whatever it finds. The dangerous part: no error message — you get confidently wrong numbers. This is why =VLOOKUP(x, range, col, <strong>FALSE</strong>) should be your default.</div>
+</div>
+
+<div class="tq">
+  <div class="tq-lbl">Trick Question</div>
+  <div class="tq-q">=SUM(IF(A1:A10>5, A1:A10)) — will this work? What's the catch?</div>
+  <div class="tq-trap">In older Excel this requires Ctrl+Shift+Enter. In 365 it just works.</div>
+  <div class="tq-ans">In <strong>Excel 2019 and older</strong>, this is an array formula and MUST be entered with Ctrl+Shift+Enter (it shows {curly braces} around it). Pressing just Enter gives the wrong result (only evaluates first cell).<br><br>In <strong>Excel 365 / Excel 2021</strong>, dynamic arrays handle this automatically — just press Enter. However, the modern equivalent is simply <code>=SUMIF(A1:A10,"&gt;5")</code>.</div>
+</div>
+
+<div class="iq">
+  <div class="iq-lbl">Interview Question</div>
+  <div class="iq-q">What is Power Query and how is it different from regular Excel formulas?</div>
+  <div class="iq-a"><strong>Power Query</strong> (Data → Get & Transform) is a data transformation engine built into Excel. Unlike formulas which transform one cell at a time, Power Query transforms entire datasets as a pipeline of steps. Key differences:<br>
+  • <strong>Repeatable</strong>: Steps are recorded — refresh imports and re-applies all transformations<br>
+  • <strong>Scale</strong>: Handles millions of rows (beyond Excel's 1M row limit when loading to data model)<br>
+  • <strong>No formulas in cells</strong>: Transformations happen before data lands in the sheet<br>
+  • <strong>M language</strong>: Each step generates M code which can be edited directly<br>
+  Use it for: combining multiple files, unpivoting data, complex cleaning, merging tables from different sources.</div>
+</div>
+
+<div class="iq">
+  <div class="iq-lbl">Interview Question</div>
+  <div class="iq-q">Explain the difference between COUNTA, COUNT, and COUNTBLANK. When would each give different results?</div>
+  <div class="iq-a">
+    <strong>COUNT</strong> — counts only numeric values (ignores text, blanks, errors)<br>
+    <strong>COUNTA</strong> — counts all non-blank cells (numbers, text, errors — everything except truly empty cells)<br>
+    <strong>COUNTBLANK</strong> — counts empty cells AND cells containing formula that returns ""<br><br>
+    They differ when: column has mixed types (text + numbers), cells have formulas returning "", or cells look empty but contain spaces.
+  </div>
+</div>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════ SQL ════════════════════════ -->
+<section id="sql">
+<div class="sec-hdr">
+  <div class="sec-icon sql">🗄️</div>
+  <div class="sec-info">
+    <h2>SQL — Beginner to Advanced</h2>
+    <p>Milestones 4–7 · Northwind Database · All Query Types</p>
+  </div>
+</div>
+
+<!-- SQL BASICS -->
+<div class="topic" id="sql-basics">
+<div class="topic-hdr"><h3>SQL Fundamentals — SELECT, WHERE, ORDER BY</h3><span class="badge b-concept">CONCEPT</span><span class="ms">Milestone 4</span></div>
+
+<div class="cbox">
+<h4>SQL Query Execution Order (Not Written Order)</h4>
+<pre class="sql-c"><span class="cm">-- WRITTEN order:  SELECT → FROM → WHERE → GROUP BY → HAVING → ORDER BY → LIMIT</span>
+<span class="cm">-- EXECUTED order: FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT</span>
+
+<span class="cm">-- Why this matters: you CANNOT use SELECT aliases in WHERE or GROUP BY</span>
+<span class="cm">-- This is WRONG:</span>
+<span class="kw">SELECT</span> Revenue <span class="op">*</span> <span class="nm">1.1</span> <span class="kw">AS</span> NewRev
+<span class="kw">FROM</span> Sales
+<span class="kw">WHERE</span> NewRev <span class="op">></span> <span class="nm">1000</span>;  <span class="cm">-- ERROR: WHERE runs before SELECT, alias not yet defined</span>
+
+<span class="cm">-- This is CORRECT:</span>
+<span class="kw">SELECT</span> Revenue <span class="op">*</span> <span class="nm">1.1</span> <span class="kw">AS</span> NewRev
+<span class="kw">FROM</span> Sales
+<span class="kw">WHERE</span> Revenue <span class="op">*</span> <span class="nm">1.1</span> <span class="op">></span> <span class="nm">1000</span>;  <span class="cm">-- repeat the expression in WHERE</span></pre>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n sql">Q1</span>
+  <span class="ex-q">TRICK: Can you use a column alias in a GROUP BY? What about in ORDER BY? Why the difference?</span>
+  <span class="diff d-t">TRICK</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+  <div class="tq-trap">Most candidates say "no" to both — but ORDER BY is actually YES in most databases!</div>
+  <div class="tq-ans">
+    <strong>GROUP BY</strong>: Cannot use aliases in standard SQL (executes before SELECT). However, MySQL/MariaDB allow it as an extension.<br><br>
+    <strong>ORDER BY</strong>: <strong>YES, you can use aliases!</strong> ORDER BY executes AFTER SELECT, so the alias is already defined. This works in all major databases (PostgreSQL, MySQL, SQL Server, SQLite).<br><br>
+    <code>SELECT revenue * 1.1 AS adj_rev FROM sales ORDER BY adj_rev DESC;</code> ✅
+  </div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n sql">Q2</span>
+  <span class="ex-q">Write a query to find all Northwind products where the product name contains "ch" (case-insensitive) and price is between $10-$50.</span>
+  <span class="diff d-e">Easy</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+<pre class="sql-c"><span class="kw">SELECT</span> ProductID, ProductName, UnitPrice
+<span class="kw">FROM</span>   Products
+<span class="kw">WHERE</span>  LOWER(ProductName) <span class="kw">LIKE</span> <span class="st">'%ch%'</span>
+  <span class="kw">AND</span>  UnitPrice <span class="kw">BETWEEN</span> <span class="nm">10</span> <span class="kw">AND</span> <span class="nm">50</span>
+<span class="kw">ORDER</span> <span class="kw">BY</span> UnitPrice;</pre>
+  <div class="note">💡 BETWEEN is inclusive on both ends: BETWEEN 10 AND 50 = UnitPrice >= 10 AND UnitPrice <= 50</div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n sql">Q3</span>
+  <span class="ex-q">TRICK: What is NULL? Is NULL = NULL true in SQL? How do you properly check for NULL?</span>
+  <span class="diff d-t">TRICK</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+  <div class="tq-trap">Almost everyone says NULL = NULL is TRUE. It's FALSE — and this breaks many queries silently.</div>
+  <div class="tq-ans">
+    <strong>NULL represents the absence of a value</strong> — it's unknown, not zero or empty string.<br><br>
+    <strong>NULL = NULL → returns NULL (not TRUE!)</strong> This is three-value logic: TRUE, FALSE, or NULL.<br><br>
+    This means: <code>WHERE col = NULL</code> will NEVER return rows, even if col has NULLs.<br><br>
+    <strong>Correct way:</strong> <code>WHERE col IS NULL</code> or <code>WHERE col IS NOT NULL</code><br><br>
+    Also: Any arithmetic with NULL returns NULL. <code>5 + NULL = NULL</code>. Any comparison with NULL returns NULL (falsy). This is why COUNT(*) ≠ COUNT(col) when col has NULLs.
+  </div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n sql">Q4</span>
+  <span class="ex-q">TRICK: What is the difference between COUNT(*), COUNT(col), and COUNT(DISTINCT col)?</span>
+  <span class="diff d-t">TRICK</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+  <div class="tq-ans">
+    <strong>COUNT(*)</strong>: counts ALL rows including NULLs and duplicates<br>
+    <strong>COUNT(col)</strong>: counts rows where col is NOT NULL (ignores NULLs)<br>
+    <strong>COUNT(DISTINCT col)</strong>: counts unique non-null values in col<br><br>
+    Example — if col has values [1, 1, 2, NULL, NULL]:<br>
+    COUNT(*) = 5, COUNT(col) = 3, COUNT(DISTINCT col) = 2
+  </div>
+</div>
+</div>
+</div>
+
+<!-- SQL AGGREGATES -->
+<div class="topic" id="sql-agg">
+<div class="topic-hdr"><h3>Aggregation — GROUP BY, HAVING, CASE WHEN</h3><span class="badge b-practice">PRACTICE</span><span class="ms">Milestone 5</span></div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n sql">Q5</span>
+  <span class="ex-q">Find the top 3 categories by average product price, but only include categories with more than 5 products.</span>
+  <span class="diff d-m">Medium</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+<pre class="sql-c"><span class="kw">SELECT</span>
+    c.CategoryName,
+    <span class="fn">COUNT</span>(p.ProductID)          <span class="kw">AS</span> ProductCount,
+    <span class="fn">ROUND</span>(<span class="fn">AVG</span>(p.UnitPrice), <span class="nm">2</span>)  <span class="kw">AS</span> AvgPrice
+<span class="kw">FROM</span>   Categories c
+<span class="kw">JOIN</span>   Products p <span class="kw">ON</span> c.CategoryID <span class="op">=</span> p.CategoryID
+<span class="kw">GROUP</span> <span class="kw">BY</span> c.CategoryName
+<span class="kw">HAVING</span> <span class="fn">COUNT</span>(p.ProductID) <span class="op">></span> <span class="nm">5</span>
+<span class="kw">ORDER</span> <span class="kw">BY</span> AvgPrice <span class="kw">DESC</span>
+<span class="kw">LIMIT</span>  <span class="nm">3</span>;</pre>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n sql">Q6</span>
+  <span class="ex-q">Classify each order as 'Small' (<100), 'Medium' (100-500), 'Large' (>500) based on total order value. Count orders in each class.</span>
+  <span class="diff d-m">Medium</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+<pre class="sql-c"><span class="kw">SELECT</span>
+    <span class="kw">CASE</span>
+        <span class="kw">WHEN</span> OrderTotal <span class="op"><</span>  <span class="nm">100</span> <span class="kw">THEN</span> <span class="st">'Small'</span>
+        <span class="kw">WHEN</span> OrderTotal <span class="op"><=</span> <span class="nm">500</span> <span class="kw">THEN</span> <span class="st">'Medium'</span>
+        <span class="kw">ELSE</span>                         <span class="st">'Large'</span>
+    <span class="kw">END</span> <span class="kw">AS</span> OrderCategory,
+    <span class="fn">COUNT</span>(*) <span class="kw">AS</span> OrderCount
+<span class="kw">FROM</span> (
+    <span class="kw">SELECT</span> o.OrderID,
+           <span class="fn">SUM</span>(od.Quantity <span class="op">*</span> od.UnitPrice <span class="op">*</span> (<span class="nm">1</span><span class="op">-</span>od.Discount)) <span class="kw">AS</span> OrderTotal
+    <span class="kw">FROM</span>   Orders o
+    <span class="kw">JOIN</span>   [Order Details] od <span class="kw">ON</span> o.OrderID <span class="op">=</span> od.OrderID
+    <span class="kw">GROUP</span> <span class="kw">BY</span> o.OrderID
+) t
+<span class="kw">GROUP</span> <span class="kw">BY</span> OrderCategory
+<span class="kw">ORDER</span> <span class="kw">BY</span> OrderCount <span class="kw">DESC</span>;</pre>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n sql">Q7</span>
+  <span class="ex-q">TRICK: You have a table with salary data. Write a query to find the second highest salary WITHOUT using LIMIT/OFFSET or any window function.</span>
+  <span class="diff d-t">TRICK</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+<pre class="sql-c"><span class="cm">-- Method 1: Subquery with MAX (classic)</span>
+<span class="kw">SELECT</span> <span class="fn">MAX</span>(Salary) <span class="kw">AS</span> SecondHighest
+<span class="kw">FROM</span>   Employees
+<span class="kw">WHERE</span>  Salary <span class="op"><</span> (<span class="kw">SELECT</span> <span class="fn">MAX</span>(Salary) <span class="kw">FROM</span> Employees);
+
+<span class="cm">-- Method 2: Self-join (old school)</span>
+<span class="kw">SELECT</span> <span class="fn">MAX</span>(e1.Salary)
+<span class="kw">FROM</span>   Employees e1
+<span class="kw">WHERE</span>  e1.Salary <span class="op"><</span> (<span class="kw">SELECT</span> <span class="fn">MAX</span>(e2.Salary) <span class="kw">FROM</span> Employees e2);
+
+<span class="cm">-- Method 3: DENSE_RANK (modern, handles ties properly)</span>
+<span class="kw">SELECT</span> Salary <span class="kw">FROM</span> (
+    <span class="kw">SELECT</span> Salary, <span class="fn">DENSE_RANK</span>() <span class="kw">OVER</span> (<span class="kw">ORDER</span> <span class="kw">BY</span> Salary <span class="kw">DESC</span>) rk
+    <span class="kw">FROM</span> Employees
+) t <span class="kw">WHERE</span> rk <span class="op">=</span> <span class="nm">2</span>;</pre>
+  <div class="warn">⚠️ Methods 1 & 2 fail on ties — if two people share the highest salary, they return the same person's salary. Method 3 (DENSE_RANK) is the safest.</div>
+</div>
+</div>
+</div>
+
+<!-- JOINS -->
+<div class="topic" id="sql-joins">
+<div class="topic-hdr"><h3>JOINs — All Types + Edge Cases</h3><span class="badge b-practice">PRACTICE</span><span class="ms">Milestone 6</span></div>
+
+<div class="cbox">
+<h4>JOIN Visual Guide</h4>
+<table>
+<tr><th>JOIN Type</th><th>Returns</th><th>Null in Result?</th><th>Typical Use</th></tr>
+<tr><td>INNER JOIN</td><td>Only matching rows in BOTH tables</td><td>Never</td><td>Find related records</td></tr>
+<tr><td>LEFT JOIN</td><td>All left rows + matches from right</td><td>Right cols for non-matches</td><td>Keep all base records</td></tr>
+<tr><td>RIGHT JOIN</td><td>All right rows + matches from left</td><td>Left cols for non-matches</td><td>Rarely used (rewrite as LEFT)</td></tr>
+<tr><td>FULL OUTER JOIN</td><td>All rows from both tables</td><td>On both sides</td><td>Full reconciliation</td></tr>
+<tr><td>CROSS JOIN</td><td>Every combination (Cartesian)</td><td>Never</td><td>Combinatorial generation</td></tr>
+<tr><td>SELF JOIN</td><td>Table joined to itself</td><td>Depends</td><td>Hierarchies, comparisons</td></tr>
+</table>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n sql">Q8</span>
+  <span class="ex-q">TRICK: You write a LEFT JOIN but get the same results as an INNER JOIN. What likely went wrong?</span>
+  <span class="diff d-t">TRICK</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+  <div class="tq-trap">This is a very common real-world bug that wastes hours of debugging time</div>
+  <div class="tq-ans">
+    <strong>You put a filter on the RIGHT table in the WHERE clause instead of the ON clause.</strong><br><br>
+    This converts a LEFT JOIN into an INNER JOIN silently:<br>
+<pre class="sql-c"><span class="cm">-- WRONG: WHERE converts LEFT JOIN to INNER JOIN</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> Customers c
+<span class="kw">LEFT</span> <span class="kw">JOIN</span> Orders o <span class="kw">ON</span> c.CustomerID <span class="op">=</span> o.CustomerID
+<span class="kw">WHERE</span>  o.ShipCountry <span class="op">=</span> <span class="st">'Germany'</span>;  <span class="cm">-- NULL rows get filtered out!</span>
+
+<span class="cm">-- CORRECT: Filter in ON clause preserves NULL rows</span>
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> Customers c
+<span class="kw">LEFT</span> <span class="kw">JOIN</span> Orders o
+    <span class="kw">ON</span>  c.CustomerID <span class="op">=</span> o.CustomerID
+    <span class="kw">AND</span> o.ShipCountry <span class="op">=</span> <span class="st">'Germany'</span>;  <span class="cm">-- NULL rows preserved</span></pre>
+  </div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n sql">Q9</span>
+  <span class="ex-q">Find customers who ordered in 1996 but NOT in 1997 (i.e., they churned between years). Use two different approaches.</span>
+  <span class="diff d-h">Hard</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+<pre class="sql-c"><span class="cm">-- Method 1: LEFT JOIN Anti-Join (most efficient)</span>
+<span class="kw">SELECT</span> <span class="kw">DISTINCT</span> o96.CustomerID
+<span class="kw">FROM</span>   Orders o96
+<span class="kw">LEFT</span>  <span class="kw">JOIN</span> Orders o97
+    <span class="kw">ON</span>  o96.CustomerID <span class="op">=</span> o97.CustomerID
+    <span class="kw">AND</span> <span class="fn">strftime</span>(<span class="st">'%Y'</span>, o97.OrderDate) <span class="op">=</span> <span class="st">'1997'</span>
+<span class="kw">WHERE</span>  <span class="fn">strftime</span>(<span class="st">'%Y'</span>, o96.OrderDate) <span class="op">=</span> <span class="st">'1996'</span>
+  <span class="kw">AND</span>  o97.CustomerID <span class="kw">IS NULL</span>;
+
+<span class="cm">-- Method 2: NOT IN subquery</span>
+<span class="kw">SELECT</span> <span class="kw">DISTINCT</span> CustomerID <span class="kw">FROM</span> Orders
+<span class="kw">WHERE</span>  <span class="fn">strftime</span>(<span class="st">'%Y'</span>, OrderDate) <span class="op">=</span> <span class="st">'1996'</span>
+  <span class="kw">AND</span>  CustomerID <span class="kw">NOT IN</span> (
+      <span class="kw">SELECT</span> <span class="kw">DISTINCT</span> CustomerID <span class="kw">FROM</span> Orders
+      <span class="kw">WHERE</span>  <span class="fn">strftime</span>(<span class="st">'%Y'</span>, OrderDate) <span class="op">=</span> <span class="st">'1997'</span>
+  );</pre>
+  <div class="warn">⚠️ NOT IN is dangerous if the subquery can return NULLs — any NULL makes the entire NOT IN return FALSE. Prefer the LEFT JOIN method.</div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n sql">Q10</span>
+  <span class="ex-q">TRICK: What happens when you JOIN on a column that has duplicate values in BOTH tables? How many rows does the result have?</span>
+  <span class="diff d-t">TRICK</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer — The Cartesian Trap</div>
+  <div class="tq-trap">This is called a "fan-out" or "join explosion" — and it silently inflates your numbers</div>
+  <div class="tq-ans">
+    <strong>You get a Cartesian product for the duplicate values.</strong><br><br>
+    Example: Table A has 3 rows with CustomerID=5. Table B has 2 rows with CustomerID=5. The JOIN produces 3×2 = 6 rows for CustomerID=5.<br><br>
+    This causes <strong>inflated SUM values</strong> — a classic analytics bug. You'll sum revenue 3x when you should sum it once.<br><br>
+    <strong>Prevention:</strong> Before joining, check for duplicates in the join key: <code>SELECT key, COUNT(*) FROM table GROUP BY key HAVING COUNT(*) > 1</code>. Use DISTINCT or aggregate to deduplicate before joining.
+  </div>
+</div>
+</div>
+</div>
+
+<!-- SUBQUERIES & CTEs -->
+<div class="topic" id="sql-sub">
+<div class="topic-hdr"><h3>Subqueries, CTEs & Derived Tables</h3><span class="badge b-practice">PRACTICE</span><span class="ms">Milestone 7</span></div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n sql">Q11</span>
+  <span class="ex-q">Using a CTE chain: find the top 5 customers by revenue, then show what % of total company revenue each represents.</span>
+  <span class="diff d-h">Hard</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+<pre class="sql-c"><span class="kw">WITH</span> <span class="cl">CustomerRev</span> <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>
+        c.CompanyName,
+        <span class="fn">ROUND</span>(<span class="fn">SUM</span>(od.Quantity<span class="op">*</span>od.UnitPrice<span class="op">*</span>(<span class="nm">1</span><span class="op">-</span>od.Discount)),<span class="nm">2</span>) <span class="kw">AS</span> Rev
+    <span class="kw">FROM</span> Customers c
+    <span class="kw">JOIN</span> Orders o <span class="kw">ON</span> c.CustomerID <span class="op">=</span> o.CustomerID
+    <span class="kw">JOIN</span> [Order Details] od <span class="kw">ON</span> o.OrderID <span class="op">=</span> od.OrderID
+    <span class="kw">GROUP</span> <span class="kw">BY</span> c.CompanyName
+),
+<span class="cl">TotalRev</span> <span class="kw">AS</span> (
+    <span class="kw">SELECT</span> <span class="fn">SUM</span>(Rev) <span class="kw">AS</span> Total <span class="kw">FROM</span> <span class="cl">CustomerRev</span>
+)
+<span class="kw">SELECT</span>
+    cr.CompanyName,
+    cr.Rev,
+    <span class="fn">ROUND</span>(cr.Rev <span class="op">*</span> <span class="nm">100.0</span> <span class="op">/</span> tr.Total, <span class="nm">2</span>) <span class="kw">AS</span> PctOfTotal
+<span class="kw">FROM</span> <span class="cl">CustomerRev</span> cr, <span class="cl">TotalRev</span> tr
+<span class="kw">ORDER</span> <span class="kw">BY</span> cr.Rev <span class="kw">DESC</span>
+<span class="kw">LIMIT</span> <span class="nm">5</span>;</pre>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n sql">Q12</span>
+  <span class="ex-q">Recursive CTE: generate a number series from 1 to 12 (useful for generating date spines or calendar tables).</span>
+  <span class="diff d-h">Hard</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+<pre class="sql-c"><span class="kw">WITH RECURSIVE</span> <span class="cl">nums</span>(n) <span class="kw">AS</span> (
+    <span class="kw">SELECT</span> <span class="nm">1</span>                <span class="cm">-- anchor: starting value</span>
+    <span class="kw">UNION ALL</span>
+    <span class="kw">SELECT</span> n <span class="op">+</span> <span class="nm">1</span>           <span class="cm">-- recursive: add 1 each time</span>
+    <span class="kw">FROM</span>   <span class="cl">nums</span>
+    <span class="kw">WHERE</span>  n <span class="op"><</span> <span class="nm">12</span>          <span class="cm">-- termination condition</span>
+)
+<span class="kw">SELECT</span> n <span class="kw">FROM</span> <span class="cl">nums</span>;
+<span class="cm">-- Output: 1, 2, 3, ..., 12</span>
+<span class="cm">-- Great use: generate all months, fill missing date gaps</span></pre>
+</div>
+</div>
+</div>
+
+<!-- WINDOW FUNCTIONS -->
+<div class="topic" id="sql-window">
+<div class="topic-hdr"><h3>Window Functions — Complete Reference</h3><span class="badge b-advanced">ADVANCED</span><span class="ms">Milestone 6–7</span></div>
+
+<div class="cbox">
+<h4>Window Function Categories</h4>
+<div class="g2">
+<div>
+<strong>Ranking</strong>
+<pre class="sql-c">ROW_NUMBER() <span class="kw">OVER</span> (...)   <span class="cm">-- 1,2,3,4 always unique</span>
+RANK()       <span class="kw">OVER</span> (...)   <span class="cm">-- 1,2,2,4 gaps on ties</span>
+DENSE_RANK() <span class="kw">OVER</span> (...)   <span class="cm">-- 1,2,2,3 no gaps</span>
+NTILE(4)     <span class="kw">OVER</span> (...)   <span class="cm">-- split into 4 buckets</span>
+PERCENT_RANK() <span class="kw">OVER</span> (...) <span class="cm">-- 0.0 to 1.0 percentile</span></pre>
+</div>
+<div>
+<strong>Offset (Lead/Lag)</strong>
+<pre class="sql-c">LAG(col, 1)  <span class="kw">OVER</span> (...)   <span class="cm">-- previous row value</span>
+LAG(col, 1, 0) <span class="kw">OVER</span> (...) <span class="cm">-- default if NULL</span>
+LEAD(col, 1) <span class="kw">OVER</span> (...)   <span class="cm">-- next row value</span>
+FIRST_VALUE(col) <span class="kw">OVER</span> (...)<span class="cm">-- first in window</span>
+LAST_VALUE(col) <span class="kw">OVER</span> (...) <span class="cm">-- last in window</span></pre>
+</div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n sql">Q13</span>
+  <span class="ex-q">TRICK: What's the difference between SUM() OVER() with no ORDER BY vs with ORDER BY? Many candidates get this wrong.</span>
+  <span class="diff d-t">TRICK</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+  <div class="tq-trap">Adding ORDER BY to a window aggregate completely changes what it calculates</div>
+<pre class="sql-c"><span class="cm">-- Without ORDER BY: same value for all rows = Grand Total</span>
+<span class="fn">SUM</span>(Revenue) <span class="kw">OVER</span> (<span class="kw">PARTITION</span> <span class="kw">BY</span> Region)
+<span class="cm">-- Returns: total revenue for that region in every row</span>
+
+<span class="cm">-- With ORDER BY: RUNNING TOTAL (cumulative sum)</span>
+<span class="fn">SUM</span>(Revenue) <span class="kw">OVER</span> (<span class="kw">PARTITION</span> <span class="kw">BY</span> Region <span class="kw">ORDER</span> <span class="kw">BY</span> OrderDate)
+<span class="cm">-- Returns: cumulative revenue up to current row within region</span></pre>
+  <div class="warn">⚠️ The default frame with ORDER BY is "ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW" — this gives running total, not the full window sum.</div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n sql">Q14</span>
+  <span class="ex-q">For each employee, show: their monthly sales, previous month's sales (LAG), and % change. Flag months where growth dropped below -10%.</span>
+  <span class="diff d-h">Hard</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+<pre class="sql-c"><span class="kw">WITH</span> <span class="cl">MonthlySales</span> <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>
+        e.FirstName <span class="op">||</span> <span class="st">' '</span> <span class="op">||</span> e.LastName     <span class="kw">AS</span> Employee,
+        <span class="fn">strftime</span>(<span class="st">'%Y-%m'</span>, o.OrderDate)      <span class="kw">AS</span> Month,
+        <span class="fn">ROUND</span>(<span class="fn">SUM</span>(od.Quantity<span class="op">*</span>od.UnitPrice),<span class="nm">2</span>) <span class="kw">AS</span> Sales
+    <span class="kw">FROM</span> Employees e
+    <span class="kw">JOIN</span> Orders o <span class="kw">ON</span> e.EmployeeID <span class="op">=</span> o.EmployeeID
+    <span class="kw">JOIN</span> [Order Details] od <span class="kw">ON</span> o.OrderID <span class="op">=</span> od.OrderID
+    <span class="kw">GROUP</span> <span class="kw">BY</span> Employee, Month
+)
+<span class="kw">SELECT</span>
+    Employee, Month, Sales,
+    <span class="fn">LAG</span>(Sales) <span class="kw">OVER</span> (<span class="kw">PARTITION</span> <span class="kw">BY</span> Employee <span class="kw">ORDER</span> <span class="kw">BY</span> Month) <span class="kw">AS</span> PrevMonth,
+    <span class="fn">ROUND</span>((<span class="fn">Sales</span> <span class="op">-</span> <span class="fn">LAG</span>(Sales) <span class="kw">OVER</span> (<span class="kw">PARTITION</span> <span class="kw">BY</span> Employee <span class="kw">ORDER</span> <span class="kw">BY</span> Month))
+          <span class="op">*</span> <span class="nm">100.0</span> <span class="op">/</span> <span class="fn">NULLIF</span>(<span class="fn">LAG</span>(Sales) <span class="kw">OVER</span> (<span class="kw">PARTITION</span> <span class="kw">BY</span> Employee <span class="kw">ORDER</span> <span class="kw">BY</span> Month),<span class="nm">0</span>),<span class="nm">1</span>) <span class="kw">AS</span> GrowthPct,
+    <span class="kw">CASE</span> <span class="kw">WHEN</span> (Sales <span class="op">-</span> <span class="fn">LAG</span>(Sales) <span class="kw">OVER</span>(<span class="kw">PARTITION</span> <span class="kw">BY</span> Employee <span class="kw">ORDER</span> <span class="kw">BY</span> Month)) <span class="op">*</span> <span class="nm">100.0</span>
+              <span class="op">/</span> <span class="fn">NULLIF</span>(<span class="fn">LAG</span>(Sales) <span class="kw">OVER</span>(<span class="kw">PARTITION</span> <span class="kw">BY</span> Employee <span class="kw">ORDER</span> <span class="kw">BY</span> Month),<span class="nm">0</span>) <span class="op"><</span> <span class="op">-</span><span class="nm">10</span>
+         <span class="kw">THEN</span> <span class="st">'⚠ DROP'</span> <span class="kw">ELSE</span> <span class="st">''</span> <span class="kw">END</span> <span class="kw">AS</span> Alert
+<span class="kw">FROM</span> <span class="cl">MonthlySales</span>;</pre>
+  <div class="note">💡 NULLIF(x, 0) prevents division by zero — returns NULL when x=0, and NULL/anything = NULL (not an error)</div>
+</div>
+</div>
+</div>
+
+<!-- ADVANCED SQL -->
+<div class="topic" id="sql-advanced">
+<div class="topic-hdr"><h3>Advanced SQL — Indexes, Optimization, EXPLAIN</h3><span class="badge b-advanced">ADVANCED</span></div>
+
+<div class="cbox">
+<h4>Query Optimization Checklist</h4>
+<ul>
+<li><strong>Use indexes on JOIN columns and WHERE-filtered columns</strong> — dramatically speeds up queries</li>
+<li><strong>Avoid SELECT *</strong> — read only columns you need; reduces I/O</li>
+<li><strong>Filter early</strong> — put the most selective WHERE conditions first</li>
+<li><strong>Avoid functions on indexed columns in WHERE</strong>: <code>WHERE YEAR(date) = 2024</code> can't use an index on date — instead use <code>WHERE date BETWEEN '2024-01-01' AND '2024-12-31'</code></li>
+<li><strong>EXISTS vs IN</strong>: EXISTS stops at first match (faster for large subqueries); IN evaluates all values</li>
+<li><strong>EXPLAIN / EXPLAIN ANALYZE</strong>: shows query execution plan — look for "Full Table Scan" (bad) vs index usage (good)</li>
+</ul>
+</div>
+
+<div class="tq">
+  <div class="tq-lbl">Trick Question</div>
+  <div class="tq-q">Is it faster to filter with WHERE before or after a JOIN? Why?</div>
+  <div class="tq-trap">Most people say "it doesn't matter — the optimizer handles it." Partially true, but not always.</div>
+  <div class="tq-ans"><strong>Filtering BEFORE joining (in a subquery or CTE) reduces the rows in the join operation.</strong> While modern query optimizers often push filters down automatically ("predicate pushdown"), complex queries with multiple CTEs or views may not be optimized. Explicitly filtering early (or applying indexes to the filter columns) is always safer and more predictable. Rule of thumb: join on as small a dataset as possible.</div>
+</div>
+</div>
+
+<!-- SQL INTERVIEW -->
+<div class="topic" id="sql-interview">
+<div class="topic-hdr"><h3>SQL Interview & Trick Questions</h3><span class="badge b-trick">TRICK</span><span class="badge b-interview">INTERVIEW</span></div>
+
+<div class="tq">
+  <div class="tq-lbl">Trick Question</div>
+  <div class="tq-q">DELETE, TRUNCATE, DROP — what are the differences? Which can be rolled back?</div>
+  <div class="tq-ans">
+    <strong>DELETE</strong>: Removes specific rows (with WHERE) or all rows. Logs each row deletion. Can be rolled back (in a transaction). Triggers fire.<br>
+    <strong>TRUNCATE</strong>: Removes ALL rows. Much faster (minimal logging). Cannot be rolled back in most DBs. No triggers. Resets identity/auto-increment.<br>
+    <strong>DROP</strong>: Removes the entire table (structure + data). Cannot be rolled back. Requires re-creating the table.<br><br>
+    Memory trick: Delete = selective surgeon, Truncate = power wash the table, Drop = demolish the building.
+  </div>
+</div>
+
+<div class="tq">
+  <div class="tq-lbl">Trick Question</div>
+  <div class="tq-q">What is the difference between UNION and UNION ALL? When would using UNION ALL be wrong?</div>
+  <div class="tq-trap">People know UNION removes duplicates, but can't explain WHEN that's dangerous vs desirable</div>
+  <div class="tq-ans">
+    <strong>UNION</strong>: combines result sets and removes duplicate rows (slower — performs a sort/distinct).<br>
+    <strong>UNION ALL</strong>: combines result sets keeping ALL rows including duplicates (faster).<br><br>
+    <strong>UNION ALL is WRONG when:</strong> you're combining two queries that naturally produce overlapping data and you need unique results (e.g., combining two lists of customer IDs where some customers appear in both).<br><br>
+    <strong>UNION is WRONG when:</strong> you're doing aggregations — using UNION removes legitimate duplicate values from your aggregation dataset, corrupting results. Always use UNION ALL for performance and correctness unless you specifically need deduplication.
+  </div>
+</div>
+
+<div class="iq">
+  <div class="iq-lbl">Interview Question</div>
+  <div class="iq-q">Explain the difference between a view, a materialized view, and a CTE. When would you use each?</div>
+  <div class="iq-a">
+    <strong>VIEW</strong>: A saved SQL query (virtual table). Executes the query every time you SELECT from it. No data stored. Always shows current data. Use for: simplifying complex joins, providing a stable interface, security (hide raw tables).<br><br>
+    <strong>MATERIALIZED VIEW</strong>: A view that actually stores the result set on disk. Must be refreshed manually or on schedule. Much faster to query. Use for: expensive aggregations you query frequently, reporting dashboards.<br><br>
+    <strong>CTE</strong>: Temporary, query-scoped only. Exists only for the duration of one query. Cannot be indexed. Use for: breaking up complex queries into readable steps, recursive queries.
+  </div>
+</div>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════ POWER BI ════════════════════════ -->
+<section id="powerbi">
+<div class="sec-hdr">
+  <div class="sec-icon pbi">📈</div>
+  <div class="sec-info">
+    <h2>Power BI — Data Visualization & DAX</h2>
+    <p>Milestones 12–13 · ETL · Data Modeling · DAX · Report Design</p>
+  </div>
+</div>
+
+<div class="topic" id="pbi-ui">
+<div class="topic-hdr"><h3>Power BI Interface & Power Query ETL</h3><span class="badge b-concept">CONCEPT</span><span class="ms">Milestone 12</span></div>
+
+<div class="cbox">
+<h4>Power BI Workflow</h4>
+<table>
+<tr><th>Stage</th><th>Tool</th><th>Purpose</th></tr>
+<tr><td>1. Connect</td><td>Get Data</td><td>Connect to 100+ sources: SQL, Excel, APIs, SharePoint, Azure</td></tr>
+<tr><td>2. Transform</td><td>Power Query (M)</td><td>Clean, shape, combine data before loading</td></tr>
+<tr><td>3. Model</td><td>Model View</td><td>Define relationships, create date tables</td></tr>
+<tr><td>4. Analyze</td><td>DAX</td><td>Write measures and calculated columns</td></tr>
+<tr><td>5. Report</td><td>Report View</td><td>Build visuals and dashboards</td></tr>
+<tr><td>6. Share</td><td>Power BI Service</td><td>Publish, schedule refresh, share</td></tr>
+</table>
+</div>
+
+<div class="cbox">
+<h4>Essential Power Query Transformations</h4>
+<pre class="pbi-c"><span class="cm">// M language examples (auto-generated from UI steps)</span>
+
+<span class="cm">// Remove duplicates</span>
+Table.Distinct(Source)
+
+<span class="cm">// Filter rows</span>
+Table.SelectRows(Source, each [Region] = "North" and [Revenue] > 1000)
+
+<span class="cm">// Add custom column</span>
+Table.AddColumn(Source, "FullName", each [FirstName] & " " & [LastName])
+
+<span class="cm">// Unpivot (columns to rows — common for monthly data)</span>
+Table.UnpivotOtherColumns(Source, {"Product"}, "Month", "Sales")
+
+<span class="cm">// Pivot (rows to columns)</span>
+Table.Pivot(Source, List.Distinct(Source[Month]), "Month", "Sales", List.Sum)</pre>
+</div>
+</div>
+
+<!-- DATA MODELING -->
+<div class="topic" id="pbi-model">
+<div class="topic-hdr"><h3>Data Modeling — Star Schema</h3><span class="badge b-concept">CONCEPT</span><span class="ms">Milestone 13</span></div>
+
+<div class="cbox">
+<h4>Star Schema vs Snowflake Schema</h4>
+<table>
+<tr><th>Aspect</th><th>Star Schema</th><th>Snowflake Schema</th></tr>
+<tr><td>Structure</td><td>Fact table + flat dimension tables</td><td>Fact + normalized dimension tables (dims have dims)</td></tr>
+<tr><td>Query performance</td><td>Faster (fewer joins)</td><td>Slower (more joins required)</td></tr>
+<tr><td>Storage</td><td>More (some redundancy in dims)</td><td>Less (normalized)</td></tr>
+<tr><td>Power BI recommendation</td><td>✅ Preferred</td><td>⚠️ Avoid if possible</td></tr>
+</table>
+</div>
+
+<div class="tq">
+  <div class="tq-lbl">Trick Question</div>
+  <div class="tq-q">What is a "bidirectional relationship" in Power BI and why is it dangerous?</div>
+  <div class="tq-trap">Many people enable bidirectional by default thinking "more filtering = better"</div>
+  <div class="tq-ans">
+    <strong>Bidirectional cross-filtering</strong> allows filter context to flow in both directions between two tables (normally it flows from dimension to fact).<br><br>
+    <strong>Why it's dangerous:</strong><br>
+    1. <strong>Ambiguous results</strong> — with many-to-many relationships, filters can loop and produce unexpected results<br>
+    2. <strong>Performance degradation</strong> — Power BI must calculate more possible filter paths<br>
+    3. <strong>Circular dependency risk</strong> with multiple bidirectional relationships<br><br>
+    <strong>Rule of thumb:</strong> Use single-direction by default. Only enable bidirectional for specific many-to-many scenarios or bridge tables, and test thoroughly.
+  </div>
+</div>
+</div>
+
+<!-- DAX -->
+<div class="topic" id="pbi-dax">
+<div class="topic-hdr"><h3>DAX — From Basics to Advanced</h3><span class="badge b-practice">PRACTICE</span><span class="ms">Milestone 13</span></div>
+
+<div class="cbox">
+<h4>Filter Context vs Row Context</h4>
+<pre class="pbi-c"><span class="cm">// FILTER CONTEXT: set of filters from slicers, visuals, CALCULATE</span>
+<span class="cm">// ROW CONTEXT: exists inside calculated columns and SUMX/AVERAGEX iterators</span>
+
+<span class="cm">// CALCULATE switches row context to filter context (key concept!)</span>
+<span class="vr">Sales Pct</span> = 
+<span class="fn">DIVIDE</span>(
+    <span class="fn">SUM</span>(Sales[Revenue]),
+    <span class="fn">CALCULATE</span>(<span class="fn">SUM</span>(Sales[Revenue]), <span class="fn">ALL</span>(Sales[Product]))
+)
+<span class="cm">// Denominator: SUM of ALL products (filter removed by ALL)</span>
+<span class="cm">// Numerator: SUM of filtered product (from visual context)</span></pre>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n pbi">D1</span>
+  <span class="ex-q">TRICK: What does CALCULATE(SUM(Sales[Revenue])) with NO filter arguments do? Is it the same as SUM(Sales[Revenue])?</span>
+  <span class="diff d-t">TRICK</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+  <div class="tq-trap">Most people say "yes, they're the same." They're almost the same but have a critical difference with context transition.</div>
+  <div class="tq-ans">
+    In most cases they return the same value — the current filter context's sum.<br><br>
+    <strong>The difference:</strong> CALCULATE always performs a <strong>context transition</strong>. If used inside a row context (like a calculated column or an iterator like SUMX), CALCULATE converts the row context into an equivalent filter context. This means it will apply filters for the current row's values.<br><br>
+    Plain SUM does not do context transition. This distinction matters inside iterators and calculated columns.
+  </div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n pbi">D2</span>
+  <span class="ex-q">Write DAX for: Total Revenue, Revenue for Selected Period, Previous Period Revenue, and Period-over-Period % change. Make it work with a date slicer.</span>
+  <span class="diff d-h">Hard</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+<pre class="pbi-c"><span class="vr">Total Revenue</span> = <span class="fn">SUM</span>(Sales[Revenue])
+
+<span class="vr">Revenue Previous Period</span> = 
+<span class="fn">CALCULATE</span>(
+    [<span class="vr">Total Revenue</span>],
+    <span class="fn">PREVIOUSMONTH</span>(DateTable[Date])  <span class="cm">// or SAMEPERIODLASTYEAR, DATEADD</span>
+)
+
+<span class="vr">PoP Growth %</span> = 
+<span class="kw">VAR</span> <span class="vr">CurrRev</span> = [<span class="vr">Total Revenue</span>]
+<span class="kw">VAR</span> <span class="vr">PrevRev</span> = [<span class="vr">Revenue Previous Period</span>]
+<span class="kw">RETURN</span>
+    <span class="fn">IF</span>(
+        <span class="fn">ISBLANK</span>(<span class="vr">PrevRev</span>) || <span class="vr">PrevRev</span> = <span class="nm">0</span>,
+        <span class="fn">BLANK</span>(),
+        <span class="fn">DIVIDE</span>(<span class="vr">CurrRev</span> - <span class="vr">PrevRev</span>, <span class="vr">PrevRev</span>)
+    )
+<span class="cm">// Format as %, use conditional formatting: green if >0, red if <0</span></pre>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n pbi">D3</span>
+  <span class="ex-q">TRICK: Why does SUMX sometimes give different results than SUM? When should you use SUMX?</span>
+  <span class="diff d-t">TRICK</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+  <div class="tq-trap">Many people think SUMX and SUM are interchangeable — they're not</div>
+<pre class="pbi-c"><span class="cm">// SUM works on a single column — adds existing values</span>
+<span class="vr">Wrong Revenue</span> = <span class="fn">SUM</span>(Orders[Quantity]) * <span class="fn">SUM</span>(Orders[UnitPrice])
+<span class="cm">// ❌ WRONG: multiplies TOTAL qty × TOTAL price (not row by row)</span>
+
+<span class="cm">// SUMX iterates row by row, then sums the results</span>
+<span class="vr">Correct Revenue</span> = <span class="fn">SUMX</span>(Orders, Orders[Quantity] * Orders[UnitPrice])
+<span class="cm">// ✅ CORRECT: calculates qty × price per row, then sums</span>
+
+<span class="cm">// Use SUMX when: you need row-level calculations before aggregating</span>
+<span class="cm">// Other iterators: AVERAGEX, MAXX, MINX, COUNTX, RANKX</span></pre>
+</div>
+</div>
+</div>
+
+<!-- TIME INTELLIGENCE -->
+<div class="topic" id="pbi-timeintel">
+<div class="topic-hdr"><h3>Time Intelligence Functions</h3><span class="badge b-advanced">ADVANCED</span></div>
+
+<div class="cbox">
+<h4>Time Intelligence Quick Reference</h4>
+<table>
+<tr><th>Function</th><th>Returns</th><th>Example Use</th></tr>
+<tr><td>TOTALYTD()</td><td>Year-to-date value</td><td>YTD Revenue</td></tr>
+<tr><td>TOTALQTD()</td><td>Quarter-to-date value</td><td>QTD Sales</td></tr>
+<tr><td>TOTALMTD()</td><td>Month-to-date value</td><td>MTD Orders</td></tr>
+<tr><td>PREVIOUSMONTH()</td><td>Entire previous month</td><td>MoM comparison</td></tr>
+<tr><td>PREVIOUSYEAR()</td><td>Entire previous year</td><td>YoY comparison</td></tr>
+<tr><td>SAMEPERIODLASTYEAR()</td><td>Same period, prior year</td><td>YoY on any selection</td></tr>
+<tr><td>DATEADD(dates,-1,MONTH)</td><td>Shift dates by offset</td><td>Rolling comparisons</td></tr>
+<tr><td>DATESINPERIOD()</td><td>Range of N periods back</td><td>Rolling 3M, 12M</td></tr>
+</table>
+<div class="warn">⚠️ Time intelligence functions REQUIRE a proper Date/Calendar table marked as Date Table in Power BI. Without it, these functions won't work correctly.</div>
+</div>
+</div>
+
+<!-- PBI INTERVIEW -->
+<div class="topic" id="pbi-interview">
+<div class="topic-hdr"><h3>Power BI Interview & Trick Questions</h3><span class="badge b-trick">TRICK</span><span class="badge b-interview">INTERVIEW</span></div>
+
+<div class="tq">
+  <div class="tq-lbl">Trick Question</div>
+  <div class="tq-q">Your DAX measure shows correct values in a table visual but wrong values in a card visual. Why?</div>
+  <div class="tq-trap">This is a real scenario that trips up even experienced Power BI developers</div>
+  <div class="tq-ans">
+    <strong>The card visual has no row context</strong> — it evaluates the measure with only the filters from slicers/page filters, ignoring any row-level context from a table.<br><br>
+    If your measure uses SELECTEDVALUE() or depends on which row is selected in a visual, it works in a table (which provides row context) but returns a default or BLANK in a card.<br><br>
+    <strong>Fix:</strong> Use ALLSELECTED() for measures that should respect slicer filters, or restructure the measure to not depend on row context for card visuals.
+  </div>
+</div>
+
+<div class="iq">
+  <div class="iq-lbl">Interview Question</div>
+  <div class="iq-q">What is the difference between ALL, ALLSELECTED, and ALLEXCEPT in DAX?</div>
+  <div class="iq-a">
+    <strong>ALL(table/column)</strong>: Removes ALL filters from the specified table or column — ignores slicers, page filters, everything. Use for: grand total denominators, absolute calculations.<br><br>
+    <strong>ALLSELECTED(table/column)</strong>: Removes filters from the visual/matrix context but KEEPS slicer/page filter selections. Use for: "% of selected total" where the denominator respects slicers.<br><br>
+    <strong>ALLEXCEPT(table, col1, col2)</strong>: Removes all filters EXCEPT the specified columns. Use for: calculations that should only be affected by specific dimensions.
+  </div>
+</div>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════ PYTHON ════════════════════════ -->
+<section id="python">
+<div class="sec-hdr">
+  <div class="sec-icon py">🐍</div>
+  <div class="sec-info">
+    <h2>Python for Data Analytics</h2>
+    <p>Milestones 14–17 · Core Python · Pandas · NumPy · Matplotlib/Seaborn</p>
+  </div>
+</div>
+
+<div class="topic" id="py-core">
+<div class="topic-hdr"><h3>Core Python — Data Structures & Control Flow</h3><span class="badge b-concept">CONCEPT</span><span class="ms">Milestone 14–15</span></div>
+
+<div class="cbox">
+<h4>Data Structures Comparison</h4>
+<table>
+<tr><th>Structure</th><th>Ordered?</th><th>Mutable?</th><th>Duplicates?</th><th>Best For</th></tr>
+<tr><td>list []</td><td>Yes</td><td>Yes</td><td>Yes</td><td>Sequences, iteration</td></tr>
+<tr><td>tuple ()</td><td>Yes</td><td>No</td><td>Yes</td><td>Immutable records, dict keys</td></tr>
+<tr><td>dict {k:v}</td><td>Yes (3.7+)</td><td>Yes</td><td>Keys: No, Values: Yes</td><td>Key-value lookups</td></tr>
+<tr><td>set {}</td><td>No</td><td>Yes</td><td>No</td><td>Unique values, membership test</td></tr>
+</table>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n py">P1</span>
+  <span class="ex-q">TRICK: What is the output of: x = [1,2,3]; y = x; y.append(4); print(x)?</span>
+  <span class="diff d-t">TRICK</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+  <div class="tq-trap">Common mistake: thinking y = x creates a copy. It doesn't.</div>
+  <div class="tq-ans">
+    <strong>Output: [1, 2, 3, 4]</strong><br><br>
+    <code>y = x</code> does NOT create a copy — it creates a second reference to the SAME list object. When you modify y, you're modifying the same underlying list that x points to.<br><br>
+    <strong>To create an actual copy:</strong><br>
+    • Shallow copy: <code>y = x.copy()</code> or <code>y = x[:]</code> or <code>y = list(x)</code><br>
+    • Deep copy (nested structures): <code>import copy; y = copy.deepcopy(x)</code>
+  </div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n py">P2</span>
+  <span class="ex-q">TRICK: What is the output of: print(0.1 + 0.2 == 0.3)?</span>
+  <span class="diff d-t">TRICK</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+  <div class="tq-trap">Every data analyst using Python needs to know this. It trips up many people.</div>
+  <div class="tq-ans">
+    <strong>Output: False</strong><br><br>
+    0.1 + 0.2 = 0.30000000000000004 in Python (and most languages). This is due to floating-point binary representation — these decimals can't be represented exactly in base 2.<br><br>
+    <strong>Solutions for comparisons:</strong><br>
+    • <code>abs(0.1 + 0.2 - 0.3) < 1e-10</code> (tolerance check)<br>
+    • <code>import math; math.isclose(0.1+0.2, 0.3)</code><br>
+    • <code>from decimal import Decimal; Decimal('0.1') + Decimal('0.2')</code> (exact)<br><br>
+    This matters for data analysis: never use == for float comparisons.
+  </div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n py">P3</span>
+  <span class="ex-q">Write a function that takes a list of transactions (each a dict with 'amount' and 'category') and returns a dict of total spend per category.</span>
+  <span class="diff d-m">Medium</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+<pre class="py-c"><span class="cm"># Method 1: Manual dict</span>
+<span class="kw">def</span> <span class="fn">sum_by_category</span>(transactions):
+    totals = {}
+    <span class="kw">for</span> t <span class="kw">in</span> transactions:
+        cat = t[<span class="st">'category'</span>]
+        totals[cat] = totals.get(cat, <span class="nm">0</span>) + t[<span class="st">'amount'</span>]
+    <span class="kw">return</span> totals
+
+<span class="cm"># Method 2: defaultdict (cleaner)</span>
+<span class="kw">from</span> collections <span class="kw">import</span> defaultdict
+<span class="kw">def</span> <span class="fn">sum_by_category</span>(transactions):
+    totals = defaultdict(<span class="fn">float</span>)
+    <span class="kw">for</span> t <span class="kw">in</span> transactions: totals[t[<span class="st">'category'</span>]] += t[<span class="st">'amount'</span>]
+    <span class="kw">return</span> <span class="fn">dict</span>(totals)
+
+<span class="cm"># Method 3: One-liner with pandas</span>
+<span class="kw">import</span> pandas <span class="kw">as</span> pd
+pd.DataFrame(transactions).groupby(<span class="st">'category'</span>)[<span class="st">'amount'</span>].sum().to_dict()</pre>
+</div>
+</div>
+</div>
+
+<!-- PANDAS -->
+<div class="topic" id="py-pandas">
+<div class="topic-hdr"><h3>Pandas — Complete Reference</h3><span class="badge b-practice">PRACTICE</span><span class="ms">Milestone 16</span></div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n py">P4</span>
+  <span class="ex-q">TRICK: What's the difference between df['col'] and df[['col']]? And between df.col and df['col']?</span>
+  <span class="diff d-t">TRICK</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+  <div class="tq-trap">This is pandas syntax that confuses beginners AND experienced users</div>
+  <div class="tq-ans">
+    <code>df['col']</code> → returns a <strong>Series</strong> (1D, like a column vector). Shape: (n,)<br>
+    <code>df[['col']]</code> → returns a <strong>DataFrame</strong> (2D, single column). Shape: (n, 1)<br><br>
+    This matters when: passing to sklearn (needs DataFrame), concatenating, or methods that only work on DataFrames.<br><br>
+    <code>df.col</code> vs <code>df['col']</code>: Both return a Series for existing columns. But <code>df.col</code> fails if: column name has spaces, is a number, or conflicts with a pandas attribute (like <code>df.max</code> — is that the max attribute or a column named "max"?). Always prefer <code>df['col']</code>.
+  </div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n py">P5</span>
+  <span class="ex-q">TRICK: You assign df['NewCol'] = some_series but the result has NaN values everywhere. What went wrong?</span>
+  <span class="diff d-t">TRICK</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+  <div class="tq-trap">Index alignment is pandas' most important and most confusing feature</div>
+  <div class="tq-ans">
+    <strong>Index mismatch.</strong> Pandas aligns on the index when assigning. If some_series has different index labels than df, pandas tries to align them — unmatched positions become NaN.<br><br>
+    Example: df has index [0,1,2,3] but your series has index [10,11,12,13] → all NaN.<br><br>
+    <strong>Fix:</strong> Reset index first: <code>df['NewCol'] = some_series.values</code> (use .values to strip index) or ensure matching indexes: <code>some_series.index = df.index</code>
+  </div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n py">P6</span>
+  <span class="ex-q">You have a sales DataFrame. Using ONE method call, calculate: count, sum, mean, min, max, and 25th/75th percentile for the Revenue column.</span>
+  <span class="diff d-e">Easy</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+<pre class="py-c"><span class="cm"># describe() for standard stats:</span>
+df[<span class="st">'Revenue'</span>].describe()
+<span class="cm"># Returns: count, mean, std, min, 25%, 50%, 75%, max</span>
+
+<span class="cm"># Custom percentiles:</span>
+df[<span class="st">'Revenue'</span>].describe(percentiles=[<span class="nm">.1</span>, <span class="nm">.25</span>, <span class="nm">.75</span>, <span class="nm">.9</span>])
+
+<span class="cm"># Custom aggregations with agg():</span>
+df[<span class="st">'Revenue'</span>].agg([<span class="st">'count'</span>, <span class="st">'sum'</span>, <span class="st">'mean'</span>, <span class="st">'min'</span>, <span class="st">'max'</span>,
+                    <span class="kw">lambda</span> x: x.quantile(<span class="nm">0.25</span>),
+                    <span class="kw">lambda</span> x: x.quantile(<span class="nm">0.75</span>)])</pre>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n py">P7</span>
+  <span class="ex-q">TRICK: What's the SettingWithCopyWarning in pandas and how do you properly fix it?</span>
+  <span class="diff d-t">TRICK</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+  <div class="tq-trap">Most beginners just ignore this warning or add .copy() blindly without understanding why</div>
+  <div class="tq-ans">
+    This warning fires when you try to modify a slice of a DataFrame. The issue: you may be modifying a COPY (chained indexing) instead of the original.<br>
+<pre class="py-c"><span class="cm"># Causes the warning:</span>
+subset = df[df[<span class="st">'Region'</span>] == <span class="st">'North'</span>]
+subset[<span class="st">'Revenue'</span>] = subset[<span class="st">'Revenue'</span>] * <span class="nm">1.1</span>   <span class="cm"># ⚠️ warning!</span>
+
+<span class="cm"># Fix 1: Use .loc on original</span>
+df.loc[df[<span class="st">'Region'</span>] == <span class="st">'North'</span>, <span class="st">'Revenue'</span>] *= <span class="nm">1.1</span>  <span class="cm"># ✅</span>
+
+<span class="cm"># Fix 2: Explicit copy</span>
+subset = df[df[<span class="st">'Region'</span>] == <span class="st">'North'</span>].copy()
+subset[<span class="st">'Revenue'</span>] *= <span class="nm">1.1</span>   <span class="cm"># modifying copy only</span></pre>
+  </div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n py">P8</span>
+  <span class="ex-q">Advanced groupby: for each Region, find the top 2 customers by revenue, keeping only their rows.</span>
+  <span class="diff d-h">Hard</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+<pre class="py-c"><span class="cm"># Method 1: groupby + nlargest</span>
+result = (df.groupby(<span class="st">'Region'</span>, group_keys=<span class="kw">False</span>)
+            .apply(<span class="kw">lambda</span> g: g.nlargest(<span class="nm">2</span>, <span class="st">'Revenue'</span>)))
+
+<span class="cm"># Method 2: rank within group (more flexible)</span>
+df[<span class="st">'rank'</span>] = df.groupby(<span class="st">'Region'</span>)[<span class="st">'Revenue'</span>].rank(
+    method=<span class="st">'dense'</span>, ascending=<span class="kw">False</span>)
+result = df[df[<span class="st">'rank'</span>] <= <span class="nm">2</span>].drop(columns=<span class="st">'rank'</span>)
+
+<span class="cm"># Method 3: SQL-style with transform</span>
+df[<span class="st">'is_top2'</span>] = df.groupby(<span class="st">'Region'</span>)[<span class="st">'Revenue'</span>].transform(
+    <span class="kw">lambda</span> x: x.rank(ascending=<span class="kw">False</span>) <= <span class="nm">2</span>)
+result = df[df[<span class="st">'is_top2'</span>]]</pre>
+</div>
+</div>
+</div>
+
+<!-- NUMPY -->
+<div class="topic" id="py-numpy">
+<div class="topic-hdr"><h3>NumPy — Arrays & Mathematical Operations</h3><span class="badge b-concept">CONCEPT</span><span class="ms">Milestone 16</span></div>
+
+<div class="cbox">
+<h4>NumPy vs Python Lists</h4>
+<table>
+<tr><th>Aspect</th><th>Python List</th><th>NumPy Array</th></tr>
+<tr><td>Type</td><td>Can mix types</td><td>Single type (dtype)</td></tr>
+<tr><td>Speed</td><td>Slow (Python loop)</td><td>50-100x faster (C backend)</td></tr>
+<tr><td>Memory</td><td>More (object references)</td><td>Less (contiguous memory)</td></tr>
+<tr><td>Operations</td><td>Element-wise via loop</td><td>Vectorized (no loop needed)</td></tr>
+<tr><td>Dimensions</td><td>Only 1D (nested = not true 2D)</td><td>True n-dimensional arrays</td></tr>
+</table>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n py">P9</span>
+  <span class="ex-q">TRICK: You have two NumPy arrays with different shapes — a = np.array([1,2,3]) and b = np.array([[10],[20],[30]]). What is a + b?</span>
+  <span class="diff d-t">TRICK</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer — Broadcasting</div>
+  <div class="tq-trap">Most people say "error" or "undefined." The actual result surprises many.</div>
+<pre class="py-c">a.shape = (3,)    <span class="cm"># row vector</span>
+b.shape = (3, 1)  <span class="cm"># column vector</span>
+
+<span class="cm"># NumPy BROADCASTING: numpy stretches smaller arrays to match</span>
+<span class="cm"># a is treated as (1, 3) → broadcast to (3, 3)</span>
+<span class="cm"># b is (3, 1) → broadcast to (3, 3)</span>
+
+a + b  <span class="cm"># Result: 3x3 matrix!</span>
+<span class="cm"># [[11, 12, 13],</span>
+<span class="cm">#  [21, 22, 23],</span>
+<span class="cm">#  [31, 32, 33]]</span></pre>
+  <div class="note">💡 Broadcasting rules: 1) Pad shapes with 1s on left until same ndim. 2) Dimensions of size 1 are stretched to match the other. This is how numpy does efficient matrix operations without explicit loops.</div>
+</div>
+</div>
+</div>
+
+<!-- VISUALIZATION -->
+<div class="topic" id="py-viz">
+<div class="topic-hdr"><h3>Matplotlib & Seaborn Visualization</h3><span class="badge b-practice">PRACTICE</span><span class="ms">Milestone 17</span></div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n py">P10</span>
+  <span class="ex-q">Create a publication-quality sales dashboard: line chart for monthly trend, bar chart for top 10 products, pie chart for category split. Use subplots.</span>
+  <span class="diff d-h">Hard</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+<pre class="py-c"><span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+<span class="kw">import</span> matplotlib.gridspec <span class="kw">as</span> gridspec
+
+fig = plt.figure(figsize=(<span class="nm">16</span>, <span class="nm">10</span>), facecolor=<span class="st">'#0a0e1a'</span>)
+gs  = gridspec.GridSpec(<span class="nm">2</span>, <span class="nm">2</span>, figure=fig, hspace=<span class="nm">0.35</span>, wspace=<span class="nm">0.3</span>)
+
+<span class="cm"># Line chart (spans full top row)</span>
+ax1 = fig.add_subplot(gs[<span class="nm">0</span>, :])
+ax1.plot(monthly_df[<span class="st">'Month'</span>], monthly_df[<span class="st">'Revenue'</span>],
+         color=<span class="st">'#22d3ee'</span>, linewidth=<span class="nm">2.5</span>, marker=<span class="st">'o'</span>, markersize=<span class="nm">5</span>)
+ax1.fill_between(monthly_df[<span class="st">'Month'</span>], monthly_df[<span class="st">'Revenue'</span>],
+                 alpha=<span class="nm">0.15</span>, color=<span class="st">'#22d3ee'</span>)
+ax1.set_title(<span class="st">'Monthly Revenue Trend'</span>, color=<span class="st">'white'</span>, fontsize=<span class="nm">14</span>, pad=<span class="nm">10</span>)
+ax1.set_facecolor(<span class="st">'#0f1320'</span>)
+
+<span class="cm"># Bar chart (bottom left)</span>
+ax2 = fig.add_subplot(gs[<span class="nm">1</span>, <span class="nm">0</span>])
+top10 = product_df.nlargest(<span class="nm">10</span>, <span class="st">'Revenue'</span>)
+bars = ax2.barh(top10[<span class="st">'Product'</span>], top10[<span class="st">'Revenue'</span>], color=<span class="st">'#34d399'</span>)
+ax2.set_title(<span class="st">'Top 10 Products'</span>, color=<span class="st">'white'</span>)
+ax2.set_facecolor(<span class="st">'#0f1320'</span>)
+
+<span class="cm"># Pie chart (bottom right)</span>
+ax3 = fig.add_subplot(gs[<span class="nm">1</span>, <span class="nm">1</span>])
+wedges, texts, autotexts = ax3.pie(
+    cat_df[<span class="st">'Revenue'</span>], labels=cat_df[<span class="st">'Category'</span>],
+    autopct=<span class="st">'%1.1f%%'</span>, startangle=<span class="nm">90</span>)
+ax3.set_title(<span class="st">'Revenue by Category'</span>, color=<span class="st">'white'</span>)
+
+plt.savefig(<span class="st">'dashboard.png'</span>, dpi=<span class="nm">150</span>, bbox_inches=<span class="st">'tight'</span>,
+            facecolor=fig.get_facecolor())
+plt.show()</pre>
+</div>
+</div>
+</div>
+
+<!-- EDA -->
+<div class="topic" id="py-eda">
+<div class="topic-hdr"><h3>EDA — Exploratory Data Analysis Workflow</h3><span class="badge b-advanced">ADVANCED</span></div>
+
+<div class="cbox">
+<h4>Systematic EDA Checklist</h4>
+<table>
+<tr><th>Step</th><th>Code</th><th>What to look for</th></tr>
+<tr><td>1. Shape & types</td><td>df.info()</td><td>Unexpected dtypes (dates as object, IDs as float)</td></tr>
+<tr><td>2. Missing values</td><td>df.isnull().sum() / df.shape[0] * 100</td><td>% missing per column — > 50% → consider dropping</td></tr>
+<tr><td>3. Duplicates</td><td>df.duplicated().sum()</td><td>Exact dupes — always remove before analysis</td></tr>
+<tr><td>4. Distribution</td><td>df.describe()</td><td>mean vs median gap (skew), suspicious min/max</td></tr>
+<tr><td>5. Outliers</td><td>IQR or z-score</td><td>Values > 3σ or outside 1.5×IQR fences</td></tr>
+<tr><td>6. Cardinality</td><td>df.nunique()</td><td>High cardinality in categorical = encoding needed</td></tr>
+<tr><td>7. Correlation</td><td>df.corr()</td><td>r > 0.8 = multicollinearity risk in regression</td></tr>
+<tr><td>8. Time patterns</td><td>df.groupby(date) agg</td><td>Seasonality, trends, data gaps</td></tr>
+</table>
+</div>
+</div>
+
+<!-- PYTHON INTERVIEW -->
+<div class="topic" id="py-interview">
+<div class="topic-hdr"><h3>Python Interview & Trick Questions</h3><span class="badge b-trick">TRICK</span><span class="badge b-interview">INTERVIEW</span></div>
+
+<div class="tq">
+  <div class="tq-lbl">Trick Question</div>
+  <div class="tq-q">What is the difference between .mean() and .mean(skipna=True)? And what does .mean(skipna=False) do?</div>
+  <div class="tq-ans">
+    <code>.mean()</code> by default has <code>skipna=True</code> — it ignores NaN values and calculates mean of non-null values.<br><br>
+    <code>.mean(skipna=False)</code> — if ANY value in the column is NaN, the entire mean returns NaN. This is useful when you want to be strict: a missing value means the calculation shouldn't proceed.<br><br>
+    Same applies to .sum(), .std(), etc. This default behavior means pandas silently ignores missing data in aggregations — which can make your results look cleaner than they are.
+  </div>
+</div>
+
+<div class="tq">
+  <div class="tq-lbl">Trick Question</div>
+  <div class="tq-q">What is the difference between apply(), map(), and applymap()/map() in pandas?</div>
+  <div class="tq-ans">
+    <strong>Series.map(func)</strong>: Applies function element-wise to a Series. Also used for value substitution (pass a dict). Only works on Series.<br><br>
+    <strong>DataFrame.apply(func)</strong>: Applies function along an AXIS (by default axis=0 = per column). Returns Series (one value per column) or DataFrame (when function returns Series).<br><br>
+    <strong>DataFrame.applymap(func)</strong> / new name <strong>DataFrame.map(func)</strong> (pandas 2.1+): Applies function element-wise to every cell in the DataFrame. Slowest — use vectorized operations when possible.
+  </div>
+</div>
+
+<div class="iq">
+  <div class="iq-lbl">Interview Question</div>
+  <div class="iq-q">What are lambda functions and when would you use them vs a regular def function?</div>
+  <div class="iq-a">
+    A <strong>lambda</strong> is an anonymous, single-expression function: <code>lambda x: x*2</code>. It's syntactic sugar for a simple <code>def</code>.<br><br>
+    <strong>Use lambda when:</strong> The function is simple (one line), used once/inline (passed to map(), filter(), apply(), sorted()), and naming it would add clutter.<br><br>
+    <strong>Use def when:</strong> Logic is complex, function is reused in multiple places, needs documentation/docstring, has error handling, or takes multiple statements. Lambda functions with multiple operations reduce readability — that's a code smell.
+  </div>
+</div>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════ STATISTICS ════════════════════════ -->
+<section id="stats">
+<div class="sec-hdr">
+  <div class="sec-icon stats">📐</div>
+  <div class="sec-info">
+    <h2>Statistics — Descriptive & Inferential</h2>
+    <p>Milestones 8–9 · Probability · Distributions · Hypothesis Testing · Regression</p>
+  </div>
+</div>
+
+<div class="topic" id="stats-desc">
+<div class="topic-hdr"><h3>Descriptive Statistics — Complete Reference</h3><span class="badge b-concept">CONCEPT</span><span class="ms">Milestone 8</span></div>
+
+<div class="g2">
+<div class="cbox">
+<h4>Central Tendency</h4>
+<div class="formula">Mean = Σx / n</div>
+<div class="formula">Median = middle value (sorted)</div>
+<div class="formula">Mode = most frequent value</div>
+<p style="font-size:13px;margin-top:8px;color:var(--text)">Skewed right: Mean > Median > Mode<br>Skewed left: Mean &lt; Median &lt; Mode<br>Symmetric: Mean ≈ Median ≈ Mode</p>
+</div>
+<div class="cbox">
+<h4>Spread & Shape</h4>
+<div class="formula">Variance σ² = Σ(xᵢ - μ)² / N</div>
+<div class="formula">Sample Variance s² = Σ(xᵢ - x̄)² / (n-1)</div>
+<div class="formula">Std Dev = √Variance</div>
+<div class="formula">CV = (σ/μ) × 100%</div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n stats">S1</span>
+  <span class="ex-q">TRICK: Why does sample variance use (n-1) instead of n in the denominator? What happens if you use n?</span>
+  <span class="diff d-t">TRICK</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer — Bessel's Correction</div>
+  <div class="tq-trap">Many people say "I've seen it in formulas" without understanding why. This is a classic stat interview question.</div>
+  <div class="tq-ans">
+    Using n gives the <strong>biased</strong> estimate — it consistently UNDERESTIMATES the true population variance. This is because the sample mean is calculated FROM the same sample, so the deviations from it are smaller than deviations from the true population mean.<br><br>
+    Using (n-1) gives the <strong>unbiased</strong> estimate — it corrects for the "degree of freedom" used up by estimating the mean from the same data.<br><br>
+    In Python: <code>np.std(x, ddof=0)</code> = population std (divides by n), <code>np.std(x, ddof=1)</code> = sample std (divides by n-1). Pandas <code>.std()</code> uses ddof=1 by default.
+  </div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n stats">S2</span>
+  <span class="ex-q">TRICK: A dataset has mean=100, median=60. Is it skewed? Which direction? Can you tell which way without seeing the data?</span>
+  <span class="diff d-t">TRICK</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+  <div class="tq-trap">Most people answer correctly but can't fully explain the logic</div>
+  <div class="tq-ans">
+    <strong>Right-skewed (positive skew)</strong>. Mean (100) > Median (60) strongly indicates a long right tail — a few extremely high values are pulling the mean up significantly.<br><br>
+    Real-world example: Income data (most people earn modest amounts, but a few billionaires dramatically increase the mean), house prices, insurance claims, social media follower counts.<br><br>
+    Rule of thumb: Mean > Median → right skew. Mean < Median → left skew. The larger the gap, the more extreme the skew.
+  </div>
+</div>
+</div>
+</div>
+
+<!-- PROBABILITY -->
+<div class="topic" id="stats-prob">
+<div class="topic-hdr"><h3>Probability — Rules, Bayes, Counting</h3><span class="badge b-concept">CONCEPT</span><span class="ms">Milestone 8</span></div>
+
+<div class="cbox">
+<h4>Probability Rules</h4>
+<div class="formula">P(A ∪ B) = P(A) + P(B) − P(A ∩ B)  [Addition Rule]</div>
+<div class="formula">P(A ∩ B) = P(A) × P(B|A)  [Multiplication — dependent]</div>
+<div class="formula">P(A ∩ B) = P(A) × P(B)  [Multiplication — independent]</div>
+<div class="formula">Bayes: P(A|B) = P(B|A) × P(A) / P(B)</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n stats">S3</span>
+  <span class="ex-q">CLASSIC TRICK: The Monty Hall Problem. You pick door 1. Host opens door 3 (goat). Should you switch to door 2? What are the probabilities?</span>
+  <span class="diff d-t">TRICK</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+  <div class="tq-trap">Counterintuitive answer that even famous mathematicians initially got wrong</div>
+  <div class="tq-ans">
+    <strong>YES, always switch! Switching wins 2/3 of the time.</strong><br><br>
+    Intuition: When you first pick, P(car behind door 1) = 1/3. P(car behind one of doors 2 or 3) = 2/3. When the host KNOWINGLY opens a goat door, he transfers all that 2/3 probability to door 2. So P(door 2) = 2/3 after switch.<br><br>
+    Staying gives 1/3 chance. Switching gives 2/3 chance. If this feels wrong, simulate it: run 10,000 trials in Python — switchers win ~67% of the time.
+  </div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n stats">S4</span>
+  <span class="ex-q">A medical test is 95% accurate. The disease affects 1% of the population. You test positive. What is the ACTUAL probability you have the disease?</span>
+  <span class="diff d-h">Hard</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer — Bayes' Theorem in Action</div>
+  <div class="tq-trap">Almost everyone intuitively answers "95%." The correct answer will shock you.</div>
+<pre class="stats-c"><span class="cm"># Bayes Theorem: P(Disease | Positive) = P(Positive | Disease) × P(Disease) / P(Positive)</span>
+
+P_disease    = <span class="nm">0.01</span>   <span class="cm"># 1% prevalence</span>
+P_pos_given_disease = <span class="nm">0.95</span>  <span class="cm"># true positive rate (sensitivity)</span>
+P_pos_given_no_disease = <span class="nm">0.05</span>  <span class="cm"># false positive rate (1 - specificity)</span>
+P_no_disease = <span class="nm">1</span> <span class="op">-</span> P_disease  <span class="cm"># 0.99</span>
+
+<span class="cm"># Total probability of testing positive:</span>
+P_positive = (P_pos_given_disease <span class="op">*</span> P_disease + 
+              P_pos_given_no_disease <span class="op">*</span> P_no_disease)
+<span class="cm"># = 0.95 × 0.01 + 0.05 × 0.99 = 0.0095 + 0.0495 = 0.059</span>
+
+P_disease_given_pos = (P_pos_given_disease <span class="op">*</span> P_disease) <span class="op">/</span> P_positive
+<span class="cm"># = 0.0095 / 0.059 ≈ 0.161 = 16.1%</span></pre>
+  <div class="warn">⚠️ Only 16.1%! Even with a 95% accurate test, low disease prevalence means most positive tests are FALSE positives. This is base rate neglect — critical for medical AI and fraud detection.</div>
+</div>
+</div>
+</div>
+
+<!-- DISTRIBUTIONS -->
+<div class="topic" id="stats-dist">
+<div class="topic-hdr"><h3>Probability Distributions</h3><span class="badge b-concept">CONCEPT</span><span class="ms">Milestone 9</span></div>
+
+<div class="cbox">
+<h4>Distribution Selection Guide</h4>
+<table>
+<tr><th>Distribution</th><th>Use When</th><th>Parameters</th><th>Real Example</th></tr>
+<tr><td>Normal</td><td>Symmetric continuous data, large samples (CLT)</td><td>μ, σ</td><td>Heights, exam scores</td></tr>
+<tr><td>Binomial</td><td>Count of successes in n fixed trials</td><td>n, p</td><td>Email open rate, defects</td></tr>
+<tr><td>Poisson</td><td>Count of events in fixed time/space</td><td>λ</td><td>Calls/hour, accidents/week</td></tr>
+<tr><td>Exponential</td><td>Time between Poisson events</td><td>λ</td><td>Time between purchases</td></tr>
+<tr><td>Uniform</td><td>All outcomes equally likely</td><td>a, b</td><td>Random number generation</td></tr>
+<tr><td>Log-normal</td><td>Data where log(x) is normal</td><td>μ, σ of log</td><td>Stock prices, income, city sizes</td></tr>
+<tr><td>t-distribution</td><td>Hypothesis tests with small n</td><td>df (degrees of freedom)</td><td>Mean comparison, confidence intervals</td></tr>
+<tr><td>Chi-square</td><td>Categorical variable associations</td><td>df</td><td>A/B test (conversions), survey data</td></tr>
+<tr><td>F-distribution</td><td>Comparing variances, ANOVA</td><td>df1, df2</td><td>Testing multiple group means</td></tr>
+</table>
+<div class="formula">68-95-99.7 Rule: Normal → 68% within 1σ, 95% within 2σ, 99.7% within 3σ</div>
+</div>
+</div>
+
+<!-- INFERENTIAL -->
+<div class="topic" id="stats-inf">
+<div class="topic-hdr"><h3>Inferential Statistics & Hypothesis Testing</h3><span class="badge b-advanced">ADVANCED</span><span class="ms">Milestone 9</span></div>
+
+<div class="cbox">
+<h4>Complete Hypothesis Testing Framework</h4>
+<table>
+<tr><th>Scenario</th><th>Test</th><th>Python</th></tr>
+<tr><td>1 group mean vs known value</td><td>One-sample t-test</td><td>ttest_1samp(data, mu)</td></tr>
+<tr><td>2 independent group means</td><td>Welch's t-test</td><td>ttest_ind(a, b, equal_var=False)</td></tr>
+<tr><td>Same group before/after</td><td>Paired t-test</td><td>ttest_rel(before, after)</td></tr>
+<tr><td>3+ group means</td><td>One-way ANOVA</td><td>f_oneway(g1, g2, g3)</td></tr>
+<tr><td>2 categorical variables</td><td>Chi-square</td><td>chi2_contingency(table)</td></tr>
+<tr><td>2 groups, non-normal</td><td>Mann-Whitney U</td><td>mannwhitneyu(a, b)</td></tr>
+<tr><td>Correlation (normal)</td><td>Pearson r</td><td>pearsonr(x, y)</td></tr>
+<tr><td>Correlation (non-normal)</td><td>Spearman ρ</td><td>spearmanr(x, y)</td></tr>
+</table>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n stats">S5</span>
+  <span class="ex-q">TRICK: You run an A/B test and get p=0.048. You declare victory and ship version B. Your manager asks "what's the probability you made the wrong decision?" What do you say?</span>
+  <span class="diff d-t">TRICK</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer</div>
+  <div class="tq-trap">Most people say "4.8%." The real answer is much more nuanced and important.</div>
+  <div class="tq-ans">
+    <strong>You CANNOT say it's 4.8%.</strong> That's the most common misinterpretation of p-values.<br><br>
+    The p-value (0.048) means: "If H₀ were true (no real difference), there's a 4.8% chance of seeing this result or more extreme by chance."<br><br>
+    It does NOT mean: "there's a 4.8% chance H₀ is true" or "there's a 95.2% chance B is better."<br><br>
+    The actual probability of making the wrong decision (False Positive Rate) depends on:<br>
+    • The prior probability that B is actually better (base rate of winning A/B tests ≈ 10-20%)<br>
+    • Using Bayes: P(wrong | p=0.048) could be 30-50%+ if base rates are low<br><br>
+    <strong>Better decision criteria:</strong> Effect size (was the lift meaningful?), confidence intervals, business impact, minimum detectable effect — not just p < 0.05.
+  </div>
+</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n stats">S6</span>
+  <span class="ex-q">TRICK: Three A/B tests are run simultaneously on the same website. Each uses α=0.05. What is the probability of at least one false positive?</span>
+  <span class="diff d-t">TRICK</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer — Multiple Comparisons Problem</div>
+  <div class="tq-trap">People often assume 3 × 5% = 15%. The real calculation is different.</div>
+  <div class="tq-ans">
+    P(at least one false positive) = 1 − P(no false positives)<br>
+    = 1 − (0.95)³ = 1 − 0.857 = <strong>14.3%</strong><br><br>
+    With 20 simultaneous tests: 1 − 0.95²⁰ = 64% chance of at least one false positive!<br><br>
+    <strong>Solutions:</strong><br>
+    • <strong>Bonferroni correction:</strong> use α/k per test (for 3 tests: α = 0.05/3 = 0.017)<br>
+    • <strong>Benjamini-Hochberg FDR control:</strong> less conservative, controls False Discovery Rate<br>
+    • <strong>Run tests sequentially</strong> not simultaneously
+  </div>
+</div>
+</div>
+</div>
+
+<!-- REGRESSION -->
+<div class="topic" id="stats-reg">
+<div class="topic-hdr"><h3>Regression Analysis</h3><span class="badge b-advanced">ADVANCED</span></div>
+
+<div class="cbox">
+<h4>Regression Metrics Cheat Sheet</h4>
+<table>
+<tr><th>Metric</th><th>Formula</th><th>Interpretation</th><th>Range</th></tr>
+<tr><td>R²</td><td>1 − SS_res/SS_tot</td><td>% variance explained</td><td>0 to 1 (higher better)</td></tr>
+<tr><td>Adjusted R²</td><td>Penalizes extra predictors</td><td>Use for multiple regression</td><td>Can be negative</td></tr>
+<tr><td>RMSE</td><td>√(mean(y-ŷ)²)</td><td>Avg error in Y's units</td><td>0 to ∞ (lower better)</td></tr>
+<tr><td>MAE</td><td>mean(|y-ŷ|)</td><td>Avg absolute error</td><td>0 to ∞ (lower better)</td></tr>
+<tr><td>MAPE</td><td>mean(|y-ŷ|/y)</td><td>Avg % error (scale-free)</td><td>0%+ (lower better)</td></tr>
+</table>
+</div>
+
+<div class="tq">
+  <div class="tq-lbl">Trick Question</div>
+  <div class="tq-q">Your regression model has R² = 0.95. A colleague says "great model!" Is this always true? When could high R² be misleading?</div>
+  <div class="tq-ans">
+    <strong>High R² can be misleading in several ways:</strong><br><br>
+    1. <strong>Overfitting</strong>: Model memorized training data; test R² is much lower<br>
+    2. <strong>Spurious correlations</strong>: Two unrelated time series both trending up → high R² with no causal relationship<br>
+    3. <strong>Extrapolation</strong>: High R² in range, model is useless outside it<br>
+    4. <strong>Non-linear relationships</strong>: Even if linear R² is high, a non-linear model may fit dramatically better<br>
+    5. <strong>Residuals not random</strong>: Patterns in residuals indicate model violations even with high R²<br><br>
+    Always check: residual plots, out-of-sample performance, business interpretability.
+  </div>
+</div>
+</div>
+
+<!-- STATS INTERVIEW -->
+<div class="topic" id="stats-interview">
+<div class="topic-hdr"><h3>Statistics Interview & Trick Questions</h3><span class="badge b-trick">TRICK</span><span class="badge b-interview">INTERVIEW</span></div>
+
+<div class="tq">
+  <div class="tq-lbl">Trick Question</div>
+  <div class="tq-q">You have a dataset where 10% of values are outliers. You remove them and R² jumps from 0.4 to 0.9. Should you report the cleaned model's results?</div>
+  <div class="tq-ans">
+    <strong>Not without disclosure and justification.</strong> Removing 10% of data is substantial — this is a major methodological decision that must be:<br>
+    1. Clearly disclosed in reporting<br>
+    2. Justified with legitimate reasons (data entry errors, sensor malfunctions, truly anomalous events)<br>
+    3. Validated that outliers weren't removed just to improve metrics (data dredging)<br><br>
+    The outliers might be the most important data points! In fraud detection, churn prediction, or anomaly detection — outliers ARE the signal you're trying to find.
+  </div>
+</div>
+
+<div class="tq">
+  <div class="tq-lbl">Trick Question</div>
+  <div class="tq-q">Two variables have a correlation of 0. Does this mean they are independent?</div>
+  <div class="tq-trap">Almost everyone says YES. The correct answer is NO.</div>
+  <div class="tq-ans">
+    <strong>NO. Zero correlation (Pearson r = 0) only means no LINEAR relationship.</strong><br><br>
+    Perfect example: y = x². If x goes from -3 to +3 symmetrically, r = 0 (no linear relationship) BUT there's a perfect non-linear relationship.<br><br>
+    Pearson correlation only measures linear association. Variables can be strongly dependent (quadratic, sinusoidal, etc.) while showing r = 0.<br><br>
+    For general independence, use mutual information (information theory) or plot the data — always visualize before reporting correlation.
+  </div>
+</div>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════ BUSINESS ANALYTICS ════════════════════════ -->
+<section id="biz">
+<div class="sec-hdr">
+  <div class="sec-icon biz">💼</div>
+  <div class="sec-info">
+    <h2>Business Analytics & Case Studies</h2>
+    <p>Milestones 10–11 · Funnel · Cohort · KPIs · Problem Solving Frameworks</p>
+  </div>
+</div>
+
+<div class="topic" id="biz-funnel">
+<div class="topic-hdr"><h3>Funnel Analysis</h3><span class="badge b-practice">PRACTICE</span><span class="ms">Milestone 11</span></div>
+
+<div class="cbox">
+<h4>E-Commerce Funnel Example</h4>
+<table>
+<tr><th>Stage</th><th>Users</th><th>Conversion to Next</th><th>Drop-off</th></tr>
+<tr><td>Visit</td><td>100,000</td><td>—</td><td>—</td></tr>
+<tr><td>Product View</td><td>45,000</td><td>45%</td><td>55,000 (55%)</td></tr>
+<tr><td>Add to Cart</td><td>12,000</td><td>26.7%</td><td>33,000 (73.3%)</td></tr>
+<tr><td>Checkout Start</td><td>5,000</td><td>41.7%</td><td>7,000 (58.3%)</td></tr>
+<tr><td>Purchase</td><td>3,200</td><td>64%</td><td>1,800 (36%)</td></tr>
+<tr><td><strong>Overall</strong></td><td><strong>3.2% of visitors</strong></td><td></td><td></td></tr>
+</table>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n biz">B1</span>
+  <span class="ex-q">INTERVIEW: The cart abandonment rate jumped from 60% to 80% last week. Walk me through how you'd investigate this.</span>
+  <span class="diff d-h">Hard</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Framework Answer</div>
+  <div class="hint">
+    <strong>Step 1 — Validate the data</strong><br>
+    • Confirm the metric calculation is consistent (same formula as before?)<br>
+    • Check if tracking code changed, any data pipeline issues<br>
+    • Is it all segments or specific device/region/channel?<br><br>
+    <strong>Step 2 — Scope the problem</strong><br>
+    • When exactly did it start? Correlate with deployments/campaigns<br>
+    • Which cart → checkout step dropped: cart view, checkout start, or payment?<br>
+    • Is it new users or returning users? Mobile vs desktop?<br><br>
+    <strong>Step 3 — Hypothesize</strong><br>
+    • Technical: page load speed, checkout bugs, payment gateway errors<br>
+    • UX: new checkout flow introduced? Price display change?<br>
+    • External: competitor promotion, economic news, seasonal (tax season?)<br><br>
+    <strong>Step 4 — Test & Act</strong><br>
+    • Check error logs, session recordings (Hotjar)<br>
+    • If technical: hotfix immediately<br>
+    • If UX: A/B test the change
+  </div>
+</div>
+</div>
+</div>
+
+<!-- COHORT -->
+<div class="topic" id="biz-cohort">
+<div class="topic-hdr"><h3>Cohort Analysis</h3><span class="badge b-advanced">ADVANCED</span><span class="ms">Milestone 11</span></div>
+
+<div class="cbox">
+<h4>Retention Cohort Table</h4>
+<table>
+<tr><th>Cohort (Join Month)</th><th>Month 0</th><th>Month 1</th><th>Month 2</th><th>Month 3</th></tr>
+<tr><td>Jan 2024</td><td>1000 (100%)</td><td>450 (45%)</td><td>320 (32%)</td><td>280 (28%)</td></tr>
+<tr><td>Feb 2024</td><td>1200 (100%)</td><td>540 (45%)</td><td>390 (32.5%)</td><td>350 (29.2%)</td></tr>
+<tr><td>Mar 2024</td><td>900 (100%)</td><td>360 (40%)</td><td>270 (30%)</td><td>—</td></tr>
+</table>
+<div class="hint">⚡ Read this table diagonally: Month 1 retention for cohorts across time shows if product improvements are working. Flat diagonals = product hasn't improved. Improving diagonals = retention getting better.</div>
+</div>
+
+<div class="ex">
+<div class="ex-h" onclick="tog(this)">
+  <span class="ex-n biz">B2</span>
+  <span class="ex-q">Build a cohort retention table in Python/SQL from an events table with columns: user_id, event_date, event_type.</span>
+  <span class="diff d-h">Hard</span><span class="ex-arr">▼</span>
+</div>
+<div class="ex-body">
+  <div class="ans-lbl">Answer — Python</div>
+<pre class="py-c"><span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+<span class="cm"># Assume df has: user_id, event_date, event_type</span>
+df[<span class="st">'event_month'</span>] = pd.to_datetime(df[<span class="st">'event_date'</span>]).dt.to_period(<span class="st">'M'</span>)
+
+<span class="cm"># 1. Get each user's cohort (first activity month)</span>
+cohort_df = (df.groupby(<span class="st">'user_id'</span>)[<span class="st">'event_month'</span>]
+               .min()
+               .reset_index()
+               .rename(columns={<span class="st">'event_month'</span>: <span class="st">'cohort_month'</span>}))
+
+df = df.merge(cohort_df, on=<span class="st">'user_id'</span>)
+
+<span class="cm"># 2. Calculate months since cohort</span>
+df[<span class="st">'months_since_join'</span>] = (
+    df[<span class="st">'event_month'</span>].dt.to_timestamp() - 
+    df[<span class="st">'cohort_month'</span>].dt.to_timestamp()
+).dt.days // <span class="nm">30</span>
+
+<span class="cm"># 3. Count unique users per cohort × month offset</span>
+cohort_counts = (df.groupby([<span class="st">'cohort_month'</span>, <span class="st">'months_since_join'</span>])
+                   [<span class="st">'user_id'</span>].nunique().reset_index())
+
+<span class="cm"># 4. Pivot and calculate retention %</span>
+cohort_pivot = cohort_counts.pivot(
+    index=<span class="st">'cohort_month'</span>, columns=<span class="st">'months_since_join'</span>, values=<span class="st">'user_id'</span>)
+cohort_size = cohort_pivot.iloc[:, <span class="nm">0</span>]
+retention = cohort_pivot.divide(cohort_size, axis=<span class="nm">0</span>).round(<span class="nm">3</span>) * <span class="nm">100</span>
+<span class="fn">print</span>(retention)</pre>
+</div>
+</div>
+</div>
+
+<!-- METRICS -->
+<div class="topic" id="biz-metrics">
+<div class="topic-hdr"><h3>Key Business Metrics & KPIs</h3><span class="badge b-concept">CONCEPT</span><span class="ms">Milestone 10–11</span></div>
+
+<div class="cbox">
+<h4>Essential Business Metrics</h4>
+<table>
+<tr><th>Metric</th><th>Formula</th><th>Signals</th></tr>
+<tr><td>CAC (Customer Acquisition Cost)</td><td>Marketing + Sales Spend / New Customers</td><td>How expensive is it to get a customer?</td></tr>
+<tr><td>LTV (Lifetime Value)</td><td>Avg Order Value × Purchase Frequency × Customer Lifespan</td><td>What's a customer worth long-term?</td></tr>
+<tr><td>LTV:CAC Ratio</td><td>LTV / CAC</td><td>> 3:1 is healthy; < 1:1 is losing money</td></tr>
+<tr><td>Churn Rate</td><td>Lost Customers / Start of Period Customers</td><td>How fast are you losing customers?</td></tr>
+<tr><td>Retention Rate</td><td>1 - Churn Rate</td><td>Complement of churn</td></tr>
+<tr><td>NPS</td><td>% Promoters − % Detractors</td><td>Customer satisfaction & loyalty</td></tr>
+<tr><td>DAU/MAU Ratio</td><td>Daily Active Users / Monthly Active Users</td><td>"Stickiness" of a product</td></tr>
+<tr><td>Conversion Rate</td><td>Conversions / Total Visitors</td><td>How well funnel converts</td></tr>
+<tr><td>ARPU</td><td>Total Revenue / Total Users</td><td>Revenue per user</td></tr>
+<tr><td>Payback Period</td><td>CAC / Monthly Profit per Customer</td><td>How long to recoup acquisition cost?</td></tr>
+</table>
+</div>
+</div>
+
+<!-- CASE STUDIES -->
+<div class="topic" id="biz-cases">
+<div class="topic-hdr"><h3>Business Analytics Case Studies</h3><span class="badge b-interview">INTERVIEW</span><span class="ms">Milestone 10–11</span></div>
+
+<div class="iq">
+  <div class="iq-lbl">Case Study Interview</div>
+  <div class="iq-q">Profitability Analysis: Your company's revenue grew 20% last year but profits fell 15%. Diagnose the problem.</div>
+  <div class="iq-a">
+    <strong>Framework — Revenue × Cost decomposition:</strong><br><br>
+    1. <strong>Revenue quality check</strong>: Is the 20% revenue growth from high-margin or low-margin products? Shift in product mix toward cheaper products?<br>
+    2. <strong>COGS analysis</strong>: Did unit costs increase? (Raw materials, labor, logistics) — revenue went up but margins compressed?<br>
+    3. <strong>Fixed vs Variable costs</strong>: Did you hire aggressively ahead of revenue? (Scaling up infrastructure)?<br>
+    4. <strong>One-time items</strong>: Large write-offs? Legal settlements? Currency effects?<br>
+    5. <strong>Customer composition</strong>: New customers at a discount? Heavy promotions to drive the 20% growth?<br><br>
+    <strong>Key metric to ask for:</strong> Gross margin % and Operating margin % by product line and by customer segment — this tells you WHERE the profitability is leaking.
+  </div>
+</div>
+
+<div class="iq">
+  <div class="iq-lbl">Case Study Interview</div>
+  <div class="iq-q">Churn Analysis: Monthly churn went from 2% to 5% over 6 months. How do you analyze and address this?</div>
+  <div class="iq-a">
+    <strong>Step 1 — Diagnose WHO is churning</strong><br>
+    • Segment by: age of account, plan type, usage level, industry, acquisition channel<br>
+    • Build a churn cohort: did Jan joiners churn at 5% but June joiners at 10%? (Product experience degraded?)<br>
+    • Feature usage: are churned users using less of key features?<br><br>
+    <strong>Step 2 — Diagnose WHY</strong><br>
+    • Exit surveys, support tickets, NPS comments<br>
+    • Compare product usage in last 90 days: churned vs retained users<br>
+    • Correlate churn with timeline: did pricing change? Competitor launched?<br><br>
+    <strong>Step 3 — Build a Churn Prediction Model</strong><br>
+    • Features: login frequency, feature usage, support contacts, billing issues<br>
+    • Model: logistic regression or gradient boosting on historical churners<br>
+    • Target: intervene with high-probability churners (discount, success call)<br><br>
+    <strong>KPIs to track:</strong> Early churn (first 30 days), involuntary churn (payment failures), voluntary churn rate by segment
+  </div>
+</div>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ════════════════════════ TRICK QUESTIONS ════════════════════════ -->
+<section id="tricks">
+<div class="sec-hdr">
+  <div class="sec-icon biz">🎯</div>
+  <div class="sec-info">
+    <h2>Master Trick Question Compendium</h2>
+    <p>The most counterintuitive questions asked in Data Analytics interviews</p>
+  </div>
+</div>
+
+<div class="topic">
+<div class="topic-hdr"><h3>Cross-Domain Trick Questions</h3><span class="badge b-trick">TRICK</span></div>
+
+<div class="tq">
+  <div class="tq-lbl">General Analytics Trick</div>
+  <div class="tq-q">You increase sample size from 100 to 10,000. Your p-value drops from 0.3 to 0.001. Did the business effect get bigger?</div>
+  <div class="tq-trap">Most people confuse statistical significance with practical significance</div>
+  <div class="tq-ans">
+    <strong>NOT necessarily — and this is a critical distinction.</strong><br><br>
+    Statistical significance is highly sensitive to sample size. With 10,000 users, even a 0.1% difference in conversion rate will be "statistically significant" (p < 0.001). But a 0.1% lift may be completely meaningless for business decisions.<br><br>
+    The business effect (EFFECT SIZE) doesn't change with sample size. What changes is your ABILITY TO DETECT it.<br><br>
+    Always report alongside p-values: Effect size (Cohen's d, relative lift %), confidence intervals, and whether the effect is practically meaningful given business context.
+  </div>
+</div>
+
+<div class="tq">
+  <div class="tq-lbl">SQL Trick</div>
+  <div class="tq-q">SELECT * FROM orders LIMIT 10 — will this always return the same 10 rows?</div>
+  <div class="tq-trap">Most people say yes. The actual answer is: it depends and is generally NO.</div>
+  <div class="tq-ans">
+    <strong>NO — without ORDER BY, the row order is non-deterministic.</strong><br><br>
+    SQL tables are fundamentally unordered sets. The database engine returns rows in whatever order is most efficient (often disk/insertion order, but this can change with database maintenance, parallel execution, index rebuilding, or query plan changes).<br><br>
+    <strong>Rule:</strong> Always use ORDER BY if you care about which rows are returned by LIMIT. LIMIT without ORDER BY = random sample, not consistent results.
+  </div>
+</div>
+
+<div class="tq">
+  <div class="tq-lbl">Statistics Trick</div>
+  <div class="tq-q">Average salary at a company is $80K. You hire one CEO at $2M. The average is now $95K. Is the company "doing better" on compensation?</div>
+  <div class="tq-ans">
+    <strong>The average is misleading — the MEDIAN barely moved.</strong><br><br>
+    This is why median is superior for salary/compensation reporting. One extreme value (the CEO) pulled the mean dramatically without affecting typical employee pay at all.<br><br>
+    In real analytics: when presenting compensation data to employees or stakeholders, always use MEDIAN. When calculating total payroll budget, use SUM. Mean is appropriate only when the distribution is symmetric with no extreme outliers.
+  </div>
+</div>
+
+<div class="tq">
+  <div class="tq-lbl">Python Trick</div>
+  <div class="tq-q">df.merge(df2, on='id') returned MORE rows than either input DataFrame. Is this a bug?</div>
+  <div class="tq-ans">
+    <strong>Not a bug — it's a many-to-many join (Cartesian product on duplicates).</strong><br><br>
+    If df has 3 rows with id=5 and df2 has 4 rows with id=5, the merge produces 3×4=12 rows for id=5.<br><br>
+    <strong>Always validate merge results:</strong><br>
+    • <code>df.merge(df2, on='id', validate='1:1')</code> — raises error if not one-to-one<br>
+    • <code>validate='1:m'</code> or <code>'m:1'</code> for one-to-many<br>
+    • Always check <code>len(result)</code> vs <code>len(df)</code> after merging
+  </div>
+</div>
+
+<div class="tq">
+  <div class="tq-lbl">Excel Trick</div>
+  <div class="tq-q">Your SUMIFS formula returns 0 even though matching data clearly exists. What are all the possible reasons?</div>
+  <div class="tq-ans">
+    1. <strong>Number-text mismatch</strong>: Sum range has numbers stored as text (can't be summed). Look for green triangles. Fix: multiply by 1 or use VALUE().<br>
+    2. <strong>Criteria type mismatch</strong>: Criteria range has numbers but you're comparing to text "5" instead of 5 (or vice versa).<br>
+    3. <strong>Trailing spaces</strong>: "Smith " ≠ "Smith". Use TRIM() on criteria.<br>
+    4. <strong>Range sizes don't match</strong>: sum_range and criteria_range must be the same size (same number of rows).<br>
+    5. <strong>Wildcard not quoted</strong>: Use criteria "North*" not North* (wildcard must be in a text string).<br>
+    6. <strong>Date comparison issue</strong>: Dates stored as text vs date serial numbers.
+  </div>
+</div>
+
+<div class="tq">
+  <div class="tq-lbl">Power BI Trick</div>
+  <div class="tq-q">You create a measure and it shows the correct value in a bar chart but shows BLANK in a table visual. Why?</div>
+  <div class="tq-ans">
+    <strong>The measure returns BLANK() for rows with no data, and tables show all rows while bar charts aggregate.</strong><br><br>
+    When a table contains a dimension with values that have no matching fact data, the measure evaluates to BLANK. Bar charts typically skip blanks or show zero. A table shows every row in the visible context including those with blanks.<br><br>
+    <strong>Fix options:</strong><br>
+    • Add <code>+ 0</code> to convert BLANK to 0: <code>[Total Revenue] + 0</code><br>
+    • Use <code>IF(ISBLANK([Total Revenue]), 0, [Total Revenue])</code><br>
+    • Filter out the rows with no data using visual-level filters
+  </div>
+</div>
+</div>
+</section>
+
+</main>
+</div>
+
+<button class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+function tog(hdr) {
+  const body = hdr.nextElementSibling;
+  const arr = hdr.querySelector('.ex-arr');
+  body.classList.toggle('show');
+  arr.classList.toggle('open');
+}
+
+// Active sidebar tracking
+const allIds = document.querySelectorAll('[id]');
+const links = document.querySelectorAll('.sb-link');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(l => {
+        l.classList.remove('active');
+        if (l.getAttribute('href') === '#' + e.target.id) l.classList.add('active');
+      });
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+allIds.forEach(el => io.observe(el));
+</script>
+</body>
+</html>

@@ -1,0 +1,2552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Analytics Master Guide — SQL · Excel · Power BI · Python · Statistics</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0a0e1a;
+  --bg2: #0f1525;
+  --bg3: #151c32;
+  --card: #111827;
+  --border: #1e2d4a;
+  --accent1: #00d4ff;
+  --accent2: #7c3aed;
+  --accent3: #f59e0b;
+  --accent4: #10b981;
+  --accent5: #ef4444;
+  --text: #e2e8f0;
+  --muted: #64748b;
+  --heading: #f8fafc;
+  --sql: #00d4ff;
+  --excel: #10b981;
+  --pbi: #f59e0b;
+  --python: #7c3aed;
+  --stats: #ef4444;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Lora', serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.7;
+  font-size: 15px;
+}
+
+/* HERO */
+.hero {
+  background: linear-gradient(135deg, #0a0e1a 0%, #0d1528 50%, #0a0e1a 100%);
+  padding: 80px 40px 60px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -200px; left: -200px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(0,212,255,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -200px; right: -200px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(124,58,237,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-badge {
+  display: inline-block;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--accent1);
+  border: 1px solid rgba(0,212,255,0.3);
+  padding: 6px 18px;
+  border-radius: 20px;
+  margin-bottom: 24px;
+  background: rgba(0,212,255,0.05);
+}
+
+.hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  font-weight: 800;
+  color: var(--heading);
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+
+.hero h1 span {
+  background: linear-gradient(90deg, var(--accent1), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+  font-size: 1.1rem;
+  color: var(--muted);
+  max-width: 600px;
+  margin: 0 auto 40px;
+}
+
+.topic-pills {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.pill {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 6px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.pill-sql   { background: rgba(0,212,255,0.1); color: var(--sql); border: 1px solid rgba(0,212,255,0.3); }
+.pill-excel { background: rgba(16,185,129,0.1); color: var(--excel); border: 1px solid rgba(16,185,129,0.3); }
+.pill-pbi   { background: rgba(245,158,11,0.1); color: var(--pbi); border: 1px solid rgba(245,158,11,0.3); }
+.pill-python{ background: rgba(124,58,237,0.1); color: var(--python); border: 1px solid rgba(124,58,237,0.3); }
+.pill-stats { background: rgba(239,68,68,0.1); color: var(--stats); border: 1px solid rgba(239,68,68,0.3); }
+
+.pill:hover { transform: translateY(-2px); filter: brightness(1.2); }
+
+/* NAV SIDEBAR */
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 24px 0;
+}
+
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.sidebar-section {
+  padding: 8px 20px 4px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 12px;
+}
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 20px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  color: var(--muted);
+  text-decoration: none;
+  transition: all 0.2s;
+  border-left: 2px solid transparent;
+}
+
+.sidebar a:hover {
+  color: var(--text);
+  background: rgba(255,255,255,0.03);
+}
+
+.sidebar a.sql:hover, .sidebar a.sql.active { color: var(--sql); border-left-color: var(--sql); }
+.sidebar a.excel:hover, .sidebar a.excel.active { color: var(--excel); border-left-color: var(--excel); }
+.sidebar a.pbi:hover, .sidebar a.pbi.active { color: var(--pbi); border-left-color: var(--pbi); }
+.sidebar a.python:hover, .sidebar a.python.active { color: var(--python); border-left-color: var(--python); }
+.sidebar a.stats:hover, .sidebar a.stats.active { color: var(--stats); border-left-color: var(--stats); }
+
+.dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dot-sql { background: var(--sql); }
+.dot-excel { background: var(--excel); }
+.dot-pbi { background: var(--pbi); }
+.dot-python { background: var(--python); }
+.dot-stats { background: var(--stats); }
+
+/* MAIN CONTENT */
+.main {
+  flex: 1;
+  padding: 48px 48px 80px;
+  max-width: calc(100% - 260px);
+  overflow-x: hidden;
+}
+
+/* SECTION HEADERS */
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.section-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.icon-sql { background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.2); }
+.icon-excel { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.2); }
+.icon-pbi { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.2); }
+.icon-python { background: rgba(124,58,237,0.1); border: 1px solid rgba(124,58,237,0.2); }
+.icon-stats { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.2); }
+
+.section-title h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--heading);
+}
+
+.section-title p {
+  font-size: 13px;
+  color: var(--muted);
+  font-family: 'IBM Plex Mono', monospace;
+  margin-top: 2px;
+}
+
+/* TOPIC BLOCK */
+.topic {
+  margin-bottom: 48px;
+  scroll-margin-top: 20px;
+}
+
+.topic-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--heading);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tag {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+.tag-concept { background: rgba(100,116,139,0.2); color: var(--muted); }
+.tag-practice { background: rgba(16,185,129,0.15); color: var(--excel); }
+.tag-interview { background: rgba(245,158,11,0.15); color: var(--pbi); }
+.tag-hard { background: rgba(239,68,68,0.15); color: var(--stats); }
+
+/* CONCEPT BOX */
+.concept {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px 24px;
+  margin-bottom: 16px;
+}
+
+.concept h4 {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--heading);
+  margin-bottom: 8px;
+}
+
+/* CODE BLOCK */
+pre {
+  background: #070b14;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent1);
+  border-radius: 8px;
+  padding: 20px;
+  overflow-x: auto;
+  margin: 12px 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #c9d1d9;
+}
+
+pre.excel-code { border-left-color: var(--excel); }
+pre.pbi-code { border-left-color: var(--pbi); }
+pre.python-code { border-left-color: var(--python); }
+pre.stats-code { border-left-color: var(--stats); }
+
+.kw { color: #ff7b72; }
+.fn { color: #d2a8ff; }
+.str { color: #a5d6ff; }
+.num { color: #79c0ff; }
+.cm { color: #4a5568; font-style: italic; }
+.op { color: #ff7b72; }
+.var { color: #ffa657; }
+.cls { color: #e3b341; }
+
+/* EXERCISE CARD */
+.exercise {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 14px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+
+.exercise:hover { border-color: rgba(255,255,255,0.15); }
+
+.ex-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.ex-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  width: 28px; height: 28px;
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.ex-q {
+  flex: 1;
+  font-size: 14px;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.ex-difficulty {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.diff-easy { background: rgba(16,185,129,0.15); color: var(--excel); }
+.diff-medium { background: rgba(245,158,11,0.15); color: var(--pbi); }
+.diff-hard { background: rgba(239,68,68,0.15); color: var(--stats); }
+
+.ex-toggle {
+  color: var(--muted);
+  font-size: 16px;
+  transition: transform 0.2s;
+}
+
+.ex-toggle.open { transform: rotate(180deg); }
+
+.ex-answer {
+  border-top: 1px solid var(--border);
+  padding: 16px 18px 18px;
+  display: none;
+}
+
+.ex-answer.show { display: block; }
+
+.answer-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: var(--muted);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.hint {
+  background: rgba(245,158,11,0.06);
+  border: 1px solid rgba(245,158,11,0.2);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #d4a21a;
+  margin-bottom: 8px;
+}
+
+.note {
+  background: rgba(0,212,255,0.05);
+  border: 1px solid rgba(0,212,255,0.2);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #4db8d4;
+  margin-top: 8px;
+}
+
+/* INTERVIEW Q */
+.interview-q {
+  background: rgba(245,158,11,0.04);
+  border: 1px solid rgba(245,158,11,0.2);
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin-bottom: 14px;
+}
+
+.interview-q .q-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--pbi);
+  margin-bottom: 6px;
+}
+
+.interview-q .q-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--heading);
+  margin-bottom: 10px;
+}
+
+.interview-q .q-answer {
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.7;
+}
+
+/* TABLE */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 13px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+th {
+  background: var(--bg3);
+  color: var(--heading);
+  padding: 10px 14px;
+  text-align: left;
+  border: 1px solid var(--border);
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+td {
+  padding: 9px 14px;
+  border: 1px solid var(--border);
+  color: var(--text);
+  vertical-align: top;
+}
+
+tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+
+/* DIVIDER */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin: 48px 0;
+}
+
+/* FORMULA BOX */
+.formula {
+  background: rgba(124,58,237,0.08);
+  border: 1px solid rgba(124,58,237,0.25);
+  border-radius: 8px;
+  padding: 14px 18px;
+  margin: 12px 0;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  color: #c4b5fd;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+/* GRID */
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 16px 0;
+}
+
+@media (max-width: 900px) {
+  .grid2 { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .main { max-width: 100%; padding: 24px; }
+}
+
+/* PROGRESS CHIPS */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.chip {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+/* SQL colors */
+.num-sql { color: var(--sql); }
+.num-excel { color: var(--excel); }
+.num-pbi { color: var(--pbi); }
+.num-python { color: var(--python); }
+.num-stats { color: var(--stats); }
+
+.ex-num.sql { background: rgba(0,212,255,0.1); color: var(--sql); }
+.ex-num.excel { background: rgba(16,185,129,0.1); color: var(--excel); }
+.ex-num.pbi { background: rgba(245,158,11,0.1); color: var(--pbi); }
+.ex-num.python { background: rgba(124,58,237,0.1); color: var(--python); }
+.ex-num.stats { background: rgba(239,68,68,0.1); color: var(--stats); }
+
+/* SCROLL */
+section { scroll-margin-top: 16px; }
+
+.back-top {
+  position: fixed;
+  bottom: 28px; right: 28px;
+  background: var(--accent2);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 44px; height: 44px;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 4px 16px rgba(124,58,237,0.4);
+  transition: all 0.2s;
+  z-index: 100;
+}
+.back-top:hover { transform: translateY(-2px); }
+
+ul, ol { padding-left: 20px; }
+li { margin-bottom: 4px; color: var(--text); font-size: 14px; }
+
+strong { color: var(--heading); font-weight: 600; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">Data Analytics · Complete Study Guide</div>
+  <h1>Master <span>Data Analytics</span><br>From Zero to Interview-Ready</h1>
+  <p>Comprehensive exercises, concepts, and interview prep covering SQL, Excel, Power BI, Python, and Statistics</p>
+  <div class="topic-pills">
+    <a class="pill pill-sql" href="#sql">SQL</a>
+    <a class="pill pill-excel" href="#excel">Excel</a>
+    <a class="pill pill-pbi" href="#powerbi">Power BI</a>
+    <a class="pill pill-python" href="#python">Python</a>
+    <a class="pill pill-stats" href="#descriptive">Statistics</a>
+  </div>
+</div>
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-section">SQL</div>
+  <a href="#sql-basics" class="sql"><span class="dot dot-sql"></span>Basics & Filtering</a>
+  <a href="#sql-joins" class="sql"><span class="dot dot-sql"></span>JOINs</a>
+  <a href="#sql-aggregates" class="sql"><span class="dot dot-sql"></span>Aggregates & GROUP BY</a>
+  <a href="#sql-subqueries" class="sql"><span class="dot dot-sql"></span>Subqueries & CTEs</a>
+  <a href="#sql-window" class="sql"><span class="dot dot-sql"></span>Window Functions</a>
+  <a href="#sql-advanced" class="sql"><span class="dot dot-sql"></span>Advanced & Interview</a>
+
+  <div class="sidebar-section">Excel</div>
+  <a href="#excel-formulas" class="excel"><span class="dot dot-excel"></span>Core Formulas</a>
+  <a href="#excel-lookup" class="excel"><span class="dot dot-excel"></span>LOOKUP Functions</a>
+  <a href="#excel-pivot" class="excel"><span class="dot dot-excel"></span>Pivot Tables</a>
+  <a href="#excel-analytics" class="excel"><span class="dot dot-excel"></span>Data Analytics</a>
+  <a href="#excel-interview" class="excel"><span class="dot dot-excel"></span>Interview Questions</a>
+
+  <div class="sidebar-section">Power BI</div>
+  <a href="#pbi-dax" class="pbi"><span class="dot dot-pbi"></span>DAX Fundamentals</a>
+  <a href="#pbi-measures" class="pbi"><span class="dot dot-pbi"></span>Measures & KPIs</a>
+  <a href="#pbi-modeling" class="pbi"><span class="dot dot-pbi"></span>Data Modeling</a>
+  <a href="#pbi-visuals" class="pbi"><span class="dot dot-pbi"></span>Visuals & Design</a>
+  <a href="#pbi-interview" class="pbi"><span class="dot dot-pbi"></span>Interview Questions</a>
+
+  <div class="sidebar-section">Python</div>
+  <a href="#py-pandas" class="python"><span class="dot dot-python"></span>Pandas</a>
+  <a href="#py-numpy" class="python"><span class="dot dot-python"></span>NumPy</a>
+  <a href="#py-viz" class="python"><span class="dot dot-python"></span>Visualization</a>
+  <a href="#py-cleaning" class="python"><span class="dot dot-python"></span>Data Cleaning</a>
+  <a href="#py-interview" class="python"><span class="dot dot-python"></span>Interview Questions</a>
+
+  <div class="sidebar-section">Statistics</div>
+  <a href="#descriptive" class="stats"><span class="dot dot-stats"></span>Descriptive Stats</a>
+  <a href="#probability" class="stats"><span class="dot dot-stats"></span>Probability</a>
+  <a href="#inferential" class="stats"><span class="dot dot-stats"></span>Inferential Stats</a>
+  <a href="#regression" class="stats"><span class="dot dot-stats"></span>Regression</a>
+  <a href="#stats-interview" class="stats"><span class="dot dot-stats"></span>Interview Questions</a>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+<!-- ═══════════════════════════════ SQL ═══════════════════════════════ -->
+<section id="sql">
+<div class="section-header">
+  <div class="section-icon icon-sql">🗄️</div>
+  <div class="section-title">
+    <h2>SQL</h2>
+    <p>Structured Query Language · Northwind Database + General Practice</p>
+  </div>
+</div>
+
+<!-- SQL BASICS -->
+<div class="topic" id="sql-basics">
+<div class="topic-title">
+  SELECT, WHERE, ORDER BY, LIMIT <span class="tag tag-concept">CONCEPT</span>
+</div>
+
+<div class="concept">
+<h4>Core SELECT Syntax</h4>
+<pre>
+<span class="kw">SELECT</span> column1, column2, <span class="fn">COUNT</span>(*)
+<span class="kw">FROM</span>   table_name
+<span class="kw">WHERE</span>  condition
+<span class="kw">GROUP</span> <span class="kw">BY</span> column1
+<span class="kw">HAVING</span> aggregate_condition
+<span class="kw">ORDER</span> <span class="kw">BY</span> column2 <span class="kw">DESC</span>
+<span class="kw">LIMIT</span>  10;
+<span class="cm">-- ORDER: FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT</span></pre>
+
+<div class="chips">
+  <span class="chip">DISTINCT</span>
+  <span class="chip">BETWEEN</span>
+  <span class="chip">IN ()</span>
+  <span class="chip">LIKE '%pat%'</span>
+  <span class="chip">IS NULL</span>
+  <span class="chip">IS NOT NULL</span>
+  <span class="chip">AND / OR / NOT</span>
+</div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num sql">Q1</span>
+    <span class="ex-q">List all products with unit price greater than 20, ordered by price descending. Show ProductName and UnitPrice only.</span>
+    <span class="ex-difficulty diff-easy">Easy</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre><span class="kw">SELECT</span> ProductName, UnitPrice
+<span class="kw">FROM</span>   Products
+<span class="kw">WHERE</span>  UnitPrice <span class="op">></span> <span class="num">20</span>
+<span class="kw">ORDER</span> <span class="kw">BY</span> UnitPrice <span class="kw">DESC</span>;</pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num sql">Q2</span>
+    <span class="ex-q">Find all customers from Germany OR France who have 'GmbH' in their company name.</span>
+    <span class="ex-difficulty diff-easy">Easy</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre><span class="kw">SELECT</span> CustomerID, CompanyName, Country
+<span class="kw">FROM</span>   Customers
+<span class="kw">WHERE</span>  Country <span class="kw">IN</span> (<span class="str">'Germany'</span>, <span class="str">'France'</span>)
+  <span class="kw">AND</span>  CompanyName <span class="kw">LIKE</span> <span class="str">'%GmbH%'</span>;</pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num sql">Q3</span>
+    <span class="ex-q">Find products where UnitsInStock is 0 AND UnitsOnOrder is also 0. These are "stockout" products.</span>
+    <span class="ex-difficulty diff-easy">Easy</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre><span class="kw">SELECT</span> ProductID, ProductName, UnitsInStock, UnitsOnOrder
+<span class="kw">FROM</span>   Products
+<span class="kw">WHERE</span>  UnitsInStock <span class="op">=</span> <span class="num">0</span>
+  <span class="kw">AND</span>  UnitsOnOrder <span class="op">=</span> <span class="num">0</span>;</pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num sql">Q4</span>
+    <span class="ex-q">Get the top 5 most expensive products using LIMIT. Show name, price, and category ID.</span>
+    <span class="ex-difficulty diff-easy">Easy</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre><span class="kw">SELECT</span> ProductName, UnitPrice, CategoryID
+<span class="kw">FROM</span>   Products
+<span class="kw">ORDER</span> <span class="kw">BY</span> UnitPrice <span class="kw">DESC</span>
+<span class="kw">LIMIT</span>  <span class="num">5</span>;</pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num sql">Q5</span>
+    <span class="ex-q">List all distinct countries from the Customers table, sorted alphabetically.</span>
+    <span class="ex-difficulty diff-easy">Easy</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre><span class="kw">SELECT DISTINCT</span> Country
+<span class="kw">FROM</span>   Customers
+<span class="kw">ORDER</span> <span class="kw">BY</span> Country <span class="kw">ASC</span>;</pre>
+  </div>
+</div>
+</div>
+
+<!-- JOINS -->
+<div class="topic" id="sql-joins">
+<div class="topic-title">JOINs — INNER, LEFT, RIGHT, FULL, SELF <span class="tag tag-concept">CONCEPT</span></div>
+
+<div class="concept">
+<h4>JOIN Types</h4>
+<table>
+  <tr><th>Join Type</th><th>Returns</th><th>Use Case</th></tr>
+  <tr><td>INNER JOIN</td><td>Matching rows only</td><td>Find related records in both tables</td></tr>
+  <tr><td>LEFT JOIN</td><td>All left + matching right (NULLs if no match)</td><td>Keep all customers even without orders</td></tr>
+  <tr><td>RIGHT JOIN</td><td>All right + matching left</td><td>Keep all products even if never ordered</td></tr>
+  <tr><td>FULL OUTER JOIN</td><td>All rows from both</td><td>Full reconciliation</td></tr>
+  <tr><td>SELF JOIN</td><td>Table joined to itself</td><td>Employee → Manager hierarchy</td></tr>
+  <tr><td>CROSS JOIN</td><td>Cartesian product</td><td>All combinations (be careful!)</td></tr>
+</table>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num sql">Q6</span>
+    <span class="ex-q">Get each order with the customer name and employee name who handled it. (Orders + Customers + Employees)</span>
+    <span class="ex-difficulty diff-medium">Medium</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre><span class="kw">SELECT</span> 
+    o.OrderID,
+    c.CompanyName        <span class="kw">AS</span> Customer,
+    e.FirstName <span class="op">||</span> <span class="str">' '</span> <span class="op">||</span> e.LastName <span class="kw">AS</span> EmployeeName
+<span class="kw">FROM</span>   Orders o
+<span class="kw">JOIN</span>   Customers c <span class="kw">ON</span> o.CustomerID <span class="op">=</span> c.CustomerID
+<span class="kw">JOIN</span>   Employees e <span class="kw">ON</span> o.EmployeeID <span class="op">=</span> e.EmployeeID;</pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num sql">Q7</span>
+    <span class="ex-q">Find all customers who have NEVER placed an order. (Use LEFT JOIN + NULL check)</span>
+    <span class="ex-difficulty diff-medium">Medium</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre><span class="kw">SELECT</span> c.CustomerID, c.CompanyName
+<span class="kw">FROM</span>   Customers c
+<span class="kw">LEFT</span> <span class="kw">JOIN</span> Orders o <span class="kw">ON</span> c.CustomerID <span class="op">=</span> o.CustomerID
+<span class="kw">WHERE</span>  o.OrderID <span class="kw">IS NULL</span>;</pre>
+    <div class="note">💡 Classic interview pattern: LEFT JOIN + WHERE right.key IS NULL = anti-join (find missing relationships)</div>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num sql">Q8</span>
+    <span class="ex-q">Show each employee and their manager's name using a SELF JOIN on the Employees table (ReportsTo column).</span>
+    <span class="ex-difficulty diff-medium">Medium</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre><span class="kw">SELECT</span>
+    e.FirstName <span class="op">||</span> <span class="str">' '</span> <span class="op">||</span> e.LastName  <span class="kw">AS</span> Employee,
+    m.FirstName <span class="op">||</span> <span class="str">' '</span> <span class="op">||</span> m.LastName  <span class="kw">AS</span> Manager
+<span class="kw">FROM</span>   Employees e
+<span class="kw">LEFT</span> <span class="kw">JOIN</span> Employees m <span class="kw">ON</span> e.ReportsTo <span class="op">=</span> m.EmployeeID;</pre>
+    <div class="note">💡 LEFT JOIN so top-level employees (no manager) still appear with NULL manager</div>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num sql">Q9</span>
+    <span class="ex-q">Get order line items showing product name, category name, quantity, unit price, and calculated subtotal (Quantity × UnitPrice × (1-Discount)).</span>
+    <span class="ex-difficulty diff-medium">Medium</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre><span class="kw">SELECT</span>
+    p.ProductName,
+    cat.CategoryName,
+    od.Quantity,
+    od.UnitPrice,
+    od.Discount,
+    <span class="fn">ROUND</span>(od.Quantity <span class="op">*</span> od.UnitPrice <span class="op">*</span> (<span class="num">1</span> <span class="op">-</span> od.Discount), <span class="num">2</span>) <span class="kw">AS</span> Subtotal
+<span class="kw">FROM</span>   [Order Details] od
+<span class="kw">JOIN</span>   Products p   <span class="kw">ON</span> od.ProductID  <span class="op">=</span> p.ProductID
+<span class="kw">JOIN</span>   Categories cat <span class="kw">ON</span> p.CategoryID <span class="op">=</span> cat.CategoryID;</pre>
+  </div>
+</div>
+</div>
+
+<!-- AGGREGATES -->
+<div class="topic" id="sql-aggregates">
+<div class="topic-title">Aggregates, GROUP BY & HAVING <span class="tag tag-practice">PRACTICE</span></div>
+
+<div class="concept">
+<h4>Aggregate Functions</h4>
+<div class="chips">
+  <span class="chip">COUNT(*) / COUNT(col)</span>
+  <span class="chip">SUM(col)</span>
+  <span class="chip">AVG(col)</span>
+  <span class="chip">MIN(col)</span>
+  <span class="chip">MAX(col)</span>
+  <span class="chip">ROUND(val, 2)</span>
+</div>
+<pre>
+<span class="cm">-- HAVING filters AFTER aggregation (vs WHERE which filters rows before)</span>
+<span class="kw">SELECT</span> CategoryID, <span class="fn">AVG</span>(UnitPrice) <span class="kw">AS</span> AvgPrice
+<span class="kw">FROM</span>   Products
+<span class="kw">GROUP</span> <span class="kw">BY</span> CategoryID
+<span class="kw">HAVING</span> <span class="fn">AVG</span>(UnitPrice) <span class="op">></span> <span class="num">25</span>
+<span class="kw">ORDER</span> <span class="kw">BY</span> AvgPrice <span class="kw">DESC</span>;</pre>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num sql">Q10</span>
+    <span class="ex-q">Find total revenue per customer (sum of Quantity × UnitPrice × (1-Discount) from Order Details). Show top 10 by revenue.</span>
+    <span class="ex-difficulty diff-medium">Medium</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre><span class="kw">SELECT</span>
+    c.CompanyName,
+    <span class="fn">ROUND</span>(<span class="fn">SUM</span>(od.Quantity <span class="op">*</span> od.UnitPrice <span class="op">*</span> (<span class="num">1</span> <span class="op">-</span> od.Discount)), <span class="num">2</span>) <span class="kw">AS</span> TotalRevenue
+<span class="kw">FROM</span>   Customers c
+<span class="kw">JOIN</span>   Orders o          <span class="kw">ON</span> c.CustomerID <span class="op">=</span> o.CustomerID
+<span class="kw">JOIN</span>   [Order Details] od <span class="kw">ON</span> o.OrderID    <span class="op">=</span> od.OrderID
+<span class="kw">GROUP</span> <span class="kw">BY</span> c.CompanyName
+<span class="kw">ORDER</span> <span class="kw">BY</span> TotalRevenue <span class="kw">DESC</span>
+<span class="kw">LIMIT</span>  <span class="num">10</span>;</pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num sql">Q11</span>
+    <span class="ex-q">Count orders per employee per year. Show EmployeeID, Year, and OrderCount.</span>
+    <span class="ex-difficulty diff-medium">Medium</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre><span class="kw">SELECT</span>
+    EmployeeID,
+    <span class="fn">strftime</span>(<span class="str">'%Y'</span>, OrderDate) <span class="kw">AS</span> Year,   <span class="cm">-- SQLite</span>
+    <span class="cm">-- YEAR(OrderDate) for SQL Server/MySQL</span>
+    <span class="fn">COUNT</span>(*) <span class="kw">AS</span> OrderCount
+<span class="kw">FROM</span>   Orders
+<span class="kw">GROUP</span> <span class="kw">BY</span> EmployeeID, <span class="fn">strftime</span>(<span class="str">'%Y'</span>, OrderDate)
+<span class="kw">ORDER</span> <span class="kw">BY</span> EmployeeID, Year;</pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num sql">Q12</span>
+    <span class="ex-q">Find categories where the average product price is more than 30 AND at least 5 products exist in that category.</span>
+    <span class="ex-difficulty diff-medium">Medium</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre><span class="kw">SELECT</span>
+    cat.CategoryName,
+    <span class="fn">COUNT</span>(p.ProductID) <span class="kw">AS</span> ProductCount,
+    <span class="fn">ROUND</span>(<span class="fn">AVG</span>(p.UnitPrice), <span class="num">2</span>) <span class="kw">AS</span> AvgPrice
+<span class="kw">FROM</span>   Categories cat
+<span class="kw">JOIN</span>   Products p <span class="kw">ON</span> cat.CategoryID <span class="op">=</span> p.CategoryID
+<span class="kw">GROUP</span> <span class="kw">BY</span> cat.CategoryName
+<span class="kw">HAVING</span> <span class="fn">AVG</span>(p.UnitPrice) <span class="op">></span> <span class="num">30</span>
+   <span class="kw">AND</span> <span class="fn">COUNT</span>(p.ProductID) <span class="op">>=</span> <span class="num">5</span>;</pre>
+  </div>
+</div>
+</div>
+
+<!-- SUBQUERIES & CTEs -->
+<div class="topic" id="sql-subqueries">
+<div class="topic-title">Subqueries & CTEs <span class="tag tag-practice">PRACTICE</span></div>
+
+<div class="concept">
+<h4>CTE vs Subquery</h4>
+<pre>
+<span class="cm">-- CTE (Common Table Expression) — cleaner, reusable</span>
+<span class="kw">WITH</span> <span class="cls">CustomerRevenue</span> <span class="kw">AS</span> (
+    <span class="kw">SELECT</span> CustomerID, <span class="fn">SUM</span>(Amount) <span class="kw">AS</span> Revenue
+    <span class="kw">FROM</span>   Orders
+    <span class="kw">GROUP</span> <span class="kw">BY</span> CustomerID
+)
+<span class="kw">SELECT</span> * <span class="kw">FROM</span> <span class="cls">CustomerRevenue</span>
+<span class="kw">WHERE</span>  Revenue <span class="op">></span> <span class="num">10000</span>;
+
+<span class="cm">-- Correlated Subquery — runs once per outer row</span>
+<span class="kw">SELECT</span> p.ProductName
+<span class="kw">FROM</span>   Products p
+<span class="kw">WHERE</span>  p.UnitPrice <span class="op">></span> (<span class="kw">SELECT</span> <span class="fn">AVG</span>(UnitPrice) <span class="kw">FROM</span> Products);</pre>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num sql">Q13</span>
+    <span class="ex-q">Using a CTE, find customers whose total spend is above the average customer spend.</span>
+    <span class="ex-difficulty diff-hard">Hard</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre><span class="kw">WITH</span> <span class="cls">CustomerSpend</span> <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>
+        c.CustomerID,
+        c.CompanyName,
+        <span class="fn">ROUND</span>(<span class="fn">SUM</span>(od.Quantity <span class="op">*</span> od.UnitPrice <span class="op">*</span> (<span class="num">1</span><span class="op">-</span>od.Discount)), <span class="num">2</span>) <span class="kw">AS</span> TotalSpend
+    <span class="kw">FROM</span> Customers c
+    <span class="kw">JOIN</span> Orders o          <span class="kw">ON</span> c.CustomerID <span class="op">=</span> o.CustomerID
+    <span class="kw">JOIN</span> [Order Details] od <span class="kw">ON</span> o.OrderID    <span class="op">=</span> od.OrderID
+    <span class="kw">GROUP</span> <span class="kw">BY</span> c.CustomerID, c.CompanyName
+)
+<span class="kw">SELECT</span> *
+<span class="kw">FROM</span>   <span class="cls">CustomerSpend</span>
+<span class="kw">WHERE</span>  TotalSpend <span class="op">></span> (<span class="kw">SELECT</span> <span class="fn">AVG</span>(TotalSpend) <span class="kw">FROM</span> <span class="cls">CustomerSpend</span>)
+<span class="kw">ORDER</span> <span class="kw">BY</span> TotalSpend <span class="kw">DESC</span>;</pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num sql">Q14</span>
+    <span class="ex-q">Find the most expensive product in each category using a correlated subquery.</span>
+    <span class="ex-difficulty diff-hard">Hard</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre><span class="kw">SELECT</span> p.ProductName, p.CategoryID, p.UnitPrice
+<span class="kw">FROM</span>   Products p
+<span class="kw">WHERE</span>  p.UnitPrice <span class="op">=</span> (
+    <span class="kw">SELECT</span> <span class="fn">MAX</span>(UnitPrice)
+    <span class="kw">FROM</span>   Products p2
+    <span class="kw">WHERE</span>  p2.CategoryID <span class="op">=</span> p.CategoryID
+);
+<span class="cm">-- Alternative with CTE + ROW_NUMBER (shown in Window Functions)</span></pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num sql">Q15</span>
+    <span class="ex-q">Using a multi-CTE query: first calculate monthly revenue, then calculate month-over-month growth %.</span>
+    <span class="ex-difficulty diff-hard">Hard</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre><span class="kw">WITH</span> <span class="cls">MonthlyRevenue</span> <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>
+        <span class="fn">strftime</span>(<span class="str">'%Y-%m'</span>, o.OrderDate) <span class="kw">AS</span> Month,
+        <span class="fn">ROUND</span>(<span class="fn">SUM</span>(od.Quantity <span class="op">*</span> od.UnitPrice <span class="op">*</span> (<span class="num">1</span><span class="op">-</span>od.Discount)), <span class="num">2</span>) <span class="kw">AS</span> Revenue
+    <span class="kw">FROM</span> Orders o
+    <span class="kw">JOIN</span> [Order Details] od <span class="kw">ON</span> o.OrderID <span class="op">=</span> od.OrderID
+    <span class="kw">GROUP</span> <span class="kw">BY</span> Month
+),
+<span class="cls">WithLag</span> <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>
+        Month,
+        Revenue,
+        <span class="fn">LAG</span>(Revenue) <span class="kw">OVER</span> (<span class="kw">ORDER</span> <span class="kw">BY</span> Month) <span class="kw">AS</span> PrevRevenue
+    <span class="kw">FROM</span> <span class="cls">MonthlyRevenue</span>
+)
+<span class="kw">SELECT</span>
+    Month,
+    Revenue,
+    PrevRevenue,
+    <span class="fn">ROUND</span>((Revenue <span class="op">-</span> PrevRevenue) <span class="op">*</span> <span class="num">100.0</span> <span class="op">/</span> PrevRevenue, <span class="num">1</span>) <span class="kw">AS</span> GrowthPct
+<span class="kw">FROM</span> <span class="cls">WithLag</span>;</pre>
+  </div>
+</div>
+</div>
+
+<!-- WINDOW FUNCTIONS -->
+<div class="topic" id="sql-window">
+<div class="topic-title">Window Functions <span class="tag tag-hard">ADVANCED</span></div>
+
+<div class="concept">
+<h4>Window Function Syntax</h4>
+<pre>
+<span class="fn">function_name</span>() <span class="kw">OVER</span> (
+    [<span class="kw">PARTITION</span> <span class="kw">BY</span> partition_col]
+    [<span class="kw">ORDER</span> <span class="kw">BY</span> order_col]
+    [<span class="kw">ROWS</span> <span class="kw">BETWEEN</span> ... <span class="kw">AND</span> ...]
+)</pre>
+<table>
+  <tr><th>Function</th><th>Purpose</th><th>Example Use</th></tr>
+  <tr><td>ROW_NUMBER()</td><td>Unique sequential rank</td><td>Deduplicate, paginate</td></tr>
+  <tr><td>RANK()</td><td>Rank with gaps on ties</td><td>Leaderboards</td></tr>
+  <tr><td>DENSE_RANK()</td><td>Rank without gaps</td><td>Medal tables</td></tr>
+  <tr><td>NTILE(n)</td><td>Split into n buckets</td><td>Quartiles, deciles</td></tr>
+  <tr><td>LAG(col, n)</td><td>Previous row value</td><td>MoM change</td></tr>
+  <tr><td>LEAD(col, n)</td><td>Next row value</td><td>Forecast comparison</td></tr>
+  <tr><td>SUM() OVER()</td><td>Running total</td><td>Cumulative revenue</td></tr>
+  <tr><td>AVG() OVER()</td><td>Moving average</td><td>Smoothed trend</td></tr>
+</table>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num sql">Q16</span>
+    <span class="ex-q">Rank employees by total sales revenue. Show each employee, their total sales, and their rank.</span>
+    <span class="ex-difficulty diff-medium">Medium</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre><span class="kw">SELECT</span>
+    e.FirstName <span class="op">||</span> <span class="str">' '</span> <span class="op">||</span> e.LastName <span class="kw">AS</span> Employee,
+    <span class="fn">ROUND</span>(<span class="fn">SUM</span>(od.Quantity <span class="op">*</span> od.UnitPrice <span class="op">*</span> (<span class="num">1</span><span class="op">-</span>od.Discount)), <span class="num">2</span>) <span class="kw">AS</span> TotalSales,
+    <span class="fn">RANK</span>() <span class="kw">OVER</span> (<span class="kw">ORDER</span> <span class="kw">BY</span> <span class="fn">SUM</span>(od.Quantity <span class="op">*</span> od.UnitPrice <span class="op">*</span> (<span class="num">1</span><span class="op">-</span>od.Discount)) <span class="kw">DESC</span>) <span class="kw">AS</span> SalesRank
+<span class="kw">FROM</span>   Employees e
+<span class="kw">JOIN</span>   Orders o          <span class="kw">ON</span> e.EmployeeID <span class="op">=</span> o.EmployeeID
+<span class="kw">JOIN</span>   [Order Details] od <span class="kw">ON</span> o.OrderID    <span class="op">=</span> od.OrderID
+<span class="kw">GROUP</span> <span class="kw">BY</span> e.EmployeeID;</pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num sql">Q17</span>
+    <span class="ex-q">For each product, calculate a 3-month moving average of monthly sales quantity.</span>
+    <span class="ex-difficulty diff-hard">Hard</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre><span class="kw">WITH</span> <span class="cls">MonthlySales</span> <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>
+        od.ProductID,
+        <span class="fn">strftime</span>(<span class="str">'%Y-%m'</span>, o.OrderDate) <span class="kw">AS</span> Month,
+        <span class="fn">SUM</span>(od.Quantity) <span class="kw">AS</span> TotalQty
+    <span class="kw">FROM</span> [Order Details] od
+    <span class="kw">JOIN</span> Orders o <span class="kw">ON</span> od.OrderID <span class="op">=</span> o.OrderID
+    <span class="kw">GROUP</span> <span class="kw">BY</span> od.ProductID, Month
+)
+<span class="kw">SELECT</span>
+    ProductID, Month, TotalQty,
+    <span class="fn">ROUND</span>(<span class="fn">AVG</span>(TotalQty) <span class="kw">OVER</span> (
+        <span class="kw">PARTITION</span> <span class="kw">BY</span> ProductID
+        <span class="kw">ORDER</span> <span class="kw">BY</span> Month
+        <span class="kw">ROWS</span> <span class="kw">BETWEEN</span> <span class="num">2</span> <span class="kw">PRECEDING</span> <span class="kw">AND</span> <span class="kw">CURRENT ROW</span>
+    ), <span class="num">1</span>) <span class="kw">AS</span> MovingAvg3M
+<span class="kw">FROM</span> <span class="cls">MonthlySales</span>;</pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num sql">Q18</span>
+    <span class="ex-q">Get the top 2 products by revenue within each category using ROW_NUMBER().</span>
+    <span class="ex-difficulty diff-hard">Hard</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre><span class="kw">WITH</span> <span class="cls">ProductRevenue</span> <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>
+        p.ProductName,
+        p.CategoryID,
+        <span class="fn">ROUND</span>(<span class="fn">SUM</span>(od.Quantity <span class="op">*</span> od.UnitPrice), <span class="num">2</span>) <span class="kw">AS</span> Revenue
+    <span class="kw">FROM</span> Products p
+    <span class="kw">JOIN</span> [Order Details] od <span class="kw">ON</span> p.ProductID <span class="op">=</span> od.ProductID
+    <span class="kw">GROUP</span> <span class="kw">BY</span> p.ProductID
+),
+<span class="cls">Ranked</span> <span class="kw">AS</span> (
+    <span class="kw">SELECT</span> *,
+        <span class="fn">ROW_NUMBER</span>() <span class="kw">OVER</span> (
+            <span class="kw">PARTITION</span> <span class="kw">BY</span> CategoryID
+            <span class="kw">ORDER</span> <span class="kw">BY</span> Revenue <span class="kw">DESC</span>
+        ) <span class="kw">AS</span> rn
+    <span class="kw">FROM</span> <span class="cls">ProductRevenue</span>
+)
+<span class="kw">SELECT</span> ProductName, CategoryID, Revenue, rn
+<span class="kw">FROM</span>   <span class="cls">Ranked</span>
+<span class="kw">WHERE</span>  rn <span class="op"><=</span> <span class="num">2</span>;</pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num sql">Q19</span>
+    <span class="ex-q">Calculate cumulative (running total) revenue by order date. Show OrderDate, daily revenue, and cumulative revenue.</span>
+    <span class="ex-difficulty diff-hard">Hard</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre><span class="kw">WITH</span> <span class="cls">DailyRev</span> <span class="kw">AS</span> (
+    <span class="kw">SELECT</span>
+        o.OrderDate,
+        <span class="fn">ROUND</span>(<span class="fn">SUM</span>(od.Quantity <span class="op">*</span> od.UnitPrice <span class="op">*</span> (<span class="num">1</span><span class="op">-</span>od.Discount)), <span class="num">2</span>) <span class="kw">AS</span> DailyRevenue
+    <span class="kw">FROM</span> Orders o
+    <span class="kw">JOIN</span> [Order Details] od <span class="kw">ON</span> o.OrderID <span class="op">=</span> od.OrderID
+    <span class="kw">GROUP</span> <span class="kw">BY</span> o.OrderDate
+)
+<span class="kw">SELECT</span>
+    OrderDate,
+    DailyRevenue,
+    <span class="fn">ROUND</span>(<span class="fn">SUM</span>(DailyRevenue) <span class="kw">OVER</span> (
+        <span class="kw">ORDER</span> <span class="kw">BY</span> OrderDate
+        <span class="kw">ROWS</span> <span class="kw">BETWEEN</span> <span class="kw">UNBOUNDED PRECEDING</span> <span class="kw">AND</span> <span class="kw">CURRENT ROW</span>
+    ), <span class="num">2</span>) <span class="kw">AS</span> CumulativeRevenue
+<span class="kw">FROM</span> <span class="cls">DailyRev</span>;</pre>
+  </div>
+</div>
+</div>
+
+<!-- SQL ADVANCED -->
+<div class="topic" id="sql-advanced">
+<div class="topic-title">Advanced SQL & Interview Questions <span class="tag tag-interview">INTERVIEW</span></div>
+
+<div class="interview-q">
+  <div class="q-label">Interview Question</div>
+  <div class="q-text">What is the difference between WHERE and HAVING?</div>
+  <div class="q-answer"><strong>WHERE</strong> filters individual rows <em>before</em> aggregation. <strong>HAVING</strong> filters grouped results <em>after</em> GROUP BY. You cannot use aggregate functions (SUM, COUNT, etc.) in WHERE, but you can in HAVING. Example: WHERE UnitPrice > 10 filters rows; HAVING COUNT(*) > 5 filters groups.</div>
+</div>
+
+<div class="interview-q">
+  <div class="q-label">Interview Question</div>
+  <div class="q-text">What is a correlated subquery? When would you use it vs a CTE?</div>
+  <div class="q-answer">A <strong>correlated subquery</strong> references columns from the outer query and executes once per outer row (slow on large data). A <strong>CTE</strong> (WITH clause) is computed once and can be referenced multiple times — better for readability and performance. Use correlated subqueries for "per-row comparisons" (e.g., find products above average in their own category). Use CTEs when you need the result in multiple places or want cleaner code.</div>
+</div>
+
+<div class="interview-q">
+  <div class="q-label">Interview Question</div>
+  <div class="q-text">Explain ROW_NUMBER vs RANK vs DENSE_RANK with an example.</div>
+  <div class="q-answer">For scores [100, 90, 90, 80]: <br>
+  • ROW_NUMBER → 1, 2, 3, 4 (always unique, arbitrary tie-breaking)<br>
+  • RANK → 1, 2, 2, 4 (ties get same rank, next rank skips)<br>
+  • DENSE_RANK → 1, 2, 2, 3 (ties get same rank, no skips)<br>
+  Use ROW_NUMBER for deduplication, RANK/DENSE_RANK for leaderboards.</div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num sql">Q20</span>
+    <span class="ex-q">Find duplicate orders — same CustomerID, EmployeeID, and OrderDate appearing more than once.</span>
+    <span class="ex-difficulty diff-hard">Hard</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre><span class="kw">SELECT</span> CustomerID, EmployeeID, OrderDate, <span class="fn">COUNT</span>(*) <span class="kw">AS</span> DupeCount
+<span class="kw">FROM</span>   Orders
+<span class="kw">GROUP</span> <span class="kw">BY</span> CustomerID, EmployeeID, OrderDate
+<span class="kw">HAVING</span> <span class="fn">COUNT</span>(*) <span class="op">></span> <span class="num">1</span>;
+<span class="cm">-- To delete dupes, keep only lowest OrderID:</span>
+<span class="kw">DELETE</span> <span class="kw">FROM</span> Orders
+<span class="kw">WHERE</span>  OrderID <span class="kw">NOT IN</span> (
+    <span class="kw">SELECT</span> <span class="fn">MIN</span>(OrderID)
+    <span class="kw">FROM</span>   Orders
+    <span class="kw">GROUP</span> <span class="kw">BY</span> CustomerID, EmployeeID, OrderDate
+);</pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num sql">Q21</span>
+    <span class="ex-q">Write a query to pivot quarterly sales by year (Q1, Q2, Q3, Q4 as columns) using CASE WHEN.</span>
+    <span class="ex-difficulty diff-hard">Hard</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre><span class="kw">SELECT</span>
+    <span class="fn">strftime</span>(<span class="str">'%Y'</span>, OrderDate) <span class="kw">AS</span> Year,
+    <span class="fn">ROUND</span>(<span class="fn">SUM</span>(<span class="kw">CASE WHEN</span> <span class="fn">strftime</span>(<span class="str">'%m'</span>, OrderDate) <span class="kw">IN</span>(<span class="str">'01'</span>,<span class="str">'02'</span>,<span class="str">'03'</span>) <span class="kw">THEN</span> Amount <span class="kw">ELSE</span> <span class="num">0</span> <span class="kw">END</span>),<span class="num">2</span>) <span class="kw">AS</span> Q1,
+    <span class="fn">ROUND</span>(<span class="fn">SUM</span>(<span class="kw">CASE WHEN</span> <span class="fn">strftime</span>(<span class="str">'%m'</span>, OrderDate) <span class="kw">IN</span>(<span class="str">'04'</span>,<span class="str">'05'</span>,<span class="str">'06'</span>) <span class="kw">THEN</span> Amount <span class="kw">ELSE</span> <span class="num">0</span> <span class="kw">END</span>),<span class="num">2</span>) <span class="kw">AS</span> Q2,
+    <span class="fn">ROUND</span>(<span class="fn">SUM</span>(<span class="kw">CASE WHEN</span> <span class="fn">strftime</span>(<span class="str">'%m'</span>, OrderDate) <span class="kw">IN</span>(<span class="str">'07'</span>,<span class="str">'08'</span>,<span class="str">'09'</span>) <span class="kw">THEN</span> Amount <span class="kw">ELSE</span> <span class="num">0</span> <span class="kw">END</span>),<span class="num">2</span>) <span class="kw">AS</span> Q3,
+    <span class="fn">ROUND</span>(<span class="fn">SUM</span>(<span class="kw">CASE WHEN</span> <span class="fn">strftime</span>(<span class="str">'%m'</span>, OrderDate) <span class="kw">IN</span>(<span class="str">'10'</span>,<span class="str">'11'</span>,<span class="str">'12'</span>) <span class="kw">THEN</span> Amount <span class="kw">ELSE</span> <span class="num">0</span> <span class="kw">END</span>),<span class="num">2</span>) <span class="kw">AS</span> Q4
+<span class="kw">FROM</span> Orders
+<span class="kw">GROUP</span> <span class="kw">BY</span> Year;</pre>
+  </div>
+</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════ EXCEL ═══════════════════════════════ -->
+<section id="excel">
+<div class="section-header">
+  <div class="section-icon icon-excel">📊</div>
+  <div class="section-title">
+    <h2>Excel</h2>
+    <p>Formulas · Pivot Tables · Data Analytics · Dashboard Techniques</p>
+  </div>
+</div>
+
+<div class="topic" id="excel-formulas">
+<div class="topic-title">Core Formulas — Logical, Text, Date, Math <span class="tag tag-concept">CONCEPT</span></div>
+
+<div class="concept">
+<h4>Essential Formula Categories</h4>
+<table>
+  <tr><th>Category</th><th>Key Functions</th></tr>
+  <tr><td>Logical</td><td>IF, IFS, AND, OR, NOT, IFERROR, IFNA, SWITCH</td></tr>
+  <tr><td>Math</td><td>SUMIF, SUMIFS, COUNTIF, COUNTIFS, ROUND, ROUNDUP, MOD, ABS</td></tr>
+  <tr><td>Text</td><td>LEFT, RIGHT, MID, LEN, FIND, TRIM, UPPER, LOWER, CONCATENATE, TEXTJOIN</td></tr>
+  <tr><td>Date</td><td>TODAY, NOW, DATE, YEAR, MONTH, DAY, DATEDIF, EOMONTH, NETWORKDAYS</td></tr>
+  <tr><td>Lookup</td><td>VLOOKUP, HLOOKUP, INDEX+MATCH, XLOOKUP, INDIRECT, OFFSET</td></tr>
+  <tr><td>Statistical</td><td>AVERAGE, MEDIAN, MODE, STDEV, STDEVP, VAR, PERCENTILE, QUARTILE</td></tr>
+  <tr><td>Array</td><td>SUMPRODUCT, UNIQUE, SORT, FILTER, SEQUENCE, TRANSPOSE</td></tr>
+</table>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num excel">E1</span>
+    <span class="ex-q">You have sales data in A2:A100. Calculate total sales only for rows where the region in B2:B100 is "North" AND the month in C2:C100 is "January".</span>
+    <span class="ex-difficulty diff-easy">Easy</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="excel-code">=SUMIFS(A2:A100, B2:B100, "North", C2:C100, "January")</pre>
+    <div class="note">💡 SUMIFS: =SUMIFS(sum_range, criteria_range1, criteria1, criteria_range2, criteria2, ...)</div>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num excel">E2</span>
+    <span class="ex-q">Column A has dates. Write a formula to calculate someone's age in years if their birthday is in A2 and today is the reference date.</span>
+    <span class="ex-difficulty diff-easy">Easy</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="excel-code">=DATEDIF(A2, TODAY(), "Y")
+<span class="cm">-- Or:</span>
+=INT((TODAY()-A2)/365.25)</pre>
+    <div class="note">💡 DATEDIF(start, end, "Y") = full years. "M" = months, "D" = days, "YM" = months ignoring years</div>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num excel">E3</span>
+    <span class="ex-q">Column A has employee IDs like "EMP-2024-001". Extract just the numeric part "001" from these IDs.</span>
+    <span class="ex-difficulty diff-medium">Medium</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="excel-code">=RIGHT(A2, 3)
+<span class="cm">-- If length varies, find after last dash:</span>
+=MID(A2, FIND("-", A2, FIND("-",A2)+1)+1, LEN(A2))</pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num excel">E4</span>
+    <span class="ex-q">Create a formula that assigns a grade: A (≥90), B (≥80), C (≥70), D (≥60), F (<60) based on score in A2.</span>
+    <span class="ex-difficulty diff-medium">Medium</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="excel-code"><span class="cm">-- IFS (modern):</span>
+=IFS(A2>=90,"A", A2>=80,"B", A2>=70,"C", A2>=60,"D", TRUE,"F")
+
+<span class="cm">-- Nested IF (classic):</span>
+=IF(A2>=90,"A",IF(A2>=80,"B",IF(A2>=70,"C",IF(A2>=60,"D","F"))))</pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num excel">E5</span>
+    <span class="ex-q">You have a column of numbers with errors. Calculate the average ignoring errors (#DIV/0!, #N/A, etc.).</span>
+    <span class="ex-difficulty diff-medium">Medium</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="excel-code">=AVERAGEIF(A2:A100,"<>""")
+<span class="cm">-- Better — ignore errors:</span>
+=AGGREGATE(1, 6, A2:A100)
+<span class="cm">-- AGGREGATE(function_num=1 for AVERAGE, options=6 to ignore errors, ref)</span></pre>
+  </div>
+</div>
+</div>
+
+<!-- LOOKUP -->
+<div class="topic" id="excel-lookup">
+<div class="topic-title">VLOOKUP, INDEX-MATCH, XLOOKUP <span class="tag tag-practice">PRACTICE</span></div>
+
+<div class="concept">
+<h4>The Lookup Evolution</h4>
+<pre class="excel-code"><span class="cm">-- VLOOKUP (left column only, approximate/exact)</span>
+=VLOOKUP(lookup_value, table_array, col_index_num, [FALSE])
+
+<span class="cm">-- INDEX+MATCH (lookup in any direction)</span>
+=INDEX(return_range, MATCH(lookup_value, lookup_range, 0))
+
+<span class="cm">-- XLOOKUP (modern, most powerful)</span>
+=XLOOKUP(lookup_value, lookup_array, return_array, [if_not_found])</pre>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num excel">E6</span>
+    <span class="ex-q">Employee IDs are in Sheet1!A:A, salaries in Sheet1!C:C. Look up employee "E105" salary from Sheet2 using XLOOKUP.</span>
+    <span class="ex-difficulty diff-easy">Easy</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="excel-code">=XLOOKUP("E105", Sheet1!A:A, Sheet1!C:C, "Not Found")
+<span class="cm">-- With a cell reference for the lookup value (say A2 has the ID):</span>
+=XLOOKUP(A2, Sheet1!A:A, Sheet1!C:C, "Not Found")</pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num excel">E7</span>
+    <span class="ex-q">VLOOKUP can only look right. Use INDEX+MATCH to look up a product's category (column B) given its ProductID is in column E (to the right of B).</span>
+    <span class="ex-difficulty diff-medium">Medium</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="excel-code"><span class="cm">-- Assume ProductID in col E, Category in col B (to the LEFT)</span>
+<span class="cm">-- VLOOKUP can't go left. INDEX+MATCH can:</span>
+=INDEX(B:B, MATCH(lookup_id, E:E, 0))
+<span class="cm">-- MATCH returns the row position; INDEX retrieves the value from col B</span></pre>
+    <div class="note">💡 This is the main reason INDEX+MATCH beats VLOOKUP — it can look in any direction and the lookup column doesn't need to be first.</div>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num excel">E8</span>
+    <span class="ex-q">Use XLOOKUP to return MULTIPLE columns at once: Given an employee ID in A2, return their Name, Department, and Salary simultaneously in one formula.</span>
+    <span class="ex-difficulty diff-hard">Hard</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="excel-code"><span class="cm">-- Enter in cell C2, it will SPILL into D2 and E2</span>
+=XLOOKUP(A2, EmployeeID_col, Name_col:Salary_col)
+<span class="cm">-- Or explicitly:</span>
+=XLOOKUP(A2, B:B, C:E)  <span class="cm">-- returns 3 columns</span></pre>
+    <div class="note">💡 XLOOKUP spills automatically in Excel 365 — one formula returns multiple columns. This is a massive productivity boost over doing 3 separate VLOOKUPs.</div>
+  </div>
+</div>
+</div>
+
+<!-- PIVOT TABLES -->
+<div class="topic" id="excel-pivot">
+<div class="topic-title">Pivot Tables & Pivot Charts <span class="tag tag-practice">PRACTICE</span></div>
+
+<div class="concept">
+<h4>Pivot Table Layout</h4>
+<table>
+  <tr><th>Area</th><th>What Goes Here</th><th>Example</th></tr>
+  <tr><td>Rows</td><td>Categories to group by (row labels)</td><td>Product Name, Region</td></tr>
+  <tr><td>Columns</td><td>Cross-tabulation dimensions</td><td>Year, Quarter</td></tr>
+  <tr><td>Values</td><td>What you're measuring</td><td>SUM of Sales, COUNT of Orders</td></tr>
+  <tr><td>Filters</td><td>Top-level slicer</td><td>Category, Country</td></tr>
+</table>
+<div class="hint">🏃 Interview tip: Know how to create Calculated Fields, use Slicers, apply Conditional Formatting inside pivots, and group dates (by month/quarter/year).</div>
+</div>
+
+<div class="interview-q">
+  <div class="q-label">Excel Interview Question</div>
+  <div class="q-text">How do you refresh a Pivot Table, and what happens if you add new rows to the source data?</div>
+  <div class="q-answer">Right-click → Refresh, or Data → Refresh All. <strong>Problem:</strong> If you added rows outside the original data range, the pivot won't capture them. <strong>Solution:</strong> Always convert source data to a Table (Ctrl+T) first — Tables expand automatically, so the pivot always captures new data on refresh.</div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num excel">E9</span>
+    <span class="ex-q">You have a sales dataset with columns: Date, Region, Salesperson, Product, Revenue. Design a Pivot Table showing monthly revenue by region, with a slicer for Product.</span>
+    <span class="ex-difficulty diff-medium">Medium</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Setup Instructions</div>
+    <div class="hint">
+      1. Select data → Insert → PivotTable<br>
+      2. Rows: Date (then group by Month)<br>
+      3. Columns: Region<br>
+      4. Values: SUM of Revenue (format as currency)<br>
+      5. Insert → Slicer → select "Product"<br>
+      6. Add Conditional Formatting to highlight top values
+    </div>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num excel">E10</span>
+    <span class="ex-q">In a pivot table showing product revenue, add a "% of Total" column using Show Values As.</span>
+    <span class="ex-difficulty diff-medium">Medium</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <div class="hint">
+      1. Add Revenue to Values TWICE<br>
+      2. On second Revenue field: right-click → Show Values As → % of Grand Total<br>
+      3. Rename it "% Share"<br>
+      This shows both absolute value and percentage in the same pivot.
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- EXCEL ANALYTICS -->
+<div class="topic" id="excel-analytics">
+<div class="topic-title">Data Analytics in Excel <span class="tag tag-hard">ADVANCED</span></div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num excel">E11</span>
+    <span class="ex-q">Calculate Month-over-Month % growth using OFFSET or LAG-equivalent in Excel (no pivot, just formulas).</span>
+    <span class="ex-difficulty diff-hard">Hard</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="excel-code"><span class="cm">-- Assuming January revenue in B2, Feb in B3, etc.</span>
+<span class="cm">-- In C3 (first growth cell, skip C2):</span>
+=(B3-B2)/B2
+<span class="cm">-- Format as percentage. Drag down.</span>
+<span class="cm">-- Protect against divide by zero:</span>
+=IFERROR((B3-B2)/B2, "")</pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num excel">E12</span>
+    <span class="ex-q">You have a list of 1000 customer transactions. Use COUNTIFS to build a frequency distribution table showing how many customers fall into spend brackets: 0-100, 101-500, 501-1000, 1000+.</span>
+    <span class="ex-difficulty diff-medium">Medium</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="excel-code">=COUNTIFS(A:A, ">=0",  A:A, "<=100")     <span class="cm">-- 0-100</span>
+=COUNTIFS(A:A, ">=101", A:A, "<=500")    <span class="cm">-- 101-500</span>
+=COUNTIFS(A:A, ">=501", A:A, "<=1000")   <span class="cm">-- 501-1000</span>
+=COUNTIF(A:A,  ">1000")                  <span class="cm">-- 1000+</span>
+<span class="cm">-- Or use FREQUENCY array function:</span>
+=FREQUENCY(A2:A1001, {100,500,1000})</pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num excel">E13</span>
+    <span class="ex-q">Use SUMPRODUCT to calculate weighted average score: Scores in B2:B10, weights in C2:C10 (weights sum to 1).</span>
+    <span class="ex-difficulty diff-medium">Medium</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="excel-code">=SUMPRODUCT(B2:B10, C2:C10)
+<span class="cm">-- SUMPRODUCT multiplies each pair then sums: (B2*C2)+(B3*C3)+...</span>
+<span class="cm">-- If weights don't sum to 1:</span>
+=SUMPRODUCT(B2:B10, C2:C10) / SUM(C2:C10)</pre>
+    <div class="note">💡 SUMPRODUCT is one of the most powerful Excel functions — it can replace many complex array formulas and works like SQL's SUM(col1*col2)</div>
+  </div>
+</div>
+</div>
+
+<!-- EXCEL INTERVIEW -->
+<div class="topic" id="excel-interview">
+<div class="topic-title">Excel Interview Questions <span class="tag tag-interview">INTERVIEW</span></div>
+
+<div class="interview-q">
+  <div class="q-label">Interview Question</div>
+  <div class="q-text">When would you use SUMPRODUCT vs SUMIFS?</div>
+  <div class="q-answer"><strong>SUMIFS</strong> is simpler and faster for straightforward multi-criteria sums. <strong>SUMPRODUCT</strong> is more flexible — it can handle array operations, partial text matches with wildcards combined with other logic, and calculations that SUMIFS can't do (like conditional weighted averages). SUMPRODUCT also works in older Excel versions that lack SUMIFS.</div>
+</div>
+
+<div class="interview-q">
+  <div class="q-label">Interview Question</div>
+  <div class="q-text">What's the difference between absolute and relative references? When do you use $A$1 vs A1 vs $A1 vs A$1?</div>
+  <div class="q-answer">
+    • <strong>A1</strong> (relative) — both row and column shift when copied<br>
+    • <strong>$A$1</strong> (absolute) — neither changes; lock a constant like tax rate<br>
+    • <strong>$A1</strong> (mixed, locked column) — column stays A, row shifts; for referencing a whole column table<br>
+    • <strong>A$1</strong> (mixed, locked row) — row stays 1, column shifts; for referencing a header row<br>
+    Use F4 to toggle between these modes.
+  </div>
+</div>
+
+<div class="interview-q">
+  <div class="q-label">Interview Question</div>
+  <div class="q-text">How do you handle #N/A errors in VLOOKUP results across a large dataset?</div>
+  <div class="q-answer">Wrap in IFERROR: <code>=IFERROR(VLOOKUP(...), "Not Found")</code>. Or use IFNA for only #N/A errors (not other error types). Best practice: use XLOOKUP which has a built-in if_not_found parameter and is more robust. Also check: Is the lookup column formatted consistently? Numbers stored as text cause silent mismatches.</div>
+</div>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════ POWER BI ═══════════════════════════════ -->
+<section id="powerbi">
+<div class="section-header">
+  <div class="section-icon icon-pbi">📈</div>
+  <div class="section-title">
+    <h2>Power BI</h2>
+    <p>DAX · Data Modeling · Visuals · Report Design</p>
+  </div>
+</div>
+
+<div class="topic" id="pbi-dax">
+<div class="topic-title">DAX Fundamentals <span class="tag tag-concept">CONCEPT</span></div>
+
+<div class="concept">
+<h4>DAX vs Excel Formulas</h4>
+<table>
+  <tr><th>Concept</th><th>Excel</th><th>DAX</th></tr>
+  <tr><td>Context</td><td>Cell-based</td><td>Row context + Filter context</td></tr>
+  <tr><td>Aggregation</td><td>SUM(A1:A10)</td><td>SUM(Sales[Amount])</td></tr>
+  <tr><td>Conditions</td><td>SUMIF(range, crit)</td><td>CALCULATE(SUM(...), filter)</td></tr>
+  <tr><td>Relationships</td><td>VLOOKUP</td><td>RELATED()</td></tr>
+  <tr><td>Time Intel</td><td>Manual formulas</td><td>DATESYTD, SAMEPERIODLASTYEAR</td></tr>
+</table>
+</div>
+
+<div class="concept">
+<h4>CALCULATE — The Most Important DAX Function</h4>
+<pre class="pbi-code"><span class="cm">-- CALCULATE modifies the filter context</span>
+<span class="var">Measure</span> = <span class="fn">CALCULATE</span>(expression, filter1, filter2, ...)
+
+<span class="cm">-- Example: Sales for only the "North" region</span>
+<span class="var">North Sales</span> = <span class="fn">CALCULATE</span>(<span class="fn">SUM</span>(Sales[Revenue]), Sales[Region] = <span class="str">"North"</span>)
+
+<span class="cm">-- Example: Remove all filters (total ignoring slicers)</span>
+<span class="var">All Sales</span> = <span class="fn">CALCULATE</span>(<span class="fn">SUM</span>(Sales[Revenue]), <span class="fn">ALL</span>(Sales))</pre>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num pbi">P1</span>
+    <span class="ex-q">Write a DAX measure to calculate Total Revenue, Average Order Value, and Order Count.</span>
+    <span class="ex-difficulty diff-easy">Easy</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="pbi-code"><span class="var">Total Revenue</span> = <span class="fn">SUM</span>(Sales[Revenue])
+
+<span class="var">Order Count</span> = <span class="fn">COUNTROWS</span>(Orders)
+<span class="cm">-- Or: DISTINCTCOUNT(Orders[OrderID])</span>
+
+<span class="var">Avg Order Value</span> = <span class="fn">DIVIDE</span>([Total Revenue], [Order Count], 0)
+<span class="cm">-- DIVIDE(numerator, denominator, alternate) — handles /0 safely</span></pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num pbi">P2</span>
+    <span class="ex-q">Write a measure for % contribution: each product's sales as a % of total sales (should always show % of grand total regardless of filters).</span>
+    <span class="ex-difficulty diff-medium">Medium</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="pbi-code"><span class="var">% of Total Sales</span> = 
+<span class="fn">DIVIDE</span>(
+    <span class="fn">SUM</span>(Sales[Revenue]),
+    <span class="fn">CALCULATE</span>(<span class="fn">SUM</span>(Sales[Revenue]), <span class="fn">ALL</span>(Products[ProductName])),
+    <span class="num">0</span>
+)
+<span class="cm">-- ALL() removes filter on Products so denominator = grand total</span></pre>
+  </div>
+</div>
+</div>
+
+<!-- DAX MEASURES -->
+<div class="topic" id="pbi-measures">
+<div class="topic-title">Time Intelligence & KPI Measures <span class="tag tag-hard">ADVANCED</span></div>
+
+<div class="concept">
+<h4>Time Intelligence Functions (require a proper Date table)</h4>
+<pre class="pbi-code"><span class="cm">-- Year-to-Date</span>
+<span class="var">Revenue YTD</span> = <span class="fn">TOTALYTD</span>(<span class="fn">SUM</span>(Sales[Revenue]), Dates[Date])
+
+<span class="cm">-- Same period last year</span>
+<span class="var">Revenue LY</span> = <span class="fn">CALCULATE</span>(<span class="fn">SUM</span>(Sales[Revenue]), <span class="fn">SAMEPERIODLASTYEAR</span>(Dates[Date]))
+
+<span class="cm">-- Year-over-Year growth %</span>
+<span class="var">YoY Growth %</span> = 
+<span class="fn">DIVIDE</span>([Total Revenue] - [Revenue LY], [Revenue LY], <span class="fn">BLANK</span>())</pre>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num pbi">P3</span>
+    <span class="ex-q">Create a measure for Rolling 3-Month Revenue using DATESINPERIOD.</span>
+    <span class="ex-difficulty diff-hard">Hard</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="pbi-code"><span class="var">Revenue Rolling 3M</span> = 
+<span class="fn">CALCULATE</span>(
+    <span class="fn">SUM</span>(Sales[Revenue]),
+    <span class="fn">DATESINPERIOD</span>(
+        Dates[Date],
+        <span class="fn">LASTDATE</span>(Dates[Date]),
+        <span class="op">-</span><span class="num">3</span>,
+        <span class="fn">MONTH</span>
+    )
+)</pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num pbi">P4</span>
+    <span class="ex-q">Create a dynamic title measure that shows "Sales for [Selected Region]" or "Sales for All Regions" depending on slicer selection.</span>
+    <span class="ex-difficulty diff-hard">Hard</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="pbi-code"><span class="var">Dynamic Title</span> = 
+<span class="kw">VAR</span> <span class="var">selectedRegion</span> = <span class="fn">SELECTEDVALUE</span>(Sales[Region], <span class="str">"All Regions"</span>)
+<span class="kw">RETURN</span>
+    <span class="str">"Sales for "</span> &amp; selectedRegion
+
+<span class="cm">-- SELECTEDVALUE returns the single selected value,</span>
+<span class="cm">-- or the alternate text if multiple values are selected</span></pre>
+  </div>
+</div>
+
+<div class="interview-q">
+  <div class="q-label">Power BI Interview Question</div>
+  <div class="q-text">What is the difference between a Measure and a Calculated Column in Power BI?</div>
+  <div class="q-answer">
+    <strong>Calculated Column:</strong> Computed row-by-row when data loads. Stored in the model (uses memory). Evaluated in <em>row context</em>. Useful for static values you need to filter/slice on (e.g., category bins, full name = first + last).<br><br>
+    <strong>Measure:</strong> Computed dynamically at query time based on current filter context. NOT stored row-by-row. Uses <em>filter context</em>. Better for aggregations in visuals. Always prefer measures over calculated columns for aggregations — they're more efficient.
+  </div>
+</div>
+</div>
+
+<!-- DATA MODELING -->
+<div class="topic" id="pbi-modeling">
+<div class="topic-title">Data Modeling — Star Schema & Relationships <span class="tag tag-concept">CONCEPT</span></div>
+
+<div class="concept">
+<h4>Star Schema Structure</h4>
+<table>
+  <tr><th>Table Type</th><th>Purpose</th><th>Example</th></tr>
+  <tr><td>Fact Table</td><td>Transactions / events, contains measures and foreign keys</td><td>Sales, Orders, Transactions</td></tr>
+  <tr><td>Dimension Table</td><td>Descriptive attributes for filtering/slicing</td><td>Date, Product, Customer, Employee</td></tr>
+  <tr><td>Date Table</td><td>Required for time intelligence; must be marked as Date Table</td><td>Calendar, DateDim</td></tr>
+</table>
+<div class="hint">⚡ Best practices: 1-to-many relationships (dim → fact), single direction cross-filtering by default, always create a separate Date table and mark it as the official date table.</div>
+</div>
+
+<div class="interview-q">
+  <div class="q-label">Power BI Interview Question</div>
+  <div class="q-text">What is cardinality in Power BI relationships, and why does it matter?</div>
+  <div class="q-answer">Cardinality describes the uniqueness relationship between two tables:<br>
+  • <strong>1:many</strong> — one row in dim table links to many rows in fact table (most common in star schema)<br>
+  • <strong>many:1</strong> — same, just from the other direction<br>
+  • <strong>1:1</strong> — both tables have unique keys (rare; often you can merge the tables)<br>
+  • <strong>many:many</strong> — avoid when possible; requires bridge tables or special handling<br>
+  Wrong cardinality → wrong filter propagation → wrong report numbers.</div>
+</div>
+</div>
+
+<!-- POWER BI INTERVIEW -->
+<div class="topic" id="pbi-interview">
+<div class="topic-title">More Power BI Interview Questions <span class="tag tag-interview">INTERVIEW</span></div>
+
+<div class="interview-q">
+  <div class="q-label">Interview Question</div>
+  <div class="q-text">What are Row-Level Security (RLS) and how do you implement it?</div>
+  <div class="q-answer">RLS restricts data access based on user identity. In Power BI Desktop: Modeling → Manage Roles → Create role with DAX filter. Example: <code>[Region] = USERNAME()</code> or a table-based approach. Then assign users to roles in Power BI Service. Dynamic RLS maps the logged-in user to a security table, so each person only sees their own data automatically.</div>
+</div>
+
+<div class="interview-q">
+  <div class="q-label">Interview Question</div>
+  <div class="q-text">Import Mode vs DirectQuery — when to use each?</div>
+  <div class="q-answer">
+    <strong>Import Mode:</strong> Data is loaded into Power BI's in-memory engine. Fast queries, full DAX support, but data is only as fresh as the last refresh. Best for most analytics use cases.<br><br>
+    <strong>DirectQuery:</strong> Queries sent live to source database on every interaction. Always fresh but slower. Limited DAX functions. Use when: data is too large to import, real-time accuracy is critical, or compliance requires data to stay in source.
+  </div>
+</div>
+</div>
+
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════ PYTHON ═══════════════════════════════ -->
+<section id="python">
+<div class="section-header">
+  <div class="section-icon icon-python">🐍</div>
+  <div class="section-title">
+    <h2>Python for Data Analytics</h2>
+    <p>Pandas · NumPy · Matplotlib/Seaborn · Data Cleaning</p>
+  </div>
+</div>
+
+<div class="topic" id="py-pandas">
+<div class="topic-title">Pandas — Core Operations <span class="tag tag-concept">CONCEPT</span></div>
+
+<div class="concept">
+<h4>Essential Pandas Methods</h4>
+<div class="chips">
+  <span class="chip">df.head(n)</span>
+  <span class="chip">df.info()</span>
+  <span class="chip">df.describe()</span>
+  <span class="chip">df.shape</span>
+  <span class="chip">df.dtypes</span>
+  <span class="chip">df.isnull().sum()</span>
+  <span class="chip">df.duplicated()</span>
+  <span class="chip">df.value_counts()</span>
+  <span class="chip">df.groupby()</span>
+  <span class="chip">df.merge()</span>
+  <span class="chip">df.pivot_table()</span>
+  <span class="chip">df.sort_values()</span>
+  <span class="chip">df.apply()</span>
+  <span class="chip">df.query()</span>
+</div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num python">Py1</span>
+    <span class="ex-q">Load a CSV, check its shape, view first 5 rows, check for nulls, and get basic statistics.</span>
+    <span class="ex-difficulty diff-easy">Easy</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="python-code"><span class="kw">import</span> pandas <span class="kw">as</span> pd
+
+df = pd.read_csv(<span class="str">'data.csv'</span>)
+
+<span class="fn">print</span>(df.shape)           <span class="cm"># (rows, columns)</span>
+<span class="fn">print</span>(df.head(<span class="num">5</span>))
+<span class="fn">print</span>(df.info())           <span class="cm"># dtypes + non-null counts</span>
+<span class="fn">print</span>(df.isnull().sum())   <span class="cm"># nulls per column</span>
+<span class="fn">print</span>(df.describe())       <span class="cm"># count/mean/std/min/25%/50%/75%/max</span>
+<span class="fn">print</span>(df.dtypes)            <span class="cm"># data types</span></pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num python">Py2</span>
+    <span class="ex-q">Filter sales DataFrame to rows where Revenue > 1000 AND Region is 'North' OR 'East'. Show only CustomerID and Revenue columns.</span>
+    <span class="ex-difficulty diff-easy">Easy</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="python-code"><span class="cm"># Boolean indexing</span>
+mask = (df[<span class="str">'Revenue'</span>] <span class="op">></span> <span class="num">1000</span>) &amp; (df[<span class="str">'Region'</span>].isin([<span class="str">'North'</span>, <span class="str">'East'</span>]))
+result = df.loc[mask, [<span class="str">'CustomerID'</span>, <span class="str">'Revenue'</span>]]
+
+<span class="cm"># Or with query() — more readable:</span>
+result = df.query(<span class="str">"Revenue > 1000 and Region in ['North', 'East']"</span>)[[<span class="str">'CustomerID'</span>, <span class="str">'Revenue'</span>]]</pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num python">Py3</span>
+    <span class="ex-q">Group sales data by Region and Month, calculate total revenue, average order value, and number of orders. Sort by region and month.</span>
+    <span class="ex-difficulty diff-medium">Medium</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="python-code">df[<span class="str">'Month'</span>] = pd.to_datetime(df[<span class="str">'OrderDate'</span>]).dt.to_period(<span class="str">'M'</span>)
+
+summary = df.groupby([<span class="str">'Region'</span>, <span class="str">'Month'</span>]).agg(
+    TotalRevenue  = (<span class="str">'Revenue'</span>, <span class="str">'sum'</span>),
+    AvgOrderValue = (<span class="str">'Revenue'</span>, <span class="str">'mean'</span>),
+    OrderCount    = (<span class="str">'OrderID'</span>, <span class="str">'nunique'</span>)
+).round(<span class="num">2</span>).reset_index().sort_values([<span class="str">'Region'</span>, <span class="str">'Month'</span>])
+
+<span class="fn">print</span>(summary)</pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num python">Py4</span>
+    <span class="ex-q">Merge two DataFrames: orders_df (OrderID, CustomerID, Revenue) and customers_df (CustomerID, Name, Country). Keep all orders even if no customer match.</span>
+    <span class="ex-difficulty diff-medium">Medium</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="python-code"><span class="cm"># LEFT JOIN equivalent</span>
+merged = orders_df.merge(
+    customers_df,
+    on=<span class="str">'CustomerID'</span>,
+    how=<span class="str">'left'</span>
+)
+<span class="cm"># how options: 'inner', 'left', 'right', 'outer' (full)</span>
+<span class="cm"># If key names differ: left_on='cust_id', right_on='CustomerID'</span></pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num python">Py5</span>
+    <span class="ex-q">Use apply() with a lambda to create a new column "RevenueCategory" — Low (<500), Medium (500-2000), High (>2000).</span>
+    <span class="ex-difficulty diff-medium">Medium</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="python-code"><span class="cm"># With apply + lambda</span>
+df[<span class="str">'RevenueCategory'</span>] = df[<span class="str">'Revenue'</span>].apply(
+    <span class="kw">lambda</span> x: <span class="str">'High'</span> <span class="kw">if</span> x <span class="op">></span> <span class="num">2000</span> <span class="kw">else</span> (<span class="str">'Medium'</span> <span class="kw">if</span> x <span class="op">>=</span> <span class="num">500</span> <span class="kw">else</span> <span class="str">'Low'</span>)
+)
+
+<span class="cm"># Better with pd.cut (vectorised, faster):</span>
+df[<span class="str">'RevenueCategory'</span>] = pd.cut(
+    df[<span class="str">'Revenue'</span>],
+    bins=[<span class="num">0</span>, <span class="num">499</span>, <span class="num">2000</span>, <span class="fn">float</span>(<span class="str">'inf'</span>)],
+    labels=[<span class="str">'Low'</span>, <span class="str">'Medium'</span>, <span class="str">'High'</span>]
+)</pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num python">Py6</span>
+    <span class="ex-q">Replicate SQL window functions in pandas: add a column showing each order's rank within its region by revenue (highest = rank 1).</span>
+    <span class="ex-difficulty diff-hard">Hard</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="python-code">df[<span class="str">'RegionRank'</span>] = df.groupby(<span class="str">'Region'</span>)[<span class="str">'Revenue'</span>].rank(
+    method=<span class="str">'dense'</span>,   <span class="cm"># 'min', 'max', 'average', 'dense', 'first'</span>
+    ascending=<span class="kw">False</span>    <span class="cm"># highest revenue = rank 1</span>
+)
+<span class="cm"># Cumulative sum per group (like SUM() OVER PARTITION BY):</span>
+df[<span class="str">'CumRevenue'</span>] = df.sort_values(<span class="str">'OrderDate'</span>).groupby(<span class="str">'Region'</span>)[<span class="str">'Revenue'</span>].cumsum()</pre>
+  </div>
+</div>
+</div>
+
+<!-- NUMPY -->
+<div class="topic" id="py-numpy">
+<div class="topic-title">NumPy — Array Operations <span class="tag tag-concept">CONCEPT</span></div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num python">Py7</span>
+    <span class="ex-q">Given a NumPy array of test scores, calculate mean, median, std, variance, 25th and 75th percentile, and IQR.</span>
+    <span class="ex-difficulty diff-easy">Easy</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="python-code"><span class="kw">import</span> numpy <span class="kw">as</span> np
+
+scores = np.array([<span class="num">72</span>, <span class="num">85</span>, <span class="num">90</span>, <span class="num">68</span>, <span class="num">77</span>, <span class="num">92</span>, <span class="num">88</span>, <span class="num">55</span>, <span class="num">79</span>, <span class="num">83</span>])
+
+<span class="fn">print</span>(<span class="str">f"Mean:    {np.mean(scores):.2f}"</span>)
+<span class="fn">print</span>(<span class="str">f"Median:  {np.median(scores)}"</span>)
+<span class="fn">print</span>(<span class="str">f"Std Dev: {np.std(scores):.2f}"</span>)
+<span class="fn">print</span>(<span class="str">f"Var:     {np.var(scores):.2f}"</span>)
+Q1 = np.percentile(scores, <span class="num">25</span>)
+Q3 = np.percentile(scores, <span class="num">75</span>)
+<span class="fn">print</span>(<span class="str">f"IQR:     {Q3 - Q1}"</span>)   <span class="cm"># Q3 - Q1</span></pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num python">Py8</span>
+    <span class="ex-q">Normalize an array to 0-1 range (min-max scaling) without using sklearn.</span>
+    <span class="ex-difficulty diff-easy">Easy</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="python-code">arr = np.array([<span class="num">10</span>, <span class="num">20</span>, <span class="num">30</span>, <span class="num">40</span>, <span class="num">50</span>])
+
+normalized = (arr <span class="op">-</span> arr.min()) / (arr.max() <span class="op">-</span> arr.min())
+<span class="fn">print</span>(normalized)   <span class="cm"># [0.  0.25 0.5  0.75 1. ]</span>
+
+<span class="cm"># Z-score standardization (mean=0, std=1):</span>
+standardized = (arr <span class="op">-</span> arr.mean()) / arr.std()</pre>
+  </div>
+</div>
+</div>
+
+<!-- VISUALIZATION -->
+<div class="topic" id="py-viz">
+<div class="topic-title">Data Visualization — Matplotlib & Seaborn <span class="tag tag-practice">PRACTICE</span></div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num python">Py9</span>
+    <span class="ex-q">Create a comprehensive EDA plot: histogram, boxplot, and scatter plot for a numeric variable. Include titles, labels, and a style.</span>
+    <span class="ex-difficulty diff-medium">Medium</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="python-code"><span class="kw">import</span> matplotlib.pyplot <span class="kw">as</span> plt
+<span class="kw">import</span> seaborn <span class="kw">as</span> sns
+
+plt.style.use(<span class="str">'seaborn-v0_8-darkgrid'</span>)
+fig, axes = plt.subplots(<span class="num">1</span>, <span class="num">3</span>, figsize=(<span class="num">15</span>, <span class="num">4</span>))
+
+<span class="cm"># Histogram</span>
+axes[<span class="num">0</span>].hist(df[<span class="str">'Revenue'</span>], bins=<span class="num">20</span>, color=<span class="str">'steelblue'</span>, edgecolor=<span class="str">'black'</span>)
+axes[<span class="num">0</span>].set_title(<span class="str">'Revenue Distribution'</span>)
+axes[<span class="num">0</span>].set_xlabel(<span class="str">'Revenue'</span>)
+
+<span class="cm"># Boxplot</span>
+sns.boxplot(data=df, x=<span class="str">'Region'</span>, y=<span class="str">'Revenue'</span>, ax=axes[<span class="num">1</span>])
+axes[<span class="num">1</span>].set_title(<span class="str">'Revenue by Region'</span>)
+
+<span class="cm"># Scatter</span>
+axes[<span class="num">2</span>].scatter(df[<span class="str">'Units'</span>], df[<span class="str">'Revenue'</span>], alpha=<span class="num">0.5</span>)
+axes[<span class="num">2</span>].set_title(<span class="str">'Units vs Revenue'</span>)
+axes[<span class="num">2</span>].set_xlabel(<span class="str">'Units Sold'</span>)
+
+plt.tight_layout()
+plt.savefig(<span class="str">'eda.png'</span>, dpi=<span class="num">150</span>, bbox_inches=<span class="str">'tight'</span>)
+plt.show()</pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num python">Py10</span>
+    <span class="ex-q">Create a correlation heatmap for a DataFrame with multiple numeric columns. Show values inside cells and use a diverging colormap.</span>
+    <span class="ex-difficulty diff-medium">Medium</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="python-code">corr = df.select_dtypes(include=<span class="str">'number'</span>).corr()
+
+plt.figure(figsize=(<span class="num">10</span>, <span class="num">8</span>))
+sns.heatmap(
+    corr,
+    annot=<span class="kw">True</span>,        <span class="cm"># show values</span>
+    fmt=<span class="str">'.2f'</span>,
+    cmap=<span class="str">'RdYlGn'</span>,     <span class="cm"># diverging: red=negative, green=positive</span>
+    vmin=<span class="op">-</span><span class="num">1</span>, vmax=<span class="num">1</span>,
+    linewidths=<span class="num">0.5</span>,
+    square=<span class="kw">True</span>
+)
+plt.title(<span class="str">'Correlation Matrix'</span>, fontsize=<span class="num">14</span>)
+plt.tight_layout()
+plt.show()</pre>
+  </div>
+</div>
+</div>
+
+<!-- DATA CLEANING -->
+<div class="topic" id="py-cleaning">
+<div class="topic-title">Data Cleaning & Preprocessing <span class="tag tag-practice">PRACTICE</span></div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num python">Py11</span>
+    <span class="ex-q">Complete data cleaning pipeline: handle missing values, fix data types, remove duplicates, and standardize column names.</span>
+    <span class="ex-difficulty diff-medium">Medium</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="python-code"><span class="cm"># 1. Standardize column names</span>
+df.columns = df.columns.str.lower().str.replace(<span class="str">' '</span>, <span class="str">'_'</span>)
+
+<span class="cm"># 2. Remove exact duplicates</span>
+df.drop_duplicates(inplace=<span class="kw">True</span>)
+
+<span class="cm"># 3. Fix data types</span>
+df[<span class="str">'order_date'</span>] = pd.to_datetime(df[<span class="str">'order_date'</span>])
+df[<span class="str">'revenue'</span>] = pd.to_numeric(df[<span class="str">'revenue'</span>], errors=<span class="str">'coerce'</span>)  <span class="cm"># bad → NaN</span>
+
+<span class="cm"># 4. Handle missing values</span>
+df[<span class="str">'region'</span>].fillna(<span class="str">'Unknown'</span>, inplace=<span class="kw">True</span>)          <span class="cm"># categorical → mode/label</span>
+df[<span class="str">'revenue'</span>].fillna(df[<span class="str">'revenue'</span>].median(), inplace=<span class="kw">True</span>)  <span class="cm"># numeric → median</span>
+
+<span class="cm"># 5. Strip whitespace from strings</span>
+str_cols = df.select_dtypes(include=<span class="str">'object'</span>).columns
+df[str_cols] = df[str_cols].apply(<span class="kw">lambda</span> x: x.str.strip())
+
+<span class="cm"># 6. Report</span>
+<span class="fn">print</span>(<span class="str">f"Shape: {df.shape}"</span>)
+<span class="fn">print</span>(df.isnull().sum())</pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num python">Py12</span>
+    <span class="ex-q">Detect and handle outliers in a revenue column using the IQR method. Replace outliers with the boundary values (capping/winsorization).</span>
+    <span class="ex-difficulty diff-hard">Hard</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="python-code">Q1 = df[<span class="str">'revenue'</span>].quantile(<span class="num">0.25</span>)
+Q3 = df[<span class="str">'revenue'</span>].quantile(<span class="num">0.75</span>)
+IQR = Q3 <span class="op">-</span> Q1
+
+lower = Q1 <span class="op">-</span> <span class="num">1.5</span> <span class="op">*</span> IQR
+upper = Q3 <span class="op">+</span> <span class="num">1.5</span> <span class="op">*</span> IQR
+
+<span class="cm"># Count outliers</span>
+outliers = ((df[<span class="str">'revenue'</span>] <span class="op"><</span> lower) | (df[<span class="str">'revenue'</span>] <span class="op">></span> upper)).sum()
+<span class="fn">print</span>(<span class="str">f"Outliers: {outliers}"</span>)
+
+<span class="cm"># Cap (Winsorize)</span>
+df[<span class="str">'revenue_capped'</span>] = df[<span class="str">'revenue'</span>].clip(lower=lower, upper=upper)
+
+<span class="cm"># Or remove outliers entirely:</span>
+df_clean = df[(df[<span class="str">'revenue'</span>] <span class="op">>=</span> lower) &amp; (df[<span class="str">'revenue'</span>] <span class="op"><=</span> upper)]</pre>
+  </div>
+</div>
+</div>
+
+<!-- PYTHON INTERVIEW -->
+<div class="topic" id="py-interview">
+<div class="topic-title">Python Interview Questions <span class="tag tag-interview">INTERVIEW</span></div>
+
+<div class="interview-q">
+  <div class="q-label">Interview Question</div>
+  <div class="q-text">What is the difference between loc and iloc in pandas?</div>
+  <div class="q-answer"><strong>loc</strong> is label-based indexing — uses actual index labels and column names. <code>df.loc[5, 'Revenue']</code> gets the row with index label 5.<br>
+  <strong>iloc</strong> is integer-position based — uses 0-based positions. <code>df.iloc[5, 2]</code> gets the 6th row, 3rd column regardless of labels.<br>
+  When the index is 0-based integers (default), they behave similarly but loc is inclusive on both ends while iloc excludes the end (like Python slicing).</div>
+</div>
+
+<div class="interview-q">
+  <div class="q-label">Interview Question</div>
+  <div class="q-text">How do you handle a very large dataset that doesn't fit in memory?</div>
+  <div class="q-answer">
+    1. <strong>Read in chunks:</strong> <code>pd.read_csv('file.csv', chunksize=10000)</code><br>
+    2. <strong>Reduce dtypes:</strong> Use <code>int32</code> instead of <code>int64</code>, <code>category</code> for low-cardinality strings<br>
+    3. <strong>Use Dask:</strong> Drop-in pandas replacement for parallel/chunked processing<br>
+    4. <strong>Filter at load time:</strong> <code>usecols=['col1','col2']</code> to read only needed columns<br>
+    5. <strong>Use a database:</strong> Load to SQLite/Postgres and query with SQL
+  </div>
+</div>
+</div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════ STATISTICS ═══════════════════════════════ -->
+<section id="stats">
+<div class="section-header">
+  <div class="section-icon icon-stats">📐</div>
+  <div class="section-title">
+    <h2>Statistics</h2>
+    <p>Descriptive · Probability · Inferential · Regression</p>
+  </div>
+</div>
+
+<div class="topic" id="descriptive">
+<div class="topic-title">Descriptive Statistics <span class="tag tag-concept">CONCEPT</span></div>
+
+<div class="grid2">
+<div class="concept">
+<h4>Measures of Central Tendency</h4>
+<div class="formula">Mean = Σx / n</div>
+<div class="formula">Median = middle value (sorted)</div>
+<div class="formula">Mode = most frequent value</div>
+<p style="font-size:13px;margin-top:8px;">Use <strong>median</strong> when data is skewed (outliers). Use <strong>mean</strong> for symmetric distributions. Mode for categorical data.</p>
+</div>
+<div class="concept">
+<h4>Measures of Spread / Variability</h4>
+<div class="formula">Range = Max − Min</div>
+<div class="formula">IQR = Q3 − Q1</div>
+<div class="formula">Variance (σ²) = Σ(x − μ)² / n</div>
+<div class="formula">Std Dev (σ) = √Variance</div>
+</div>
+</div>
+
+<div class="concept">
+<h4>Shape of Distribution</h4>
+<table>
+  <tr><th>Concept</th><th>Formula / Rule</th><th>Meaning</th></tr>
+  <tr><td>Skewness</td><td>+ve → right tail longer; −ve → left tail longer</td><td>Skewed right: mean > median > mode</td></tr>
+  <tr><td>Kurtosis</td><td>Excess > 0 = heavy tails (leptokurtic)</td><td>How "peaked" the distribution is</td></tr>
+  <tr><td>Outlier (IQR)</td><td>< Q1 − 1.5×IQR or > Q3 + 1.5×IQR</td><td>Standard outlier fence</td></tr>
+  <tr><td>Z-score</td><td>z = (x − μ) / σ</td><td>How many SDs from mean; |z| > 3 = outlier</td></tr>
+  <tr><td>CV</td><td>CV = (σ / μ) × 100%</td><td>Relative variability — compare different scales</td></tr>
+</table>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num stats">S1</span>
+    <span class="ex-q">Given scores: [85, 90, 78, 92, 88, 72, 95, 68, 88, 91]. Calculate mean, median, mode, variance, std dev, IQR, and identify any outliers using z-scores.</span>
+    <span class="ex-difficulty diff-medium">Medium</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="stats-code"><span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">from</span> scipy <span class="kw">import</span> stats
+
+scores = np.array([<span class="num">85</span>,<span class="num">90</span>,<span class="num">78</span>,<span class="num">92</span>,<span class="num">88</span>,<span class="num">72</span>,<span class="num">95</span>,<span class="num">68</span>,<span class="num">88</span>,<span class="num">91</span>])
+
+<span class="fn">print</span>(<span class="str">f"Mean:   {np.mean(scores):.2f}"</span>)        <span class="cm"># 84.7</span>
+<span class="fn">print</span>(<span class="str">f"Median: {np.median(scores)}"</span>)           <span class="cm"># 88.5</span>
+<span class="fn">print</span>(<span class="str">f"Mode:   {stats.mode(scores).mode[0]}"</span>)  <span class="cm"># 88</span>
+<span class="fn">print</span>(<span class="str">f"Std:    {np.std(scores, ddof=1):.2f}"</span>)  <span class="cm"># sample std (ddof=1)</span>
+Q1, Q3 = np.percentile(scores, [<span class="num">25</span>, <span class="num">75</span>])
+<span class="fn">print</span>(<span class="str">f"IQR:    {Q3-Q1}"</span>)
+z = np.abs(stats.zscore(scores))
+<span class="fn">print</span>(<span class="str">f"Outliers (|z|>2): {scores[z > 2]}"</span>)   <span class="cm"># 68 is borderline</span></pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num stats">S2</span>
+    <span class="ex-q">A dataset of salaries is right-skewed. Should you report mean or median to describe "typical" salary? Explain why and show which is larger.</span>
+    <span class="ex-difficulty diff-easy">Easy</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <div class="hint">
+      <strong>Use MEDIAN.</strong> In right-skewed data, a few very high earners pull the mean up significantly above what "most people" earn. The median is the middle value and is resistant to outliers.<br><br>
+      Right-skewed: Mean > Median > Mode<br>
+      Example: $50K, $55K, $60K, $65K, $500K → Mean = $146K (misleading!), Median = $60K (accurate for "typical")
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- PROBABILITY -->
+<div class="topic" id="probability">
+<div class="topic-title">Probability & Distributions <span class="tag tag-concept">CONCEPT</span></div>
+
+<div class="concept">
+<h4>Key Probability Rules</h4>
+<div class="formula">P(A or B) = P(A) + P(B) − P(A and B)   [Addition Rule]</div>
+<div class="formula">P(A and B) = P(A) × P(B|A)   [Multiplication Rule]</div>
+<div class="formula">P(A|B) = P(A and B) / P(B)   [Conditional Probability]</div>
+<div class="formula">Bayes: P(A|B) = P(B|A) × P(A) / P(B)</div>
+</div>
+
+<div class="concept">
+<h4>Common Distributions</h4>
+<table>
+  <tr><th>Distribution</th><th>Use Case</th><th>Parameters</th></tr>
+  <tr><td>Normal (Gaussian)</td><td>Heights, errors, test scores</td><td>μ (mean), σ (std dev)</td></tr>
+  <tr><td>Binomial</td><td>Count of successes in n trials</td><td>n (trials), p (prob of success)</td></tr>
+  <tr><td>Poisson</td><td>Count of events in time/space</td><td>λ (average rate)</td></tr>
+  <tr><td>Uniform</td><td>Equal probability outcomes</td><td>a (min), b (max)</td></tr>
+  <tr><td>Exponential</td><td>Time between Poisson events</td><td>λ (rate)</td></tr>
+  <tr><td>t-distribution</td><td>Small sample hypothesis tests</td><td>df (degrees of freedom)</td></tr>
+</table>
+<div class="formula">68-95-99.7 Rule: Normal → 68% within 1σ, 95% within 2σ, 99.7% within 3σ</div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num stats">S3</span>
+    <span class="ex-q">IQ scores follow a Normal distribution with μ=100, σ=15. What % of people have IQ between 85 and 115? What score is at the 90th percentile?</span>
+    <span class="ex-difficulty diff-medium">Medium</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="stats-code"><span class="kw">from</span> scipy.stats <span class="kw">import</span> norm
+
+mu, sigma = <span class="num">100</span>, <span class="num">15</span>
+
+<span class="cm"># P(85 <= X <= 115)</span>
+p = norm.cdf(<span class="num">115</span>, mu, sigma) <span class="op">-</span> norm.cdf(<span class="num">85</span>, mu, sigma)
+<span class="fn">print</span>(<span class="str">f"P(85≤X≤115) = {p:.4f}"</span>)  <span class="cm"># ≈ 0.6827 (68.27%) = ±1σ rule</span>
+
+<span class="cm"># 90th percentile</span>
+p90 = norm.ppf(<span class="num">0.90</span>, mu, sigma)
+<span class="fn">print</span>(<span class="str">f"90th percentile: {p90:.1f}"</span>)  <span class="cm"># ≈ 119.2</span></pre>
+    <div class="note">💡 Z-score for 85 = (85-100)/15 = -1 and for 115 = +1. From 68-95-99.7 rule: 68% within ±1σ.</div>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num stats">S4</span>
+    <span class="ex-q">A factory produces items where 5% are defective. If 20 items are sampled, what's the probability that exactly 2 are defective? Use the Binomial distribution.</span>
+    <span class="ex-difficulty diff-medium">Medium</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="stats-code"><span class="kw">from</span> scipy.stats <span class="kw">import</span> binom
+
+n = <span class="num">20</span>    <span class="cm"># trials</span>
+p = <span class="num">0.05</span>  <span class="cm"># prob defective</span>
+k = <span class="num">2</span>     <span class="cm"># exactly 2 defective</span>
+
+prob = binom.pmf(k, n, p)
+<span class="fn">print</span>(<span class="str">f"P(X=2) = {prob:.4f}"</span>)  <span class="cm"># ≈ 0.1887 = 18.87%</span>
+
+<span class="cm"># P(X <= 2):</span>
+<span class="fn">print</span>(<span class="str">f"P(X≤2) = {binom.cdf(2, n, p):.4f}"</span>)  <span class="cm"># ≈ 0.9245</span>
+
+<span class="cm"># Expected value = n*p = 1, Variance = n*p*(1-p) = 0.95</span></pre>
+  </div>
+</div>
+</div>
+
+<!-- INFERENTIAL STATS -->
+<div class="topic" id="inferential">
+<div class="topic-title">Inferential Statistics — Hypothesis Testing <span class="tag tag-hard">ADVANCED</span></div>
+
+<div class="concept">
+<h4>Hypothesis Testing Framework</h4>
+<table>
+  <tr><th>Step</th><th>Action</th></tr>
+  <tr><td>1. State hypotheses</td><td>H₀ (null) and H₁ (alternative)</td></tr>
+  <tr><td>2. Choose significance level</td><td>α = 0.05 (95% confidence) or 0.01</td></tr>
+  <tr><td>3. Select test</td><td>Based on data type, groups, distribution</td></tr>
+  <tr><td>4. Calculate test statistic & p-value</td><td>t-stat, z-stat, F-stat, chi-square</td></tr>
+  <tr><td>5. Decision</td><td>If p < α → reject H₀; if p ≥ α → fail to reject H₀</td></tr>
+  <tr><td>6. Conclusion</td><td>State in context of the problem</td></tr>
+</table>
+
+<div class="hint">⚠️ p-value is NOT the probability that H₀ is true. It's the probability of getting results as extreme as observed, IF H₀ were true.</div>
+</div>
+
+<div class="concept">
+<h4>Which Test to Use?</h4>
+<table>
+  <tr><th>Situation</th><th>Test</th></tr>
+  <tr><td>Compare mean of 1 group to known value</td><td>One-sample t-test</td></tr>
+  <tr><td>Compare means of 2 independent groups</td><td>Independent t-test (Welch)</td></tr>
+  <tr><td>Compare same group before/after</td><td>Paired t-test</td></tr>
+  <tr><td>Compare means of 3+ groups</td><td>One-way ANOVA</td></tr>
+  <tr><td>Association between 2 categorical variables</td><td>Chi-square test</td></tr>
+  <tr><td>Non-normal data, 2 groups</td><td>Mann-Whitney U test</td></tr>
+  <tr><td>Correlation between 2 numeric variables</td><td>Pearson r (normal) or Spearman ρ</td></tr>
+</table>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num stats">S5</span>
+    <span class="ex-q">A new training program claims to increase sales. 10 salespeople are tested before and after. Before: [45,52,48,61,57,42,59,55,51,58]. After: [52,58,55,65,63,47,64,62,56,63]. Test at α=0.05 whether the program worked.</span>
+    <span class="ex-difficulty diff-hard">Hard</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="stats-code"><span class="kw">from</span> scipy.stats <span class="kw">import</span> ttest_rel
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+before = np.array([<span class="num">45</span>,<span class="num">52</span>,<span class="num">48</span>,<span class="num">61</span>,<span class="num">57</span>,<span class="num">42</span>,<span class="num">59</span>,<span class="num">55</span>,<span class="num">51</span>,<span class="num">58</span>])
+after  = np.array([<span class="num">52</span>,<span class="num">58</span>,<span class="num">55</span>,<span class="num">65</span>,<span class="num">63</span>,<span class="num">47</span>,<span class="num">64</span>,<span class="num">62</span>,<span class="num">56</span>,<span class="num">63</span>])
+
+<span class="cm"># H₀: mean difference = 0 (no effect)</span>
+<span class="cm"># H₁: after > before (one-tailed)</span>
+t_stat, p_two = ttest_rel(after, before)
+p_one = p_two / <span class="num">2</span>
+
+<span class="fn">print</span>(<span class="str">f"Mean before: {before.mean():.1f}, after: {after.mean():.1f}"</span>)
+<span class="fn">print</span>(<span class="str">f"t-statistic: {t_stat:.3f}"</span>)
+<span class="fn">print</span>(<span class="str">f"p-value (one-tailed): {p_one:.4f}"</span>)
+
+<span class="kw">if</span> p_one <span class="op"><</span> <span class="num">0.05</span>:
+    <span class="fn">print</span>(<span class="str">"Reject H₀: Training significantly increased sales"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"Fail to reject H₀"</span>)</pre>
+    <div class="note">💡 Paired t-test is used here because the SAME people were measured twice. If it were two different groups, use independent t-test.</div>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num stats">S6</span>
+    <span class="ex-q">A/B test: 500 users saw version A (120 converted), 500 saw version B (145 converted). Is the difference statistically significant at α=0.05?</span>
+    <span class="ex-difficulty diff-hard">Hard</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="stats-code"><span class="kw">from</span> scipy.stats <span class="kw">import</span> chi2_contingency
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+
+<span class="cm"># Contingency table</span>
+observed = np.array([
+    [<span class="num">120</span>, <span class="num">380</span>],   <span class="cm"># A: converted, not converted</span>
+    [<span class="num">145</span>, <span class="num">355</span>]    <span class="cm"># B: converted, not converted</span>
+])
+
+chi2, p, dof, expected = chi2_contingency(observed)
+<span class="fn">print</span>(<span class="str">f"Chi2: {chi2:.3f}, p-value: {p:.4f}"</span>)
+<span class="fn">print</span>(<span class="str">f"Version A CVR: {120/500:.1%}, B CVR: {145/500:.1%}"</span>)
+
+<span class="kw">if</span> p <span class="op"><</span> <span class="num">0.05</span>:
+    <span class="fn">print</span>(<span class="str">"Significant difference — Version B is better"</span>)
+<span class="kw">else</span>:
+    <span class="fn">print</span>(<span class="str">"No significant difference"</span>)
+
+<span class="cm"># Confidence interval for difference in proportions:</span>
+p_a, p_b = <span class="num">120</span><span class="op">/</span><span class="num">500</span>, <span class="num">145</span><span class="op">/</span><span class="num">500</span>
+se = np.sqrt(p_a*(<span class="num">1</span><span class="op">-</span>p_a)/<span class="num">500</span> <span class="op">+</span> p_b*(<span class="num">1</span><span class="op">-</span>p_b)/<span class="num">500</span>)
+ci = (<span class="num">1.96</span> <span class="op">*</span> se)
+<span class="fn">print</span>(<span class="str">f"95% CI for difference: ({p_b-p_a-ci:.3f}, {p_b-p_a+ci:.3f})"</span>)</pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num stats">S7</span>
+    <span class="ex-q">Explain Type I and Type II errors with a business example. What is statistical power?</div>
+    <span class="ex-difficulty diff-medium">Medium</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Conceptual Answer</div>
+    <div class="hint">
+      <strong>Type I Error (False Positive, α):</strong> Rejecting H₀ when it's actually true. Example: Concluding a drug works when it doesn't (α controls this — lower α = stricter)<br><br>
+      <strong>Type II Error (False Negative, β):</strong> Failing to reject H₀ when H₁ is true. Example: Missing a real drug effect (β is the probability of this)<br><br>
+      <strong>Statistical Power = 1 − β:</strong> Probability of correctly detecting a real effect. Increase power by: larger sample size, larger effect size, higher α (trade-off)<br><br>
+      There's always a trade-off: stricter significance (lower α) → higher chance of Type II error.
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- REGRESSION -->
+<div class="topic" id="regression">
+<div class="topic-title">Regression Analysis <span class="tag tag-hard">ADVANCED</span></div>
+
+<div class="concept">
+<h4>Linear Regression Key Concepts</h4>
+<div class="formula">ŷ = β₀ + β₁x₁ + β₂x₂ + ... + ε</div>
+<table>
+  <tr><th>Metric</th><th>What it Measures</th><th>Good Value</th></tr>
+  <tr><td>R² (R-squared)</td><td>% variance in Y explained by X</td><td>Higher is better (0-1)</td></tr>
+  <tr><td>Adjusted R²</td><td>R² penalized for extra predictors</td><td>Use for multiple regression</td></tr>
+  <tr><td>RMSE</td><td>Average prediction error (same units as Y)</td><td>Lower is better</td></tr>
+  <tr><td>MAE</td><td>Mean absolute error (less sensitive to outliers)</td><td>Lower is better</td></tr>
+  <tr><td>p-value (coeff)</td><td>Is this predictor statistically significant?</td><td>< 0.05 = significant</td></tr>
+  <tr><td>VIF</td><td>Multicollinearity between predictors</td><td>VIF < 5 (< 10 acceptable)</td></tr>
+</table>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num stats">S8</span>
+    <span class="ex-q">Run a simple linear regression predicting revenue from advertising spend. Report R², coefficients, and interpret the output.</span>
+    <span class="ex-difficulty diff-medium">Medium</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <pre class="stats-code"><span class="kw">from</span> sklearn.linear_model <span class="kw">import</span> LinearRegression
+<span class="kw">from</span> sklearn.metrics <span class="kw">import</span> r2_score, mean_squared_error
+<span class="kw">import</span> numpy <span class="kw">as</span> np
+<span class="kw">import</span> statsmodels.api <span class="kw">as</span> sm
+
+<span class="cm"># With statsmodels for full statistical output:</span>
+X = sm.add_constant(df[[<span class="str">'ad_spend'</span>]])  <span class="cm"># adds intercept</span>
+model = sm.OLS(df[<span class="str">'revenue'</span>], X).fit()
+<span class="fn">print</span>(model.summary())
+<span class="cm"># Interpret: coef for ad_spend = 3.2 means</span>
+<span class="cm"># "for every $1 increase in ad spend, revenue increases by $3.20 on average"</span>
+<span class="cm"># R-squared = 0.78 means "78% of revenue variance explained by ad spend"</span></pre>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num stats">S9</span>
+    <span class="ex-q">What are the 4 key assumptions of linear regression? How do you check them?</span>
+    <span class="ex-difficulty diff-hard">Hard</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <div class="hint">
+      <strong>LINE assumptions:</strong><br><br>
+      1. <strong>Linearity</strong>: Y and X have a linear relationship → Check: scatter plot, residuals vs fitted plot (should show no pattern)<br><br>
+      2. <strong>Independence</strong>: Observations are independent → Check: time-series data may violate this; use Durbin-Watson test<br><br>
+      3. <strong>Normality</strong> of residuals → Check: Q-Q plot (should follow diagonal line), Shapiro-Wilk test<br><br>
+      4. <strong>Equal Variance (Homoscedasticity)</strong>: Residuals have constant variance → Check: residuals vs fitted plot (no funnel shape), Breusch-Pagan test<br><br>
+      Bonus: No <strong>Multicollinearity</strong> in multiple regression → Check: VIF < 5-10
+    </div>
+  </div>
+</div>
+
+<div class="exercise">
+  <div class="ex-header" onclick="toggle(this)">
+    <span class="ex-num stats">S10</span>
+    <span class="ex-q">What is the Central Limit Theorem and why is it so important for statistics and data analytics?</span>
+    <span class="ex-difficulty diff-easy">Easy</span>
+    <span class="ex-toggle">▼</span>
+  </div>
+  <div class="ex-answer">
+    <div class="answer-label">Answer</div>
+    <div class="hint">
+      <strong>Central Limit Theorem (CLT):</strong> The distribution of sample means will approach a Normal distribution as sample size increases (n ≥ 30 is the rule of thumb), regardless of the shape of the original population distribution.<br><br>
+      <strong>Why it matters:</strong><br>
+      • Allows us to use t-tests and z-tests even when the underlying data isn't perfectly normal<br>
+      • Justifies constructing confidence intervals using the normal distribution<br>
+      • Foundation of most hypothesis tests in inferential statistics<br>
+      • Mean of sample means = population mean (μ), Std Error = σ/√n
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- STATS INTERVIEW -->
+<div class="topic" id="stats-interview">
+<div class="topic-title">Statistics Interview Questions <span class="tag tag-interview">INTERVIEW</span></div>
+
+<div class="interview-q">
+  <div class="q-label">Interview Question</div>
+  <div class="q-text">What is a confidence interval? If a 95% CI for a difference is (2, 18), what does that mean?</div>
+  <div class="q-answer">A <strong>confidence interval</strong> is a range of plausible values for a population parameter, calculated from sample data. "95% CI" means that if we repeated the experiment 100 times, approximately 95 of those intervals would contain the true population parameter.<br><br>
+  If the 95% CI for the difference is (2, 18): Since 0 is not in the interval, the difference is statistically significant at α=0.05. We estimate the true difference is between 2 and 18 units, with 95% confidence.</div>
+</div>
+
+<div class="interview-q">
+  <div class="q-label">Interview Question</div>
+  <div class="q-text">What is the difference between correlation and causation? Give a real-world example of spurious correlation.</div>
+  <div class="q-answer"><strong>Correlation</strong> = two variables move together (Pearson r measures linear association, −1 to +1).<br>
+  <strong>Causation</strong> = one variable actually causes the other.<br><br>
+  Classic spurious correlation: Ice cream sales and drowning deaths both increase in summer. r ≈ 0.8. But ice cream doesn't cause drowning — both are caused by a <strong>confounding variable</strong> (hot weather → more swimming + more ice cream).<br><br>
+  To establish causation: randomized controlled experiments (A/B tests), or causal inference methods like difference-in-differences, instrumental variables.</div>
+</div>
+
+<div class="interview-q">
+  <div class="q-label">Interview Question</div>
+  <div class="q-text">When would you use median over mean? When would you use mode?</div>
+  <div class="q-answer">
+    <strong>Use Median when:</strong> Data is skewed (income, house prices), has outliers, or is ordinal. It's "robust" — 1 extreme value won't move it much.<br><br>
+    <strong>Use Mean when:</strong> Data is roughly symmetric/normal, you need a value for further calculations (CLT, t-tests use mean), or you're computing expected values.<br><br>
+    <strong>Use Mode when:</strong> Data is categorical (most common product sold, most frequent city), or you need the "most likely" value. Also useful for bimodal distributions where mean/median fall between two peaks.
+  </div>
+</div>
+
+<div class="interview-q">
+  <div class="q-label">Interview Question</div>
+  <div class="q-text">Explain p-hacking and how to avoid it in A/B testing.</div>
+  <div class="q-answer"><strong>P-hacking</strong> = running a test until p < 0.05 appears by chance, or testing multiple variations without correcting for multiple comparisons. If you run 20 independent tests at α=0.05, you'd expect ~1 false positive by chance alone.<br><br>
+  <strong>How to avoid:</strong><br>
+  • Pre-register your hypothesis and sample size before running the test<br>
+  • Calculate required sample size upfront using power analysis<br>
+  • Don't peek at results and stop early<br>
+  • If testing multiple variants, use Bonferroni correction (α/k) or FDR control<br>
+  • Set a fixed experiment duration before starting</div>
+</div>
+</div>
+</section>
+
+</main>
+</div>
+
+<button class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+function toggle(header) {
+  const answer = header.nextElementSibling;
+  const toggle = header.querySelector('.ex-toggle');
+  answer.classList.toggle('show');
+  toggle.classList.toggle('open');
+}
+
+// Highlight active sidebar link on scroll
+const sections = document.querySelectorAll('section, .topic');
+const sideLinks = document.querySelectorAll('.sidebar a');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      sideLinks.forEach(l => {
+        l.classList.remove('active');
+        if (l.getAttribute('href') === '#'+id) l.classList.add('active');
+      });
+    }
+  });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('[id]').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

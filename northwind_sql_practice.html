@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Northwind SQL Practice</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0d14;
+    --surface: #111520;
+    --card: #161b2e;
+    --border: #1e2640;
+    --accent: #00d4ff;
+    --accent2: #7c3aed;
+    --green: #00e5a0;
+    --red: #ff4d6d;
+    --yellow: #ffd60a;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --tag-bg: #1e2640;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0,212,255,0.07) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 80% 80%, rgba(124,58,237,0.06) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  header {
+    padding: 2rem 2rem 1rem;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+  }
+  .logo { display: flex; align-items: center; gap: 0.75rem; }
+  .logo-icon {
+    width: 38px; height: 38px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+  }
+  .logo-text { font-size: 1.3rem; font-weight: 800; letter-spacing: -0.5px; }
+  .logo-text span { color: var(--accent); }
+  .stats-bar { display: flex; gap: 1.5rem; }
+  .stat { text-align: center; }
+  .stat-val { font-size: 1.4rem; font-weight: 800; color: var(--accent); font-family: 'JetBrains Mono', monospace; }
+  .stat-lbl { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+
+  .main { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  /* Filter bar */
+  .filter-bar {
+    display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 2rem;
+  }
+  .filter-btn {
+    padding: 0.4rem 0.9rem; border-radius: 20px; border: 1px solid var(--border);
+    background: var(--card); color: var(--muted); cursor: pointer;
+    font-family: 'Syne', sans-serif; font-size: 0.78rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    transition: all 0.2s;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    border-color: var(--accent); color: var(--accent); background: rgba(0,212,255,0.08);
+  }
+
+  /* Progress */
+  .progress-wrap { margin-bottom: 2rem; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--muted); margin-bottom: 0.4rem; }
+  .progress-bar { height: 4px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .progress-fill {
+    height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 4px; transition: width 0.4s ease;
+  }
+
+  /* Question card */
+  .q-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    margin-bottom: 1.25rem;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .q-card:hover { border-color: rgba(0,212,255,0.25); }
+  .q-card.revealed { border-color: rgba(0,229,160,0.3); }
+
+  .q-header {
+    padding: 1.25rem 1.5rem;
+    display: flex; gap: 1rem; align-items: flex-start; cursor: pointer;
+  }
+  .q-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; color: var(--muted);
+    background: var(--tag-bg); padding: 0.2rem 0.5rem; border-radius: 4px;
+    white-space: nowrap; margin-top: 2px;
+  }
+  .q-content { flex: 1; }
+  .q-tags { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+  .tag {
+    font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+    padding: 0.15rem 0.5rem; border-radius: 4px;
+  }
+  .tag-join { background: rgba(0,212,255,0.15); color: var(--accent); }
+  .tag-agg { background: rgba(124,58,237,0.2); color: #a78bfa; }
+  .tag-window { background: rgba(255,214,10,0.15); color: var(--yellow); }
+  .tag-subquery { background: rgba(0,229,160,0.15); color: var(--green); }
+  .tag-groupby { background: rgba(255,77,109,0.15); color: var(--red); }
+  .tag-cte { background: rgba(251,146,60,0.15); color: #fb923c; }
+  .tag-basic { background: rgba(100,116,139,0.2); color: #94a3b8; }
+
+  .q-text { font-size: 0.95rem; line-height: 1.6; color: var(--text); }
+  .q-toggle {
+    font-size: 0.7rem; color: var(--muted); white-space: nowrap;
+    padding: 0.3rem 0.7rem; border-radius: 6px; border: 1px solid var(--border);
+    background: var(--surface); cursor: pointer; font-family: 'Syne', sans-serif;
+    font-weight: 600; transition: all 0.2s; margin-top: 2px;
+  }
+  .q-toggle:hover { border-color: var(--accent); color: var(--accent); }
+
+  .q-answer {
+    display: none;
+    border-top: 1px solid var(--border);
+    padding: 1.25rem 1.5rem;
+    animation: slideIn 0.25s ease;
+  }
+  .q-answer.show { display: block; }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .answer-label {
+    font-size: 0.65rem; color: var(--green); text-transform: uppercase;
+    letter-spacing: 1px; font-weight: 700; margin-bottom: 0.75rem;
+    display: flex; align-items: center; gap: 0.4rem;
+  }
+  .answer-label::before { content: ''; width: 6px; height: 6px; background: var(--green); border-radius: 50%; display: inline-block; }
+
+  pre {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1rem 1.2rem;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    line-height: 1.7;
+  }
+  .kw { color: #7dd3fc; font-weight: 600; }
+  .fn { color: #a78bfa; }
+  .str { color: #86efac; }
+  .num { color: #fbbf24; }
+  .cm { color: var(--muted); font-style: italic; }
+  .tbl { color: #f9a8d4; }
+  .col { color: var(--text); }
+
+  .hint { margin-top: 0.75rem; font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+  .hint strong { color: #94a3b8; }
+
+  .section-title {
+    font-size: 0.65rem; color: var(--muted); text-transform: uppercase;
+    letter-spacing: 2px; font-weight: 700; margin: 2rem 0 1rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🗄</div>
+    <div class="logo-text">Northwind <span>SQL</span> Prep</div>
+  </div>
+  <div class="stats-bar">
+    <div class="stat"><div class="stat-val" id="total-count">0</div><div class="stat-lbl">Questions</div></div>
+    <div class="stat"><div class="stat-val" id="revealed-count">0</div><div class="stat-lbl">Revealed</div></div>
+  </div>
+</header>
+
+<div class="main">
+
+  <div class="filter-bar" id="filter-bar">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="basic">Basic</button>
+    <button class="filter-btn" data-filter="join">Joins</button>
+    <button class="filter-btn" data-filter="agg">Aggregation</button>
+    <button class="filter-btn" data-filter="groupby">Group By</button>
+    <button class="filter-btn" data-filter="subquery">Subquery</button>
+    <button class="filter-btn" data-filter="window">Window</button>
+    <button class="filter-btn" data-filter="cte">CTE</button>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-label"><span>Progress</span><span id="progress-text">0 / 0</span></div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  </div>
+
+  <div id="questions-container"></div>
+</div>
+
+<script>
+const questions = [
+  // ── BASIC ──────────────────────────────────────────────────────────────
+  {
+    id: 1, tags: ['basic'],
+    q: 'List all customers from Germany.',
+    sql: `<span class="kw">SELECT</span> customerid, customername, city
+<span class="kw">FROM</span>   <span class="tbl">customers</span>
+<span class="kw">WHERE</span>  country <span class="kw">=</span> <span class="str">'Germany'</span>;`,
+    hint: 'Simple WHERE filter on the <strong>customers</strong> table.'
+  },
+  {
+    id: 2, tags: ['basic'],
+    q: 'Get all products whose price is greater than 50, ordered by price descending.',
+    sql: `<span class="kw">SELECT</span> productname, price
+<span class="kw">FROM</span>   <span class="tbl">products</span>
+<span class="kw">WHERE</span>  price <span class="kw">&gt;</span> <span class="num">50</span>
+<span class="kw">ORDER BY</span> price <span class="kw">DESC</span>;`,
+    hint: 'Filter on <strong>products.price</strong>, sort descending.'
+  },
+  {
+    id: 3, tags: ['basic'],
+    q: 'Find all orders placed in the year 2024.',
+    sql: `<span class="kw">SELECT</span> orderid, customerid, orderdate
+<span class="kw">FROM</span>   <span class="tbl">orders</span>
+<span class="kw">WHERE</span>  <span class="fn">EXTRACT</span>(YEAR <span class="kw">FROM</span> orderdate) <span class="kw">=</span> <span class="num">2024</span>;`,
+    hint: 'Use <strong>EXTRACT(YEAR FROM …)</strong> or <strong>DATE_PART</strong> on <strong>orders.orderdate</strong>.'
+  },
+
+  // ── JOINS ──────────────────────────────────────────────────────────────
+  {
+    id: 4, tags: ['join'],
+    q: 'Show each order with the customer name and employee name who handled it.',
+    sql: `<span class="kw">SELECT</span> o.orderid,
+       c.customername,
+       e.firstname <span class="kw">||</span> <span class="str">' '</span> <span class="kw">||</span> e.lastname <span class="kw">AS</span> employee_name,
+       o.orderdate
+<span class="kw">FROM</span>   <span class="tbl">orders</span>   o
+<span class="kw">JOIN</span>   <span class="tbl">customers</span>  c <span class="kw">ON</span> c.customerid  <span class="kw">=</span> o.customerid
+<span class="kw">JOIN</span>   <span class="tbl">employees</span>  e <span class="kw">ON</span> e.employeeid  <span class="kw">=</span> o.employeeid;`,
+    hint: 'Two JOINs: <strong>orders → customers</strong> and <strong>orders → employees</strong>.'
+  },
+  {
+    id: 5, tags: ['join'],
+    q: 'List every order detail enriched with the product name and shipper name.',
+    sql: `<span class="kw">SELECT</span> od.orderdetailid,
+       od.orderid,
+       p.productname,
+       od.quantity,
+       s.shippername
+<span class="kw">FROM</span>   <span class="tbl">orderdetails</span> od
+<span class="kw">JOIN</span>   <span class="tbl">products</span>  p  <span class="kw">ON</span> p.productid  <span class="kw">=</span> od.productid
+<span class="kw">JOIN</span>   <span class="tbl">orders</span>    o  <span class="kw">ON</span> o.orderid    <span class="kw">=</span> od.orderid
+<span class="kw">JOIN</span>   <span class="tbl">shippers</span>  s  <span class="kw">ON</span> s.shipperid  <span class="kw">=</span> o.shipperid;`,
+    hint: 'Chain: <strong>orderdetails → products</strong>, then <strong>orderdetails → orders → shippers</strong>.'
+  },
+  {
+    id: 6, tags: ['join'],
+    q: 'List all suppliers along with the products they supply. Include suppliers who supply no products.',
+    sql: `<span class="kw">SELECT</span> s.suppliername,
+       p.productname
+<span class="kw">FROM</span>   <span class="tbl">suppliers</span> s
+<span class="kw">LEFT JOIN</span> <span class="tbl">products</span> p <span class="kw">ON</span> p.supplierid <span class="kw">=</span> s.supplierid
+<span class="kw">ORDER BY</span> s.suppliername;`,
+    hint: '<strong>LEFT JOIN</strong> keeps suppliers with zero products (NULL productname).'
+  },
+  {
+    id: 7, tags: ['join'],
+    q: 'Get product name, category name, and supplier name for every product.',
+    sql: `<span class="kw">SELECT</span> p.productname,
+       c.categoryname,
+       s.suppliername
+<span class="kw">FROM</span>   <span class="tbl">products</span>   p
+<span class="kw">JOIN</span>   <span class="tbl">categories</span> c <span class="kw">ON</span> c.categoryid <span class="kw">=</span> p.categoryid
+<span class="kw">JOIN</span>   <span class="tbl">suppliers</span>  s <span class="kw">ON</span> s.supplierid <span class="kw">=</span> p.supplierid;`,
+    hint: 'Three-way join: <strong>products → categories</strong> and <strong>products → suppliers</strong>.'
+  },
+
+  // ── AGGREGATION ────────────────────────────────────────────────────────
+  {
+    id: 8, tags: ['agg'],
+    q: 'What is the total revenue (price × quantity) across all order details?',
+    sql: `<span class="kw">SELECT</span> <span class="fn">SUM</span>(p.price <span class="kw">*</span> od.quantity) <span class="kw">AS</span> total_revenue
+<span class="kw">FROM</span>   <span class="tbl">orderdetails</span> od
+<span class="kw">JOIN</span>   <span class="tbl">products</span> p <span class="kw">ON</span> p.productid <span class="kw">=</span> od.productid;`,
+    hint: 'SUM of <strong>price * quantity</strong> after joining with products.'
+  },
+  {
+    id: 9, tags: ['agg', 'groupby'],
+    q: 'How many orders did each customer place? Show customer name and order count, sorted by most orders first.',
+    sql: `<span class="kw">SELECT</span> c.customername,
+       <span class="fn">COUNT</span>(o.orderid) <span class="kw">AS</span> order_count
+<span class="kw">FROM</span>   <span class="tbl">customers</span> c
+<span class="kw">LEFT JOIN</span> <span class="tbl">orders</span> o <span class="kw">ON</span> o.customerid <span class="kw">=</span> c.customerid
+<span class="kw">GROUP BY</span> c.customername
+<span class="kw">ORDER BY</span> order_count <span class="kw">DESC</span>;`,
+    hint: 'LEFT JOIN to keep customers with 0 orders; COUNT on orderid.'
+  },
+  {
+    id: 10, tags: ['agg', 'groupby'],
+    q: 'Find the total quantity sold per product. Only show products where total quantity > 100.',
+    sql: `<span class="kw">SELECT</span> p.productname,
+       <span class="fn">SUM</span>(od.quantity) <span class="kw">AS</span> total_qty
+<span class="kw">FROM</span>   <span class="tbl">orderdetails</span> od
+<span class="kw">JOIN</span>   <span class="tbl">products</span> p <span class="kw">ON</span> p.productid <span class="kw">=</span> od.productid
+<span class="kw">GROUP BY</span> p.productname
+<span class="kw">HAVING</span>   <span class="fn">SUM</span>(od.quantity) <span class="kw">&gt;</span> <span class="num">100</span>
+<span class="kw">ORDER BY</span> total_qty <span class="kw">DESC</span>;`,
+    hint: 'Use <strong>HAVING</strong> (not WHERE) to filter after aggregation.'
+  },
+  {
+    id: 11, tags: ['agg', 'groupby'],
+    q: 'Which employee handled the most orders? Show their full name and count.',
+    sql: `<span class="kw">SELECT</span> e.firstname <span class="kw">||</span> <span class="str">' '</span> <span class="kw">||</span> e.lastname <span class="kw">AS</span> employee,
+       <span class="fn">COUNT</span>(o.orderid) <span class="kw">AS</span> total_orders
+<span class="kw">FROM</span>   <span class="tbl">employees</span> e
+<span class="kw">JOIN</span>   <span class="tbl">orders</span> o <span class="kw">ON</span> o.employeeid <span class="kw">=</span> e.employeeid
+<span class="kw">GROUP BY</span> e.firstname, e.lastname
+<span class="kw">ORDER BY</span> total_orders <span class="kw">DESC</span>
+<span class="kw">LIMIT</span> <span class="num">1</span>;`,
+    hint: 'GROUP BY both name parts; LIMIT 1 after ORDER BY DESC.'
+  },
+  {
+    id: 12, tags: ['agg', 'groupby'],
+    q: 'Show revenue per category, sorted highest first.',
+    sql: `<span class="kw">SELECT</span> c.categoryname,
+       <span class="fn">SUM</span>(p.price <span class="kw">*</span> od.quantity) <span class="kw">AS</span> revenue
+<span class="kw">FROM</span>   <span class="tbl">orderdetails</span>  od
+<span class="kw">JOIN</span>   <span class="tbl">products</span>    p  <span class="kw">ON</span> p.productid  <span class="kw">=</span> od.productid
+<span class="kw">JOIN</span>   <span class="tbl">categories</span>  c  <span class="kw">ON</span> c.categoryid <span class="kw">=</span> p.categoryid
+<span class="kw">GROUP BY</span> c.categoryname
+<span class="kw">ORDER BY</span> revenue <span class="kw">DESC</span>;`,
+    hint: 'Three tables: <strong>orderdetails → products → categories</strong>.'
+  },
+
+  // ── SUBQUERY ───────────────────────────────────────────────────────────
+  {
+    id: 13, tags: ['subquery'],
+    q: 'Find all products that cost more than the average product price.',
+    sql: `<span class="kw">SELECT</span> productname, price
+<span class="kw">FROM</span>   <span class="tbl">products</span>
+<span class="kw">WHERE</span>  price <span class="kw">&gt;</span> (<span class="kw">SELECT</span> <span class="fn">AVG</span>(price) <span class="kw">FROM</span> <span class="tbl">products</span>)
+<span class="kw">ORDER BY</span> price <span class="kw">DESC</span>;`,
+    hint: 'Scalar subquery inside WHERE: <strong>AVG(price)</strong> from same table.'
+  },
+  {
+    id: 14, tags: ['subquery'],
+    q: 'Which customers have never placed an order? (Use NOT IN or NOT EXISTS)',
+    sql: `<span class="cm">-- Option A: NOT EXISTS</span>
+<span class="kw">SELECT</span> customername
+<span class="kw">FROM</span>   <span class="tbl">customers</span> c
+<span class="kw">WHERE NOT EXISTS</span> (
+  <span class="kw">SELECT</span> <span class="num">1</span> <span class="kw">FROM</span> <span class="tbl">orders</span> o
+  <span class="kw">WHERE</span> o.customerid <span class="kw">=</span> c.customerid
+);
+
+<span class="cm">-- Option B: NOT IN</span>
+<span class="kw">SELECT</span> customername
+<span class="kw">FROM</span>   <span class="tbl">customers</span>
+<span class="kw">WHERE</span>  customerid <span class="kw">NOT IN</span>
+       (<span class="kw">SELECT</span> customerid <span class="kw">FROM</span> <span class="tbl">orders</span>);`,
+    hint: 'NOT EXISTS is safer when subquery might return NULLs.'
+  },
+  {
+    id: 15, tags: ['subquery'],
+    q: 'Get the top 3 most expensive products per category using a subquery.',
+    sql: `<span class="kw">SELECT</span> categoryid, productname, price
+<span class="kw">FROM</span>   <span class="tbl">products</span> p1
+<span class="kw">WHERE</span> (
+  <span class="kw">SELECT</span> <span class="fn">COUNT</span>(<span class="kw">*</span>)
+  <span class="kw">FROM</span> <span class="tbl">products</span> p2
+  <span class="kw">WHERE</span> p2.categoryid <span class="kw">=</span> p1.categoryid
+    <span class="kw">AND</span> p2.price <span class="kw">&gt;</span> p1.price
+) <span class="kw">&lt;</span> <span class="num">3</span>
+<span class="kw">ORDER BY</span> categoryid, price <span class="kw">DESC</span>;`,
+    hint: 'Correlated subquery: count of products with higher price < 3.'
+  },
+  {
+    id: 16, tags: ['subquery'],
+    q: 'Find the order with the highest total value (sum of price × quantity).',
+    sql: `<span class="kw">SELECT</span> orderid, total
+<span class="kw">FROM</span> (
+  <span class="kw">SELECT</span> od.orderid,
+         <span class="fn">SUM</span>(p.price <span class="kw">*</span> od.quantity) <span class="kw">AS</span> total
+  <span class="kw">FROM</span>   <span class="tbl">orderdetails</span> od
+  <span class="kw">JOIN</span>   <span class="tbl">products</span> p <span class="kw">ON</span> p.productid <span class="kw">=</span> od.productid
+  <span class="kw">GROUP BY</span> od.orderid
+) <span class="kw">AS</span> order_totals
+<span class="kw">ORDER BY</span> total <span class="kw">DESC</span>
+<span class="kw">LIMIT</span> <span class="num">1</span>;`,
+    hint: 'Derived table (subquery in FROM) to pre-aggregate, then sort.'
+  },
+
+  // ── WINDOW ─────────────────────────────────────────────────────────────
+  {
+    id: 17, tags: ['window'],
+    q: 'Rank products by price within each category using RANK().',
+    sql: `<span class="kw">SELECT</span> categoryid,
+       productname,
+       price,
+       <span class="fn">RANK</span>() <span class="kw">OVER</span> (
+         <span class="kw">PARTITION BY</span> categoryid
+         <span class="kw">ORDER BY</span> price <span class="kw">DESC</span>
+       ) <span class="kw">AS</span> price_rank
+<span class="kw">FROM</span> <span class="tbl">products</span>;`,
+    hint: 'RANK() with PARTITION BY categoryid; gaps appear for ties.'
+  },
+  {
+    id: 18, tags: ['window'],
+    q: 'For each order, show a running total of quantity within that order using SUM() OVER.',
+    sql: `<span class="kw">SELECT</span> orderid,
+       orderdetailid,
+       productid,
+       quantity,
+       <span class="fn">SUM</span>(quantity) <span class="kw">OVER</span> (
+         <span class="kw">PARTITION BY</span> orderid
+         <span class="kw">ORDER BY</span> orderdetailid
+       ) <span class="kw">AS</span> running_qty
+<span class="kw">FROM</span> <span class="tbl">orderdetails</span>;`,
+    hint: 'Running total: SUM with OVER(PARTITION BY … ORDER BY …).'
+  },
+  {
+    id: 19, tags: ['window'],
+    q: 'Show each employee\'s order count vs the average order count across all employees using AVG() OVER().',
+    sql: `<span class="kw">SELECT</span> e.firstname <span class="kw">||</span> <span class="str">' '</span> <span class="kw">||</span> e.lastname <span class="kw">AS</span> employee,
+       <span class="fn">COUNT</span>(o.orderid)                             <span class="kw">AS</span> orders,
+       <span class="fn">ROUND</span>(<span class="fn">AVG</span>(<span class="fn">COUNT</span>(o.orderid)) <span class="kw">OVER</span> (), <span class="num">2</span>)  <span class="kw">AS</span> avg_orders
+<span class="kw">FROM</span>   <span class="tbl">employees</span> e
+<span class="kw">LEFT JOIN</span> <span class="tbl">orders</span> o <span class="kw">ON</span> o.employeeid <span class="kw">=</span> e.employeeid
+<span class="kw">GROUP BY</span> e.employeeid, e.firstname, e.lastname;`,
+    hint: 'Nest aggregate inside window: <strong>AVG(COUNT(…)) OVER ()</strong>.'
+  },
+  {
+    id: 20, tags: ['window'],
+    q: 'Use DENSE_RANK() to rank customers by total spending. No gaps in rank for ties.',
+    sql: `<span class="kw">SELECT</span> c.customername,
+       <span class="fn">SUM</span>(p.price <span class="kw">*</span> od.quantity)   <span class="kw">AS</span> total_spent,
+       <span class="fn">DENSE_RANK</span>() <span class="kw">OVER</span> (
+         <span class="kw">ORDER BY</span> <span class="fn">SUM</span>(p.price <span class="kw">*</span> od.quantity) <span class="kw">DESC</span>
+       ) <span class="kw">AS</span> spend_rank
+<span class="kw">FROM</span>   <span class="tbl">customers</span>    c
+<span class="kw">JOIN</span>   <span class="tbl">orders</span>       o  <span class="kw">ON</span> o.customerid  <span class="kw">=</span> c.customerid
+<span class="kw">JOIN</span>   <span class="tbl">orderdetails</span> od <span class="kw">ON</span> od.orderid    <span class="kw">=</span> o.orderid
+<span class="kw">JOIN</span>   <span class="tbl">products</span>     p  <span class="kw">ON</span> p.productid   <span class="kw">=</span> od.productid
+<span class="kw">GROUP BY</span> c.customerid, c.customername;`,
+    hint: 'DENSE_RANK skips no numbers; RANK does.'
+  },
+  {
+    id: 21, tags: ['window'],
+    q: 'Show the previous order date for each customer using LAG().',
+    sql: `<span class="kw">SELECT</span> customerid,
+       orderid,
+       orderdate,
+       <span class="fn">LAG</span>(orderdate) <span class="kw">OVER</span> (
+         <span class="kw">PARTITION BY</span> customerid
+         <span class="kw">ORDER BY</span> orderdate
+       ) <span class="kw">AS</span> prev_order_date
+<span class="kw">FROM</span> <span class="tbl">orders</span>;`,
+    hint: 'LAG(col) returns the previous row\'s value within each partition.'
+  },
+  {
+    id: 22, tags: ['window'],
+    q: 'Use NTILE(4) to split products into price quartiles.',
+    sql: `<span class="kw">SELECT</span> productname,
+       price,
+       <span class="fn">NTILE</span>(<span class="num">4</span>) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> price) <span class="kw">AS</span> quartile
+<span class="kw">FROM</span> <span class="tbl">products</span>
+<span class="kw">ORDER BY</span> price;`,
+    hint: 'NTILE(n) distributes rows into n equal buckets.'
+  },
+
+  // ── CTE ────────────────────────────────────────────────────────────────
+  {
+    id: 23, tags: ['cte'],
+    q: 'Using a CTE, find the top 5 customers by total revenue.',
+    sql: `<span class="kw">WITH</span> customer_revenue <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> c.customerid,
+         c.customername,
+         <span class="fn">SUM</span>(p.price <span class="kw">*</span> od.quantity) <span class="kw">AS</span> revenue
+  <span class="kw">FROM</span>   <span class="tbl">customers</span>    c
+  <span class="kw">JOIN</span>   <span class="tbl">orders</span>       o  <span class="kw">ON</span> o.customerid  <span class="kw">=</span> c.customerid
+  <span class="kw">JOIN</span>   <span class="tbl">orderdetails</span> od <span class="kw">ON</span> od.orderid    <span class="kw">=</span> o.orderid
+  <span class="kw">JOIN</span>   <span class="tbl">products</span>     p  <span class="kw">ON</span> p.productid   <span class="kw">=</span> od.productid
+  <span class="kw">GROUP BY</span> c.customerid, c.customername
+)
+<span class="kw">SELECT</span> customername, revenue
+<span class="kw">FROM</span>   customer_revenue
+<span class="kw">ORDER BY</span> revenue <span class="kw">DESC</span>
+<span class="kw">LIMIT</span> <span class="num">5</span>;`,
+    hint: 'CTE cleans up the aggregation; final SELECT filters top 5.'
+  },
+  {
+    id: 24, tags: ['cte', 'window'],
+    q: 'Using a CTE + ROW_NUMBER(), get the single most expensive product per category.',
+    sql: `<span class="kw">WITH</span> ranked <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> categoryid,
+         productname,
+         price,
+         <span class="fn">ROW_NUMBER</span>() <span class="kw">OVER</span> (
+           <span class="kw">PARTITION BY</span> categoryid
+           <span class="kw">ORDER BY</span> price <span class="kw">DESC</span>
+         ) <span class="kw">AS</span> rn
+  <span class="kw">FROM</span> <span class="tbl">products</span>
+)
+<span class="kw">SELECT</span> categoryid, productname, price
+<span class="kw">FROM</span>   ranked
+<span class="kw">WHERE</span>  rn <span class="kw">=</span> <span class="num">1</span>;`,
+    hint: 'ROW_NUMBER in a CTE, then filter WHERE rn = 1.'
+  },
+  {
+    id: 25, tags: ['cte'],
+    q: 'With two CTEs, compute monthly revenue and then find the month with highest revenue.',
+    sql: `<span class="kw">WITH</span> monthly <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> <span class="fn">DATE_TRUNC</span>(<span class="str">'month'</span>, o.orderdate) <span class="kw">AS</span> month,
+         <span class="fn">SUM</span>(p.price <span class="kw">*</span> od.quantity)       <span class="kw">AS</span> revenue
+  <span class="kw">FROM</span>   <span class="tbl">orders</span>       o
+  <span class="kw">JOIN</span>   <span class="tbl">orderdetails</span> od <span class="kw">ON</span> od.orderid  <span class="kw">=</span> o.orderid
+  <span class="kw">JOIN</span>   <span class="tbl">products</span>     p  <span class="kw">ON</span> p.productid <span class="kw">=</span> od.productid
+  <span class="kw">GROUP BY</span> <span class="num">1</span>
+),
+best_month <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> month, revenue,
+         <span class="fn">RANK</span>() <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> revenue <span class="kw">DESC</span>) <span class="kw">AS</span> rnk
+  <span class="kw">FROM</span> monthly
+)
+<span class="kw">SELECT</span> month, revenue
+<span class="kw">FROM</span>   best_month
+<span class="kw">WHERE</span>  rnk <span class="kw">=</span> <span class="num">1</span>;`,
+    hint: 'Chaining two CTEs: first aggregate by month, then rank.'
+  },
+
+  // ── MIXED HARD ─────────────────────────────────────────────────────────
+  {
+    id: 26, tags: ['window', 'agg'],
+    q: 'Show each product\'s price and the % it contributes to its category\'s total price sum.',
+    sql: `<span class="kw">SELECT</span> categoryid,
+       productname,
+       price,
+       <span class="fn">ROUND</span>(
+         price <span class="kw">*</span> <span class="num">100.0</span> <span class="kw">/</span>
+         <span class="fn">SUM</span>(price) <span class="kw">OVER</span> (<span class="kw">PARTITION BY</span> categoryid)
+       , <span class="num">2</span>) <span class="kw">AS</span> pct_of_category
+<span class="kw">FROM</span> <span class="tbl">products</span>
+<span class="kw">ORDER BY</span> categoryid, price <span class="kw">DESC</span>;`,
+    hint: 'Divide each price by the SUM OVER partition.'
+  },
+  {
+    id: 27, tags: ['join', 'groupby'],
+    q: 'Find shippers with the most orders, showing shipper name and count.',
+    sql: `<span class="kw">SELECT</span> s.shippername,
+       <span class="fn">COUNT</span>(o.orderid) <span class="kw">AS</span> total_orders
+<span class="kw">FROM</span>   <span class="tbl">shippers</span> s
+<span class="kw">JOIN</span>   <span class="tbl">orders</span>   o <span class="kw">ON</span> o.shipperid <span class="kw">=</span> s.shipperid
+<span class="kw">GROUP BY</span> s.shippername
+<span class="kw">ORDER BY</span> total_orders <span class="kw">DESC</span>;`,
+    hint: 'Simple GROUP BY after joining orders to shippers.'
+  },
+  {
+    id: 28, tags: ['subquery', 'agg'],
+    q: 'List categories whose average product price is above the overall average product price.',
+    sql: `<span class="kw">SELECT</span> c.categoryname,
+       <span class="fn">ROUND</span>(<span class="fn">AVG</span>(p.price), <span class="num">2</span>) <span class="kw">AS</span> avg_price
+<span class="kw">FROM</span>   <span class="tbl">products</span>   p
+<span class="kw">JOIN</span>   <span class="tbl">categories</span> c <span class="kw">ON</span> c.categoryid <span class="kw">=</span> p.categoryid
+<span class="kw">GROUP BY</span> c.categoryname
+<span class="kw">HAVING</span>   <span class="fn">AVG</span>(p.price) <span class="kw">&gt;</span>
+         (<span class="kw">SELECT</span> <span class="fn">AVG</span>(price) <span class="kw">FROM</span> <span class="tbl">products</span>);`,
+    hint: 'Scalar subquery inside HAVING to compare group avg to global avg.'
+  },
+  {
+    id: 29, tags: ['cte', 'window', 'join'],
+    q: 'For each employee, show their total orders and their percentile rank among all employees.',
+    sql: `<span class="kw">WITH</span> emp_orders <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> e.employeeid,
+         e.firstname <span class="kw">||</span> <span class="str">' '</span> <span class="kw">||</span> e.lastname <span class="kw">AS</span> name,
+         <span class="fn">COUNT</span>(o.orderid) <span class="kw">AS</span> total_orders
+  <span class="kw">FROM</span>   <span class="tbl">employees</span> e
+  <span class="kw">LEFT JOIN</span> <span class="tbl">orders</span> o <span class="kw">ON</span> o.employeeid <span class="kw">=</span> e.employeeid
+  <span class="kw">GROUP BY</span> e.employeeid, e.firstname, e.lastname
+)
+<span class="kw">SELECT</span> name,
+       total_orders,
+       <span class="fn">ROUND</span>(
+         <span class="fn">PERCENT_RANK</span>() <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> total_orders) <span class="kw">*</span> <span class="num">100</span>
+       , <span class="num">1</span>) <span class="kw">AS</span> percentile
+<span class="kw">FROM</span>   emp_orders
+<span class="kw">ORDER BY</span> total_orders <span class="kw">DESC</span>;`,
+    hint: 'PERCENT_RANK() returns 0–1; multiply by 100 for percentage.'
+  },
+  {
+    id: 30, tags: ['window', 'cte'],
+    q: 'Show month-over-month revenue growth using LAG() on monthly totals.',
+    sql: `<span class="kw">WITH</span> monthly <span class="kw">AS</span> (
+  <span class="kw">SELECT</span> <span class="fn">DATE_TRUNC</span>(<span class="str">'month'</span>, o.orderdate) <span class="kw">AS</span> month,
+         <span class="fn">SUM</span>(p.price <span class="kw">*</span> od.quantity) <span class="kw">AS</span> revenue
+  <span class="kw">FROM</span>   <span class="tbl">orders</span>       o
+  <span class="kw">JOIN</span>   <span class="tbl">orderdetails</span> od <span class="kw">ON</span> od.orderid  <span class="kw">=</span> o.orderid
+  <span class="kw">JOIN</span>   <span class="tbl">products</span>     p  <span class="kw">ON</span> p.productid <span class="kw">=</span> od.productid
+  <span class="kw">GROUP BY</span> <span class="num">1</span>
+)
+<span class="kw">SELECT</span> month,
+       revenue,
+       <span class="fn">LAG</span>(revenue) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> month) <span class="kw">AS</span> prev_revenue,
+       <span class="fn">ROUND</span>(
+         (revenue <span class="kw">-</span> <span class="fn">LAG</span>(revenue) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> month))
+         <span class="kw">*</span> <span class="num">100.0</span>
+         <span class="kw">/</span> <span class="fn">NULLIF</span>(<span class="fn">LAG</span>(revenue) <span class="kw">OVER</span> (<span class="kw">ORDER BY</span> month), <span class="num">0</span>)
+       , <span class="num">2</span>) <span class="kw">AS</span> growth_pct
+<span class="kw">FROM</span>   monthly
+<span class="kw">ORDER BY</span> month;`,
+    hint: 'NULLIF avoids divide-by-zero when previous month revenue is 0.'
+  },
+];
+
+// ── Render ──────────────────────────────────────────────────────────────
+let activeFilter = 'all';
+let revealedSet = new Set();
+
+function tagHTML(tags) {
+  return tags.map(t => `<span class="tag tag-${t}">${t}</span>`).join('');
+}
+
+function renderQuestions(filter) {
+  const container = document.getElementById('questions-container');
+  container.innerHTML = '';
+  const visible = filter === 'all' ? questions : questions.filter(q => q.tags.includes(filter));
+
+  // Group by section
+  const sections = {};
+  visible.forEach(q => {
+    const primary = q.tags[0];
+    if (!sections[primary]) sections[primary] = [];
+    sections[primary].push(q);
+  });
+
+  const sectionLabels = {
+    basic: '🔷 Basic SELECT & Filtering',
+    join: '🔗 Joins',
+    agg: '📊 Aggregation',
+    groupby: '📦 Group By & Having',
+    subquery: '🔍 Subqueries',
+    window: '🪟 Window Functions',
+    cte: '🧩 CTEs'
+  };
+
+  const order = ['basic','join','agg','groupby','subquery','window','cte'];
+  order.forEach(sec => {
+    if (!sections[sec]) return;
+    const title = document.createElement('div');
+    title.className = 'section-title';
+    title.textContent = sectionLabels[sec] || sec;
+    container.appendChild(title);
+
+    sections[sec].forEach(q => {
+      const card = document.createElement('div');
+      card.className = 'q-card' + (revealedSet.has(q.id) ? ' revealed' : '');
+      card.dataset.tags = q.tags.join(',');
+      card.innerHTML = `
+        <div class="q-header" onclick="toggleAnswer(${q.id}, this)">
+          <span class="q-number">Q${String(q.id).padStart(2,'0')}</span>
+          <div class="q-content">
+            <div class="q-tags">${tagHTML(q.tags)}</div>
+            <div class="q-text">${q.q}</div>
+          </div>
+          <button class="q-toggle" id="btn-${q.id}">${revealedSet.has(q.id) ? 'Hide' : 'Answer'}</button>
+        </div>
+        <div class="q-answer ${revealedSet.has(q.id) ? 'show' : ''}" id="ans-${q.id}">
+          <div class="answer-label">SQL Answer</div>
+          <pre>${q.sql}</pre>
+          <p class="hint"><strong>Tip:</strong> ${q.hint}</p>
+        </div>`;
+      container.appendChild(card);
+    });
+  });
+
+  updateStats(visible);
+}
+
+function toggleAnswer(id, headerEl) {
+  const ans = document.getElementById(`ans-${id}`);
+  const btn = document.getElementById(`btn-${id}`);
+  const card = headerEl.closest('.q-card');
+  const showing = ans.classList.contains('show');
+
+  if (showing) {
+    ans.classList.remove('show');
+    btn.textContent = 'Answer';
+    card.classList.remove('revealed');
+    revealedSet.delete(id);
+  } else {
+    ans.classList.add('show');
+    btn.textContent = 'Hide';
+    card.classList.add('revealed');
+    revealedSet.add(id);
+  }
+  updateStats();
+}
+
+function updateStats(visible) {
+  const all = activeFilter === 'all' ? questions : questions.filter(q => q.tags.includes(activeFilter));
+  const total = all.length;
+  const rev = all.filter(q => revealedSet.has(q.id)).length;
+  document.getElementById('total-count').textContent = total;
+  document.getElementById('revealed-count').textContent = rev;
+  document.getElementById('progress-text').textContent = `${rev} / ${total}`;
+  document.getElementById('progress-fill').style.width = total ? `${(rev/total)*100}%` : '0%';
+}
+
+// Filter buttons
+document.getElementById('filter-bar').addEventListener('click', e => {
+  if (!e.target.matches('.filter-btn')) return;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  e.target.classList.add('active');
+  activeFilter = e.target.dataset.filter;
+  renderQuestions(activeFilter);
+});
+
+renderQuestions('all');
+</script>
+</body>
+</html>

@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DA Interface Questions — Visual Identification Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07090f;--bg2:#0b0e18;--bg3:#0f1320;--card:#0c0f1c;
+  --border:#16203a;--border2:#1e2d4a;
+  --sql:#22d3ee;--excel:#34d399;--pbi:#f59e0b;--py:#a78bfa;--stats:#f87171;
+  --text:#c4d0e8;--muted:#3d4f70;--head:#e8eeff;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Space Grotesk',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.7}
+
+.topbar{position:sticky;top:0;z-index:100;background:rgba(7,9,15,.97);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);padding:0 18px;display:flex;align-items:center;gap:10px;height:48px}
+.logo{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--head);white-space:nowrap;flex-shrink:0}
+.logo span{color:var(--pbi)}
+.filters{display:flex;gap:5px;overflow-x:auto;flex:1}
+.filters::-webkit-scrollbar{height:0}
+.fbtn{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;padding:4px 11px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--muted);cursor:pointer;white-space:nowrap;transition:all .2s}
+.fbtn:hover,.fbtn.active{color:var(--head);background:rgba(255,255,255,.05);border-color:#2a3d5a}
+.fbtn.pbi.active{border-color:var(--pbi);color:var(--pbi);background:rgba(245,158,11,.07)}
+.fbtn.excel.active{border-color:var(--excel);color:var(--excel);background:rgba(52,211,153,.07)}
+.fbtn.sql.active{border-color:var(--sql);color:var(--sql);background:rgba(34,211,238,.07)}
+.fbtn.py.active{border-color:var(--py);color:var(--py);background:rgba(167,139,250,.07)}
+
+.sbar{background:var(--bg2);border-bottom:1px solid var(--border);padding:8px 18px;display:flex;gap:18px;align-items:center}
+.sstat{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)}
+.sstat span{font-weight:700;font-size:12px;color:var(--head)}
+.sstat.g span{color:#34d399}.sstat.r span{color:#f87171}
+.prog-track{flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,#34d399,#22d3ee);border-radius:2px;transition:width .4s;width:0%}
+
+.main{padding:20px 18px 80px;max-width:960px;margin:0 auto}
+
+/* section header */
+.sec{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.stag{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:3px 10px;border-radius:3px}
+.stag.pbi{background:rgba(245,158,11,.1);color:var(--pbi);border:1px solid rgba(245,158,11,.22)}
+.stag.excel{background:rgba(52,211,153,.1);color:var(--excel);border:1px solid rgba(52,211,153,.22)}
+.stag.sql{background:rgba(34,211,238,.1);color:var(--sql);border:1px solid rgba(34,211,238,.22)}
+.stag.py{background:rgba(167,139,250,.1);color:var(--py);border:1px solid rgba(167,139,250,.22)}
+.sec h2{font-size:15px;font-weight:600;color:var(--head)}
+.pri{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;padding:2px 7px;border-radius:3px}
+.p-must{background:rgba(248,113,113,.13);color:#f87171;border:1px solid rgba(248,113,113,.28)}
+.p-hi{background:rgba(245,158,11,.1);color:var(--pbi);border:1px solid rgba(245,158,11,.22)}
+
+/* card */
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:10px;overflow:hidden;transition:border-color .2s}
+.card:hover{border-color:var(--border2)}
+.ch{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;cursor:pointer;user-select:none}
+.qn{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;width:26px;height:26px;border-radius:5px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px}
+.qn.pbi{background:rgba(245,158,11,.12);color:var(--pbi)}
+.qn.excel{background:rgba(52,211,153,.12);color:var(--excel)}
+.qn.sql{background:rgba(34,211,238,.12);color:var(--sql)}
+.qn.py{background:rgba(167,139,250,.12);color:var(--py)}
+.qi{flex:1}
+.qt{font-size:13.5px;color:var(--head);font-weight:500;line-height:1.4;margin-bottom:3px}
+.qm{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.qc{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted)}
+.qr{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.db{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--muted);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--muted);transition:all .2s;flex-shrink:0}
+.db:hover{border-color:#34d399;color:#34d399}
+.db.on{background:#34d399;border-color:#34d399;color:#03150a}
+.arr{color:var(--muted);font-size:10px;transition:transform .2s;flex-shrink:0}
+.arr.open{transform:rotate(180deg)}
+.ab{border-top:1px solid var(--border);display:none;padding:0 14px 14px}
+.ab.show{display:block}
+
+/* INTERFACE MOCKUP COMPONENTS */
+.mock-wrap{margin:12px 0;padding:14px;background:#050810;border:1px solid var(--border);border-radius:8px}
+.mock-title{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+
+/* Excel ribbon mockup */
+.ribbon{background:#217346;border-radius:6px 6px 0 0;padding:0 8px;display:flex;align-items:center;gap:2px;height:32px}
+.rtab{font-size:11px;color:rgba(255,255,255,.7);padding:0 10px;height:100%;display:flex;align-items:center;border-radius:3px 3px 0 0;cursor:pointer;font-weight:500;transition:background .15s}
+.rtab:hover{background:rgba(255,255,255,.1)}
+.rtab.active{background:#fff;color:#217346;font-weight:600}
+.ribbon-body{background:#fff;border:1px solid #d0d0d0;border-top:none;padding:6px 10px;border-radius:0 0 6px 6px;display:flex;gap:12px;align-items:center}
+.rgroup{display:flex;flex-direction:column;align-items:center;gap:2px;padding:2px 8px;border-right:1px solid #e0e0e0}
+.rgroup:last-child{border-right:none}
+.rbtn{width:28px;height:22px;background:#f0f0f0;border:1px solid #ccc;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:11px;cursor:pointer;font-weight:700;color:#333}
+.rbtn:hover{background:#e0e0e0}
+.rbtn.wide{width:auto;padding:0 8px;font-size:10px}
+.rglabel{font-size:9px;color:#666}
+.rrow{display:flex;gap:2px}
+.formula-bar{display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #d0d0d0;border-top:none;padding:3px 8px;font-size:11px;color:#333}
+.fb-cell{background:#f5f5f5;border:1px solid #ccc;padding:2px 6px;border-radius:2px;font-family:monospace;font-size:11px;min-width:40px;text-align:center}
+.fb-eq{color:#666}
+.fb-formula{flex:1;font-family:monospace;color:#0066cc;font-size:11px}
+.sheet-grid{display:grid;font-size:11px;border:1px solid #d0d0d0;border-top:none}
+.sh{background:#f0f0f0;border-bottom:1px solid #ccc;border-right:1px solid #ccc;padding:2px 8px;font-size:10px;color:#444;text-align:center;font-weight:600}
+.sc{border-bottom:1px solid #e8e8e8;border-right:1px solid #e8e8e8;padding:2px 8px;font-size:11px;color:#333;background:#fff;min-width:80px}
+.sc.sel{background:#dce9f5;border:1.5px solid #0066cc}
+.sc.head{background:#f5f5f5;font-weight:600;color:#333}
+.sc.formula{color:#0066cc}
+.sc.err{color:#cc0000;font-weight:600}
+
+/* Power BI mockup */
+.pbi-app{background:#1a1a2e;border-radius:8px;overflow:hidden;border:1px solid #2a2a4a}
+.pbi-topbar{background:#1a1a2e;border-bottom:1px solid #2a2a4a;padding:0 12px;display:flex;align-items:center;gap:8px;height:36px}
+.pbi-logo{color:var(--pbi);font-size:12px;font-weight:700;font-family:'JetBrains Mono',monospace}
+.pbi-tabs{display:flex;gap:0;margin-left:8px}
+.pbi-tab{font-size:10px;padding:0 14px;height:36px;display:flex;align-items:center;color:#888;cursor:pointer;border-bottom:2px solid transparent;transition:all .15s}
+.pbi-tab.active{color:var(--pbi);border-bottom-color:var(--pbi)}
+.pbi-body{display:grid;grid-template-columns:48px 1fr 220px;min-height:220px}
+.pbi-sidebar{background:#141428;border-right:1px solid #2a2a4a;padding:8px 0;display:flex;flex-direction:column;align-items:center;gap:12px}
+.pbi-icon{width:32px;height:32px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer;transition:background .15s;color:#888}
+.pbi-icon:hover,.pbi-icon.active{background:#2a2a4a;color:var(--pbi)}
+.pbi-canvas{padding:10px;background:#1e1e38;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pbi-visual{background:#141428;border:1px solid #2a2a4a;border-radius:6px;padding:8px;min-height:80px}
+.pbi-vt{font-size:9px;color:#666;font-family:'JetBrains Mono',monospace;margin-bottom:6px;letter-spacing:1px;text-transform:uppercase}
+.pbi-panel{background:#141428;border-left:1px solid #2a2a4a;padding:10px}
+.pbi-pt{font-size:9px;color:var(--pbi);font-family:'JetBrains Mono',monospace;letter-spacing:1px;margin-bottom:8px;text-transform:uppercase}
+.pbi-field{background:#1e1e38;border:1px solid #2a2a4a;border-radius:4px;padding:5px 8px;font-size:10px;color:#aaa;margin-bottom:4px;display:flex;align-items:center;gap:6px}
+.pbi-field-icon{width:14px;height:14px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0}
+.pbi-drop{background:#1e1e38;border:1px dashed #3a3a5a;border-radius:4px;padding:5px 8px;font-size:9px;color:#555;margin-bottom:4px;text-align:center}
+.pbi-slicer{background:#141428;border:1px solid var(--pbi);border-radius:6px;padding:8px}
+.pbi-filter{background:#141428;border:1px solid #2a2a4a;border-radius:6px;padding:8px}
+
+/* chart mini */
+.mini-bar{display:flex;align-items:flex-end;gap:3px;height:50px;padding:4px 0}
+.bar{background:linear-gradient(to top,#f59e0b88,#f59e0b);border-radius:2px 2px 0 0;flex:1;min-width:8px;transition:height .3s}
+.mini-line{position:relative;height:40px;margin:4px 0}
+.ml-svg{width:100%;height:40px}
+
+/* DAX editor */
+.dax-ed{background:#0d1117;border:1px solid #30363d;border-radius:6px;padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.8}
+.d-fn{color:#d2a8ff}.d-kw{color:#ff7b72}.d-col{color:#79c0ff}.d-str{color:#a5d6ff}.d-cm{color:#3d4f6b;font-style:italic}.d-num{color:#f8c555}
+
+/* SQL editor */
+.sql-ed{background:#0d1117;border:1px solid #30363d;border-radius:6px;padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.8}
+.s-kw{color:#ff7b72}.s-fn{color:#d2a8ff}.s-str{color:#a5d6ff}.s-cm{color:#3d4f6b;font-style:italic}.s-num{color:#f8c555}
+
+/* Python editor */
+.py-ed{background:#0d1117;border:1px solid #30363d;border-radius:6px;padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:11.5px;line-height:1.8}
+.p-kw{color:#ff7b72}.p-fn{color:#d2a8ff}.p-str{color:#a5d6ff}.p-cm{color:#3d4f6b;font-style:italic}.p-nm{color:#f8c555}.p-op{color:#ff7b72}
+
+/* annotation arrows */
+.annotated{position:relative;display:inline-block}
+.ann{font-size:10px;background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.35);color:#fde68a;padding:2px 8px;border-radius:3px;font-family:'JetBrains Mono',monospace}
+.ann.red{background:rgba(248,113,113,.12);border-color:rgba(248,113,113,.3);color:#fca5a5}
+.ann.green{background:rgba(52,211,153,.1);border-color:rgba(52,211,153,.25);color:#a7f3d0}
+.ann.blue{background:rgba(34,211,238,.08);border-color:rgba(34,211,238,.22);color:#a5f3fc}
+
+/* highlight box */
+.hl{margin:10px 0;padding:10px 12px;border-radius:7px;font-size:13px;line-height:1.65}
+.hl.green{background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.2);color:#a7f3d0}
+.hl.yellow{background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.2);color:#fde68a}
+.hl.red{background:rgba(248,113,113,.07);border:1px solid rgba(248,113,113,.2);color:#fca5a5}
+.hl.blue{background:rgba(34,211,238,.06);border:1px solid rgba(34,211,238,.18);color:#a5f3fc}
+.hl strong{color:#fff;font-weight:600}
+
+/* table */
+.ct{width:100%;border-collapse:collapse;margin:10px 0;font-size:12px}
+.ct th{background:var(--bg3);color:var(--head);padding:8px 12px;text-align:left;border:1px solid var(--border);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:.5px;text-transform:uppercase}
+.ct td{padding:7px 12px;border:1px solid var(--border);color:var(--text);vertical-align:top;line-height:1.5}
+.ct tr:nth-child(even) td{background:rgba(255,255,255,.01)}
+.ct .ca{background:rgba(34,211,238,.04);border-left:2px solid rgba(34,211,238,.25)}
+.ct .cb{background:rgba(167,139,250,.04);border-left:2px solid rgba(167,139,250,.25)}
+
+/* divider */
+.sdiv{height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);margin:24px 0 18px}
+/* mnemonic */
+.mn{margin:8px 0;padding:9px 12px;background:rgba(167,139,250,.07);border:1px solid rgba(167,139,250,.18);border-radius:6px;font-size:12.5px;color:#c4b5fd}
+.mn strong{color:#e9d5ff;font-weight:600}
+
+strong{color:var(--head);font-weight:600}
+.back{position:fixed;bottom:18px;right:18px;width:36px;height:36px;background:var(--py);border:none;border-radius:50%;color:#1a0a3a;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-weight:700;z-index:200}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">INTERFACE <span>.</span> QUESTIONS</div>
+  <div class="filters">
+    <button class="fbtn active" onclick="fil('all',this)">ALL</button>
+    <button class="fbtn pbi" onclick="fil('pbi',this)">Power BI</button>
+    <button class="fbtn excel" onclick="fil('excel',this)">Excel</button>
+    <button class="fbtn sql" onclick="fil('sql',this)">SQL</button>
+    <button class="fbtn py" onclick="fil('py',this)">Python</button>
+  </div>
+</div>
+
+<div class="sbar">
+  <div class="sstat t">Total <span id="st">0</span></div>
+  <div class="sstat g">Done <span id="sd">0</span></div>
+  <div class="sstat r">Left <span id="sl">0</span></div>
+  <div class="prog-track"><div class="prog-fill" id="pf"></div></div>
+  <div class="sstat"><span id="sp">0%</span></div>
+</div>
+
+<main class="main">
+
+<!-- ══════ POWER BI ══════ -->
+<div class="sec"><span class="stag pbi">Power BI</span><h2>Power BI Interface Questions</h2><span class="pri p-must">CRITICAL — scored 1.3</span></div>
+
+<!-- PB1 -->
+<div class="card" data-cat="pbi">
+<div class="ch" onclick="tog(this)">
+  <span class="qn pbi">P1</span>
+  <div class="qi">
+    <div class="qt">Identify the 5 views in the Power BI Desktop left panel — what does each one do?</div>
+    <div class="qm"><span class="qc">Interface Navigation · Must know before anything else</span><span class="pri p-must">MUST KNOW</span></div>
+  </div>
+  <div class="qr"><button class="db" onclick="done(event,this)">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ab">
+<div class="mock-wrap">
+  <div class="mock-title">Power BI Desktop — Left navigation panel</div>
+  <div style="display:flex;gap:14px;align-items:flex-start">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:6px;background:#141428;border:1px solid #2a2a4a;border-radius:8px;padding:10px 6px">
+      <div style="width:32px;height:32px;border-radius:6px;background:rgba(245,158,11,.2);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer" title="Report View">📊</div>
+      <div style="width:32px;height:32px;border-radius:6px;background:#1e1e38;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer">🗃️</div>
+      <div style="width:32px;height:32px;border-radius:6px;background:#1e1e38;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer">🔗</div>
+      <div style="width:32px;height:32px;border-radius:6px;background:#1e1e38;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer">🔮</div>
+      <div style="width:32px;height:32px;border-radius:6px;background:#1e1e38;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer">📋</div>
+    </div>
+    <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;align-items:center;gap:8px"><span style="background:rgba(245,158,11,.15);color:var(--pbi);padding:2px 8px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700">📊 REPORT VIEW</span><span style="font-size:12px;color:var(--text)">Build visuals and dashboards. Where you spend most time as a developer.</span></div>
+      <div style="display:flex;align-items:center;gap:8px"><span style="background:rgba(34,211,238,.1);color:var(--sql);padding:2px 8px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700">🗃️ DATA VIEW</span><span style="font-size:12px;color:var(--text)">Inspect raw table data row by row. See calculated column values. Verify what's in the model.</span></div>
+      <div style="display:flex;align-items:center;gap:8px"><span style="background:rgba(52,211,153,.1);color:var(--excel);padding:2px 8px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700">🔗 MODEL VIEW</span><span style="font-size:12px;color:var(--text)">See all tables and relationships as a diagram. Create/edit/delete relationships here. Define cardinality and cross-filter direction.</span></div>
+      <div style="display:flex;align-items:center;gap:8px"><span style="background:rgba(167,139,250,.1);color:var(--py);padding:2px 8px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700">🔮 DAX QUERY VIEW</span><span style="font-size:12px;color:var(--text)">Write and test DAX queries directly. New in 2023. Like SQL query editor but for DAX.</span></div>
+      <div style="display:flex;align-items:center;gap:8px"><span style="background:rgba(248,113,113,.1);color:#f87171;padding:2px 8px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700">📋 SCORECARD VIEW</span><span style="font-size:12px;color:var(--text)">KPI scorecards with goals and status tracking (metrics feature).</span></div>
+    </div>
+  </div>
+</div>
+<div class="hl yellow"><strong>Most asked:</strong> "Where do you create relationships?" → Model View. "Where do you write DAX measures?" → Report View (or DAX Query View). "Where do you check raw data?" → Data View (also called Table View).</div>
+</div>
+</div>
+
+<!-- PB2 -->
+<div class="card" data-cat="pbi">
+<div class="ch" onclick="tog(this)">
+  <span class="qn pbi">P2</span>
+  <div class="qi">
+    <div class="qt">The Filters pane has 3 levels — Visual, Page, Report. Identify what each affects and how to access them.</div>
+    <div class="qm"><span class="qc">Filters Pane · Direct from your feedback</span><span class="pri p-must">MUST KNOW</span></div>
+  </div>
+  <div class="qr"><button class="db" onclick="done(event,this)">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ab">
+<div class="mock-wrap">
+  <div class="mock-title">Filters Pane — 3 levels</div>
+  <div style="background:#141428;border:1px solid #2a2a4a;border-radius:7px;padding:10px;max-width:240px">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--pbi);letter-spacing:1px;margin-bottom:10px;text-transform:uppercase">Filters</div>
+    <div style="font-size:10px;color:#888;margin-bottom:4px;font-family:'JetBrains Mono',monospace;letter-spacing:.5px">FILTERS ON THIS VISUAL</div>
+    <div style="background:#1e1e38;border:1px solid rgba(245,158,11,.3);border-radius:4px;padding:6px 8px;margin-bottom:2px;font-size:11px;color:#fde68a">Year is 2024</div>
+    <div style="background:#1e1e38;border:1px dashed #3a3a5a;border-radius:4px;padding:4px 8px;margin-bottom:10px;font-size:10px;color:#555;text-align:center">+ Add data fields here</div>
+    <div style="font-size:10px;color:#888;margin-bottom:4px;font-family:'JetBrains Mono',monospace;letter-spacing:.5px">FILTERS ON THIS PAGE</div>
+    <div style="background:#1e1e38;border:1px solid rgba(34,211,238,.25);border-radius:4px;padding:6px 8px;margin-bottom:2px;font-size:11px;color:#a5f3fc">Region is North</div>
+    <div style="background:#1e1e38;border:1px dashed #3a3a5a;border-radius:4px;padding:4px 8px;margin-bottom:10px;font-size:10px;color:#555;text-align:center">+ Add data fields here</div>
+    <div style="font-size:10px;color:#888;margin-bottom:4px;font-family:'JetBrains Mono',monospace;letter-spacing:.5px">FILTERS ON ALL PAGES</div>
+    <div style="background:#1e1e38;border:1px solid rgba(52,211,153,.22);border-radius:4px;padding:6px 8px;margin-bottom:2px;font-size:11px;color:#a7f3d0">Status is Active</div>
+    <div style="background:#1e1e38;border:1px dashed #3a3a5a;border-radius:4px;padding:4px 8px;font-size:10px;color:#555;text-align:center">+ Add data fields here</div>
+  </div>
+</div>
+<table class="ct">
+<tr><th>Level</th><th>Affects</th><th>Use When</th><th>Access</th></tr>
+<tr><td><span class="ann">Visual-level</span></td><td class="ca">Only the currently selected visual on this page</td><td class="cb">Filter one chart without affecting others on the same page</td><td>Click a visual first, then drag field to Filters pane</td></tr>
+<tr><td><span class="ann blue">Page-level</span></td><td class="ca">All visuals on the current page only</td><td class="cb">Apply a context for one report page (e.g. "This page = 2024 only")</td><td>Deselect all visuals, then drag to Filters pane</td></tr>
+<tr><td><span class="ann green">Report-level</span></td><td class="ca">Every visual on every page in the report</td><td class="cb">Global business rules: "Always show Active customers only"</td><td>Scroll down in Filters pane to "Filters on all pages"</td></tr>
+</table>
+<div class="hl yellow"><strong>Slicer vs Filter panel recap:</strong> Slicer = visible on canvas, user can interact with it. Filter panel = hidden from viewers in Read mode (unless you enable it), used for locked/developer-controlled filters.</div>
+</div>
+</div>
+
+<!-- PB3 -->
+<div class="card" data-cat="pbi">
+<div class="ch" onclick="tog(this)">
+  <span class="qn pbi">P3</span>
+  <div class="qi">
+    <div class="qt">In Power Query Editor — what does each pane do? (Query list, Applied Steps, Preview)</div>
+    <div class="qm"><span class="qc">Power Query Interface</span><span class="pri p-must">MUST KNOW</span></div>
+  </div>
+  <div class="qr"><button class="db" onclick="done(event,this)">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ab">
+<div class="mock-wrap">
+  <div class="mock-title">Power Query Editor layout</div>
+  <div style="display:grid;grid-template-columns:160px 1fr 180px;gap:0;background:#1a1a2e;border:1px solid #2a2a4a;border-radius:7px;overflow:hidden;min-height:160px">
+    <div style="background:#141428;border-right:1px solid #2a2a4a;padding:8px">
+      <div style="font-size:9px;color:var(--pbi);font-family:'JetBrains Mono',monospace;letter-spacing:1px;margin-bottom:8px;text-transform:uppercase">Queries</div>
+      <div style="background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);border-radius:4px;padding:4px 8px;font-size:10px;color:#fde68a;margin-bottom:3px">Sales_Data</div>
+      <div style="padding:4px 8px;font-size:10px;color:#666;margin-bottom:3px">Customers</div>
+      <div style="padding:4px 8px;font-size:10px;color:#666">Products</div>
+    </div>
+    <div style="padding:8px">
+      <div style="font-size:9px;color:#555;font-family:'JetBrains Mono',monospace;letter-spacing:1px;margin-bottom:6px">DATA PREVIEW</div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);font-size:10px;gap:0;border:1px solid #2a2a4a;border-radius:4px;overflow:hidden">
+        <div style="background:#1e1e38;padding:4px 6px;border-right:1px solid #2a2a4a;border-bottom:1px solid #2a2a4a;color:#888;font-weight:600">OrderID</div>
+        <div style="background:#1e1e38;padding:4px 6px;border-right:1px solid #2a2a4a;border-bottom:1px solid #2a2a4a;color:#888;font-weight:600">Date</div>
+        <div style="background:#1e1e38;padding:4px 6px;border-right:1px solid #2a2a4a;border-bottom:1px solid #2a2a4a;color:#888;font-weight:600">Revenue</div>
+        <div style="background:#1e1e38;padding:4px 6px;border-bottom:1px solid #2a2a4a;color:#888;font-weight:600">Region</div>
+        <div style="padding:4px 6px;border-right:1px solid #2a2a4a;border-bottom:1px solid #2a2a4a;color:#ccc">1001</div>
+        <div style="padding:4px 6px;border-right:1px solid #2a2a4a;border-bottom:1px solid #2a2a4a;color:#ccc">2024-01-05</div>
+        <div style="padding:4px 6px;border-right:1px solid #2a2a4a;border-bottom:1px solid #2a2a4a;color:#ccc">4500</div>
+        <div style="padding:4px 6px;border-bottom:1px solid #2a2a4a;color:#ccc">North</div>
+        <div style="padding:4px 6px;border-right:1px solid #2a2a4a;color:#ccc">1002</div>
+        <div style="padding:4px 6px;border-right:1px solid #2a2a4a;color:#ccc">2024-01-08</div>
+        <div style="padding:4px 6px;border-right:1px solid #2a2a4a;color:#ccc">2100</div>
+        <div style="padding:4px 6px;color:#ccc">South</div>
+      </div>
+    </div>
+    <div style="background:#141428;border-left:1px solid #2a2a4a;padding:8px">
+      <div style="font-size:9px;color:var(--pbi);font-family:'JetBrains Mono',monospace;letter-spacing:1px;margin-bottom:8px;text-transform:uppercase">Applied Steps</div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:#a7f3d0"><span style="color:#34d399">✓</span>Source</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:#a7f3d0"><span style="color:#34d399">✓</span>Navigation</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:#a7f3d0"><span style="color:#34d399">✓</span>Changed Type</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:#a7f3d0"><span style="color:#34d399">✓</span>Removed Nulls</div>
+        <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--pbi);background:rgba(245,158,11,.1);border-radius:3px;padding:2px 4px"><span>⚡</span>Added Column</div>
+      </div>
+    </div>
+  </div>
+</div>
+<table class="ct">
+<tr><th>Pane</th><th>Purpose</th><th>Key action</th></tr>
+<tr><td><strong>Query List (left)</strong></td><td class="ca">Shows all tables/queries loaded. Click to switch between them.</td><td class="cb">Right-click → Rename, Duplicate, Reference, Delete</td></tr>
+<tr><td><strong>Data Preview (center)</strong></td><td class="ca">Shows a sample of your data after all applied steps. Each column header has type icon + filter dropdown.</td><td class="cb">Click column header to select. Right-click for transform options.</td></tr>
+<tr><td><strong>Applied Steps (right)</strong></td><td class="ca">Every transformation you do is recorded as a step. Steps are applied in order top → bottom.</td><td class="cb">Click any step to preview data at that point. Delete/reorder steps. Click ⚙ to edit step settings.</td></tr>
+</table>
+<div class="hl green"><strong>Key concept:</strong> Applied Steps generate M code. Click "Advanced Editor" (Home tab) to see and edit the full M script. Each step = one M function call chained together.</div>
+</div>
+</div>
+
+<!-- PB4 -->
+<div class="card" data-cat="pbi">
+<div class="ch" onclick="tog(this)">
+  <span class="qn pbi">P4</span>
+  <div class="qi">
+    <div class="qt">In the Visualizations pane — what are the Fields, Format, and Analytics tabs? When do you use each?</div>
+    <div class="qm"><span class="qc">Report View Panels · Frequently asked</span><span class="pri p-must">MUST KNOW</span></div>
+  </div>
+  <div class="qr"><button class="db" onclick="done(event,this)">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ab">
+<div class="mock-wrap">
+  <div class="mock-title">Visualizations pane — 3 tabs</div>
+  <div style="background:#141428;border:1px solid #2a2a4a;border-radius:7px;padding:10px;max-width:260px">
+    <div style="display:flex;border-bottom:1px solid #2a2a4a;margin-bottom:10px">
+      <div style="flex:1;text-align:center;padding:6px;font-size:10px;color:var(--pbi);border-bottom:2px solid var(--pbi);font-family:'JetBrains Mono',monospace;font-weight:700">Fields</div>
+      <div style="flex:1;text-align:center;padding:6px;font-size:10px;color:#666;font-family:'JetBrains Mono',monospace">Format</div>
+      <div style="flex:1;text-align:center;padding:6px;font-size:10px;color:#666;font-family:'JetBrains Mono',monospace">Analytics</div>
+    </div>
+    <div style="font-size:9px;color:#888;margin-bottom:4px;font-family:'JetBrains Mono',monospace">X AXIS</div>
+    <div style="background:#1e1e38;border:1px solid rgba(245,158,11,.3);border-radius:4px;padding:5px 8px;font-size:11px;color:#fde68a;margin-bottom:8px;display:flex;align-items:center;gap:6px"><span>📅</span>Month</div>
+    <div style="font-size:9px;color:#888;margin-bottom:4px;font-family:'JetBrains Mono',monospace">Y AXIS</div>
+    <div style="background:#1e1e38;border:1px solid rgba(245,158,11,.3);border-radius:4px;padding:5px 8px;font-size:11px;color:#fde68a;margin-bottom:8px;display:flex;align-items:center;gap:6px"><span>∑</span>Revenue</div>
+    <div style="font-size:9px;color:#888;margin-bottom:4px;font-family:'JetBrains Mono',monospace">LEGEND</div>
+    <div style="background:#1e1e38;border:1px dashed #3a3a5a;border-radius:4px;padding:4px 8px;font-size:10px;color:#555;text-align:center">+ Add data fields here</div>
+  </div>
+</div>
+<table class="ct">
+<tr><th>Tab</th><th>Purpose</th><th>What you do there</th></tr>
+<tr><td><strong>Fields (Build)</strong></td><td class="ca">Assign your data fields to visual "roles" — what goes on X axis, Y axis, Legend, Tooltip, etc.</td><td class="cb">Drag columns/measures from the Data panel into the field wells (X Axis, Y Axis, Legend, Values, etc.)</td></tr>
+<tr><td><strong>Format</strong></td><td class="ca">Control every visual styling property — colors, fonts, borders, labels, titles, backgrounds</td><td class="cb">Change bar colors, add data labels, resize title font, add border, enable background color</td></tr>
+<tr><td><strong>Analytics</strong></td><td class="ca">Add statistical reference lines to charts — trend lines, min/max lines, average lines, percentile bands</td><td class="cb">Add a "Trend Line" to a scatter chart, add "Average Line" to a bar chart, add "Forecast" to a line chart</td></tr>
+</table>
+</div>
+</div>
+
+<!-- PB5 -->
+<div class="card" data-cat="pbi">
+<div class="ch" onclick="tog(this)">
+  <span class="qn pbi">P5</span>
+  <div class="qi">
+    <div class="qt">How do you create a relationship in Model View? What are cardinality options and what does cross-filter direction mean?</div>
+    <div class="qm"><span class="qc">Data Modeling · Direct from your feedback</span><span class="pri p-must">MUST KNOW</span></div>
+  </div>
+  <div class="qr"><button class="db" onclick="done(event,this)">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ab">
+<div class="mock-wrap">
+  <div class="mock-title">Model View — relationship types</div>
+  <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap">
+    <div style="text-align:center">
+      <div style="background:#141428;border:1px solid rgba(52,211,153,.3);border-radius:6px;padding:8px 14px;font-size:11px;color:#a7f3d0;margin-bottom:4px">DimDate<br><span style="font-size:9px;color:#555">DateKey (PK)</span></div>
+      <div style="font-size:9px;color:#34d399;margin:2px 0">1 side</div>
+      <div style="width:2px;height:20px;background:#34d399;margin:0 auto"></div>
+      <div style="font-size:12px;color:#34d399">*</div>
+      <div style="width:2px;height:20px;background:#34d399;margin:0 auto"></div>
+      <div style="font-size:9px;color:#555;margin:2px 0">many side</div>
+      <div style="background:#141428;border:1px solid rgba(52,211,153,.3);border-radius:6px;padding:8px 14px;font-size:11px;color:#a7f3d0;margin-top:4px">FactSales<br><span style="font-size:9px;color:#555">OrderDate (FK)</span></div>
+    </div>
+    <div style="flex:1;min-width:200px">
+      <table class="ct" style="margin:0">
+        <tr><th>Cardinality</th><th>Meaning</th><th>Example</th></tr>
+        <tr><td><span class="ann green">1:* (One-to-Many)</span></td><td class="ca">One row in dim matches many rows in fact</td><td class="cb">One customer → many orders</td></tr>
+        <tr><td><span class="ann blue">1:1 (One-to-One)</span></td><td class="ca">Each row matches exactly one row in other table</td><td class="cb">Employee ↔ EmployeeDetails</td></tr>
+        <tr><td><span class="ann">*:* (Many-to-Many)</span></td><td class="ca">Many rows match many rows — needs bridge table</td><td class="cb">Students ↔ Courses</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="hl blue"><strong>Cross-filter direction:</strong> Single = filter flows one way (dim → fact, standard star schema). Both = bidirectional, filter flows both ways. Default: always use Single. Both = use only when specifically needed for many-to-many scenarios — it can cause unexpected results.</div>
+<div class="hl yellow"><strong>How to create:</strong> Model View → drag a column from one table onto the matching column in another table → dialog opens → set cardinality + cross-filter direction → OK. Or: Manage Relationships button in Home tab.</div>
+</div>
+</div>
+
+<!-- PB6 — DAX editor -->
+<div class="card" data-cat="pbi">
+<div class="ch" onclick="tog(this)">
+  <span class="qn pbi">P6</span>
+  <div class="qi">
+    <div class="qt">Where do you write a Measure vs a Calculated Column in the Power BI interface? What is the difference in where they appear?</div>
+    <div class="qm"><span class="qc">DAX Interface</span><span class="pri p-must">MUST KNOW</span></div>
+  </div>
+  <div class="qr"><button class="db" onclick="done(event,this)">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ab">
+<div class="mock-wrap">
+  <div class="mock-title">Measure — created from Report or Data View</div>
+  <div style="display:flex;gap:12px;flex-wrap:wrap">
+    <div style="background:#141428;border:1px solid #2a2a4a;border-radius:6px;padding:8px;flex:1;min-width:180px">
+      <div style="font-size:9px;color:#888;font-family:'JetBrains Mono',monospace;margin-bottom:6px">Right-click table → New measure</div>
+      <div class="dax-ed">
+<span class="d-fn">Total Revenue</span> = <br>
+<span class="d-fn">SUM</span>(<span class="d-col">Sales</span>[<span class="d-col">Revenue</span>])
+      </div>
+      <div style="font-size:10px;color:#34d399;margin-top:6px">✓ Appears in Data panel with calculator icon 🧮</div>
+    </div>
+    <div style="background:#141428;border:1px solid #2a2a4a;border-radius:6px;padding:8px;flex:1;min-width:180px">
+      <div style="font-size:9px;color:#888;font-family:'JetBrains Mono',monospace;margin-bottom:6px">Right-click table → New calculated column</div>
+      <div class="dax-ed">
+<span class="d-fn">Full Name</span> = <br>
+<span class="d-col">Employees</span>[<span class="d-col">First</span>]<br>
+&amp; <span class="d-str">" "</span> &amp; <span class="d-col">Employees</span>[<span class="d-col">Last</span>]
+      </div>
+      <div style="font-size:10px;color:var(--pbi);margin-top:6px">✓ Appears as a new column in the table</div>
+    </div>
+  </div>
+</div>
+<table class="ct">
+<tr><th>Item</th><th>Icon in Data Panel</th><th>Can use as slicer?</th><th>Stored in table?</th></tr>
+<tr><td>Measure</td><td class="ca">🧮 Calculator icon</td><td class="cb">No</td><td class="ca">No — computed dynamically</td></tr>
+<tr><td>Calculated Column</td><td class="ca">Column icon (same as regular column)</td><td class="cb">Yes</td><td class="ca">Yes — stored at refresh</td></tr>
+</table>
+</div>
+</div>
+
+<div class="sdiv"></div>
+
+<!-- ══════ EXCEL ══════ -->
+<div class="sec"><span class="stag excel">Excel</span><h2>Excel Interface Questions</h2><span class="pri p-must">CRITICAL — scored 2.5</span></div>
+
+<!-- E1 -->
+<div class="card" data-cat="excel">
+<div class="ch" onclick="tog(this)">
+  <span class="qn excel">E1</span>
+  <div class="qi">
+    <div class="qt">Identify what's happening in this Excel formula bar and cell — is this formula correct or does it have an error?</div>
+    <div class="qm"><span class="qc">Formula Identification · Most basic Excel skill check</span><span class="pri p-must">MUST KNOW</span></div>
+  </div>
+  <div class="qr"><button class="db" onclick="done(event,this)">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ab">
+<div class="mock-wrap">
+  <div class="mock-title">Scenario 1 — VLOOKUP formula</div>
+  <div class="ribbon">
+    <div class="rtab">Home</div><div class="rtab active">Formulas</div><div class="rtab">Data</div>
+  </div>
+  <div class="formula-bar">
+    <div class="fb-cell">C2</div>
+    <div class="fb-eq">fx</div>
+    <div class="fb-formula">=VLOOKUP(A2,Sheet2!B:D,2,0)</div>
+  </div>
+  <div class="sheet-grid" style="display:grid;grid-template-columns:30px 120px 120px 180px;border:1px solid #d0d0d0;border-top:none">
+    <div class="sh"></div><div class="sh">A</div><div class="sh">B</div><div class="sh">C</div>
+    <div class="sh">1</div><div class="sc head">Employee ID</div><div class="sc head">Name</div><div class="sc head">Department</div>
+    <div class="sh">2</div><div class="sc">E1042</div><div class="sc">Sarah K</div><div class="sc sel formula">=VLOOKUP(A2,Sheet2!B:D,2,0)</div>
+    <div class="sh">3</div><div class="sc">E1043</div><div class="sc">Raj M</div><div class="sc">#N/A</div>
+    <div class="sh">4</div><div class="sc">E1044</div><div class="sc">Priya S</div><div class="sc">HR</div>
+  </div>
+</div>
+<div class="hl yellow"><strong>What to spot in this formula:</strong> =VLOOKUP(<span style="color:#fde68a">A2</span>, <span style="color:#a5f3fc">Sheet2!B:D</span>, <span style="color:#a7f3d0">2</span>, <span style="color:#fca5a5">0</span>)<br><br>
+• <strong>A2</strong> = lookup value (Employee ID from this sheet)<br>
+• <strong>Sheet2!B:D</strong> = lookup range on Sheet2 — BUT this is a problem! If the Employee ID being looked up is in column B of Sheet2, and the range starts at B, then column B = position 1, C = position 2.<br>
+• <strong>2</strong> = return the 2nd column of the range (column C of Sheet2)<br>
+• <strong>0 / FALSE</strong> = exact match ✓<br><br>
+<strong>Why row 3 shows #N/A:</strong> Employee E1043 was not found in Sheet2!B:D — either it doesn't exist there, or it has a type mismatch (text vs number) or trailing spaces.</div>
+<div class="hl red"><strong>Common #N/A causes:</strong> 1) Value genuinely not in lookup range. 2) ID stored as text in one place, number in another. 3) Trailing space " E1043" ≠ "E1043". Fix with TRIM() and VALUE().</div>
+</div>
+</div>
+
+<!-- E2 -->
+<div class="card" data-cat="excel">
+<div class="ch" onclick="tog(this)">
+  <span class="qn excel">E2</span>
+  <div class="qi">
+    <div class="qt">What does the green triangle in a cell mean? What about a small red triangle in the top-right corner?</div>
+    <div class="qm"><span class="qc">Cell Indicators · Direct from your feedback</span><span class="pri p-must">MUST KNOW</span></div>
+  </div>
+  <div class="qr"><button class="db" onclick="done(event,this)">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ab">
+<div class="mock-wrap">
+  <div class="mock-title">Cell indicator types</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+    <div>
+      <div class="sheet-grid" style="display:grid;grid-template-columns:30px 120px 100px;border:1px solid #d0d0d0">
+        <div class="sh"></div><div class="sh">A</div><div class="sh">B</div>
+        <div class="sh">1</div>
+        <div class="sc" style="position:relative">
+          <span style="position:absolute;top:2px;left:2px;width:0;height:0;border-style:solid;border-width:0 8px 8px 0;border-color:transparent #32a852 transparent transparent;transform:rotate(180deg);border-top-width:8px;border-top-color:#32a852;border-width:8px 8px 0 0"></span>
+          12345
+        </div>
+        <div class="sc">Product A</div>
+        <div class="sh">2</div>
+        <div class="sc" style="position:relative">
+          <span style="position:absolute;top:2px;left:2px;width:0;height:0;border-style:solid;border-width:0 8px 8px 0;border-color:transparent #32a852 transparent transparent;transform:rotate(180deg);border-top-width:8px;border-top-color:#32a852;border-width:8px 8px 0 0"></span>
+          67890
+        </div>
+        <div class="sc">Product B</div>
+      </div>
+      <div style="margin-top:6px;font-size:11px;color:#a7f3d0;display:flex;align-items:center;gap:6px"><span style="color:#32a852;font-weight:700">▲ GREEN triangle</span>(top-left corner)</div>
+      <div style="font-size:11px;color:var(--text);margin-top:4px">Number stored as TEXT. Excel detected a number that looks like text (common with IDs exported from databases). This breaks SUM, VLOOKUP (number ≠ text), and arithmetic.</div>
+      <div style="font-size:11px;color:#fde68a;margin-top:4px"><strong>Fix:</strong> Click cell → yellow ⚠ icon → "Convert to Number." Or multiply column by 1.</div>
+    </div>
+    <div>
+      <div class="sheet-grid" style="display:grid;grid-template-columns:30px 120px 100px;border:1px solid #d0d0d0">
+        <div class="sh"></div><div class="sh">A</div><div class="sh">B</div>
+        <div class="sh">1</div>
+        <div class="sc" style="position:relative">
+          <span style="position:absolute;top:1px;right:1px;width:0;height:0;border-top:7px solid #cc0000;border-left:7px solid transparent"></span>
+          Don't change
+        </div>
+        <div class="sc">100</div>
+        <div class="sh">2</div>
+        <div class="sc">Final value</div>
+        <div class="sc">250</div>
+      </div>
+      <div style="margin-top:6px;font-size:11px;color:#fca5a5;display:flex;align-items:center;gap:6px"><span style="color:#cc0000;font-weight:700">▲ RED triangle</span>(top-right corner)</div>
+      <div style="font-size:11px;color:var(--text);margin-top:4px">A comment or note is attached to this cell. Hover over the cell to read the comment/note.</div>
+      <div style="font-size:11px;color:#fde68a;margin-top:4px"><strong>Insert comment:</strong> Right-click → Insert Comment (Shift+F2). Used for documentation and annotations.</div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+<!-- E3 -->
+<div class="card" data-cat="excel">
+<div class="ch" onclick="tog(this)">
+  <span class="qn excel">E3</span>
+  <div class="qi">
+    <div class="qt">What do these Excel error codes mean — #N/A, #VALUE!, #REF!, #DIV/0!, #NAME?, ######?</div>
+    <div class="qm"><span class="qc">Error Types · Must be able to diagnose instantly</span><span class="pri p-must">MUST KNOW</span></div>
+  </div>
+  <div class="qr"><button class="db" onclick="done(event,this)">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ab">
+<div class="mock-wrap">
+  <div class="mock-title">Excel error identification</div>
+  <div class="sheet-grid" style="display:grid;grid-template-columns:30px 100px 200px 220px;border:1px solid #d0d0d0;border-top:none">
+    <div class="sh"></div><div class="sh">Cell shows</div><div class="sh">Meaning</div><div class="sh">Common cause & fix</div>
+    <div class="sh">1</div><div class="sc err">#N/A</div><td class="sc">Value Not Available</td><div class="sc">VLOOKUP/MATCH can't find the lookup value. Check for type mismatch (text vs number) or trailing spaces.</div>
+    <div class="sh">2</div><div class="sc err">#VALUE!</div><div class="sc">Wrong data type</div><div class="sc">Math on text: =A1+B1 where B1="hello". Or function argument is wrong type.</div>
+    <div class="sh">3</div><div class="sc err">#REF!</div><div class="sc">Invalid reference</div><div class="sc">Cell reference was deleted. Happens when you delete a row/column that a formula pointed to.</div>
+    <div class="sh">4</div><div class="sc err">#DIV/0!</div><div class="sc">Division by zero</div><div class="sc">=A1/B1 where B1=0 or blank. Fix: =IFERROR(A1/B1, 0)</div>
+    <div class="sh">5</div><div class="sc err">#NAME?</div><div class="sc">Unrecognized formula name</div><div class="sc">Typo in function name (=SUMIF spelled wrong), or named range doesn't exist.</div>
+    <div class="sh">6</div><div class="sc err">######</div><div class="sc">Column too narrow</div><div class="sc">NOT a formula error — just widen the column. Double-click column border to auto-fit.</div>
+  </div>
+</div>
+<div class="mn"><strong>Memory trick:</strong> #N/A = Not found. #VALUE = wrong Value type. #REF = Reference deleted. #DIV/0 = Divide by zero. #NAME = Name typo. ###### = too narrow (not really an error).</div>
+</div>
+</div>
+
+<!-- E4 Conditional formatting -->
+<div class="card" data-cat="excel">
+<div class="ch" onclick="tog(this)">
+  <span class="qn excel">E4</span>
+  <div class="qi">
+    <div class="qt">Conditional Formatting — what is it and what are the 5 types? Where is it in the ribbon?</div>
+    <div class="qm"><span class="qc">Conditional Formatting · Direct from your feedback</span><span class="pri p-must">MUST KNOW</span></div>
+  </div>
+  <div class="qr"><button class="db" onclick="done(event,this)">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ab">
+<div class="mock-wrap">
+  <div class="mock-title">Home → Conditional Formatting — the 5 types</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+    <div style="background:#f8f8f8;border:1px solid #d0d0d0;border-radius:6px;padding:8px">
+      <div style="font-size:10px;font-weight:700;color:#217346;margin-bottom:6px">1. Highlight Cell Rules</div>
+      <div class="sheet-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr">
+        <div style="background:#ffc7ce;color:#9c0006;padding:4px 8px;font-size:11px;text-align:center;border:1px solid #d0d0d0">42</div>
+        <div style="background:#ffeb9c;color:#9c6500;padding:4px 8px;font-size:11px;text-align:center;border:1px solid #d0d0d0">78</div>
+        <div style="background:#c6efce;color:#276221;padding:4px 8px;font-size:11px;text-align:center;border:1px solid #d0d0d0">95</div>
+      </div>
+      <div style="font-size:10px;color:#555;margin-top:4px">Greater than, less than, between, text contains, duplicate values</div>
+    </div>
+    <div style="background:#f8f8f8;border:1px solid #d0d0d0;border-radius:6px;padding:8px">
+      <div style="font-size:10px;font-weight:700;color:#217346;margin-bottom:6px">2. Top/Bottom Rules</div>
+      <div class="sheet-grid" style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr">
+        <div style="background:#ffc7ce;color:#9c0006;padding:4px;font-size:10px;text-align:center;border:1px solid #d0d0d0">22</div>
+        <div style="padding:4px;font-size:10px;text-align:center;border:1px solid #d0d0d0;background:#fff">58</div>
+        <div style="padding:4px;font-size:10px;text-align:center;border:1px solid #d0d0d0;background:#fff">71</div>
+        <div style="background:#c6efce;color:#276221;padding:4px;font-size:10px;text-align:center;border:1px solid #d0d0d0">94</div>
+      </div>
+      <div style="font-size:10px;color:#555;margin-top:4px">Top 10, Bottom 10, Above/Below average</div>
+    </div>
+    <div style="background:#f8f8f8;border:1px solid #d0d0d0;border-radius:6px;padding:8px">
+      <div style="font-size:10px;font-weight:700;color:#217346;margin-bottom:6px">3. Data Bars</div>
+      <div style="display:flex;flex-direction:column;gap:3px">
+        <div style="background:#e0e0e0;border-radius:2px;height:16px;position:relative"><div style="background:#4472c4;height:100%;width:35%;border-radius:2px"></div><span style="position:absolute;left:38%;top:1px;font-size:10px;color:#333">35</span></div>
+        <div style="background:#e0e0e0;border-radius:2px;height:16px;position:relative"><div style="background:#4472c4;height:100%;width:72%;border-radius:2px"></div><span style="position:absolute;left:74%;top:1px;font-size:10px;color:#333">72</span></div>
+        <div style="background:#e0e0e0;border-radius:2px;height:16px;position:relative"><div style="background:#4472c4;height:100%;width:90%;border-radius:2px"></div><span style="position:absolute;left:92%;top:1px;font-size:10px;color:#333">90</span></div>
+      </div>
+    </div>
+    <div style="background:#f8f8f8;border:1px solid #d0d0d0;border-radius:6px;padding:8px">
+      <div style="font-size:10px;font-weight:700;color:#217346;margin-bottom:6px">4. Color Scales</div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:1px">
+        <div style="background:#f8696b;height:30px;border-radius:2px"></div>
+        <div style="background:#fcae74;height:30px;border-radius:2px"></div>
+        <div style="background:#ffeb84;height:30px;border-radius:2px"></div>
+        <div style="background:#b1d580;height:30px;border-radius:2px"></div>
+        <div style="background:#63be7b;height:30px;border-radius:2px"></div>
+      </div>
+      <div style="font-size:10px;color:#555;margin-top:4px">Heatmap — good for correlation matrices</div>
+    </div>
+    <div style="background:#f8f8f8;border:1px solid #d0d0d0;border-radius:6px;padding:8px;grid-column:1/-1">
+      <div style="font-size:10px;font-weight:700;color:#217346;margin-bottom:6px">5. Icon Sets</div>
+      <div style="display:flex;gap:12px;align-items:center">
+        <div style="font-size:14px">🔴 42 &nbsp; 🟡 68 &nbsp; 🟢 95</div>
+        <div style="font-size:10px;color:#555">Traffic lights, arrows, flags — for KPI dashboards</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="hl green"><strong>Interview answer:</strong> Conditional Formatting is at Home → Styles → Conditional Formatting. It applies automatic visual formatting based on rules — no manual coloring needed. Widely used in dashboards and reports to highlight exceptions, outliers, and trends instantly.</div>
+</div>
+</div>
+
+<!-- E5 Pivot -->
+<div class="card" data-cat="excel">
+<div class="ch" onclick="tog(this)">
+  <span class="qn excel">E5</span>
+  <div class="qi">
+    <div class="qt">In a Pivot Table Field List — what do Rows, Columns, Values, and Filters areas do? Draw the relationship between field placement and output.</div>
+    <div class="qm"><span class="qc">Pivot Table Interface · Essential</span><span class="pri p-must">MUST KNOW</span></div>
+  </div>
+  <div class="qr"><button class="db" onclick="done(event,this)">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ab">
+<div class="mock-wrap">
+  <div class="mock-title">Pivot Table Field List → what the pivot looks like</div>
+  <div style="display:grid;grid-template-columns:180px 1fr;gap:14px;align-items:start">
+    <div style="background:#f5f5f5;border:1px solid #d0d0d0;border-radius:6px;padding:8px;font-size:11px">
+      <div style="font-weight:700;color:#333;margin-bottom:8px;font-size:12px">PivotTable Fields</div>
+      <div style="margin-bottom:8px">
+        <div style="font-size:10px;color:#666;margin-bottom:4px">Fields:</div>
+        <div style="display:flex;flex-direction:column;gap:2px">
+          <div style="display:flex;align-items:center;gap:4px"><input type="checkbox" checked style="accent-color:#217346"><span>Region</span></div>
+          <div style="display:flex;align-items:center;gap:4px"><input type="checkbox" checked style="accent-color:#217346"><span>Product</span></div>
+          <div style="display:flex;align-items:center;gap:4px"><input type="checkbox" checked style="accent-color:#217346"><span>Revenue</span></div>
+          <div style="display:flex;align-items:center;gap:4px"><input type="checkbox" checked style="accent-color:#217346"><span>Year</span></div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
+        <div style="background:#e8f5e9;border:1px solid #81c784;border-radius:3px;padding:4px">
+          <div style="font-size:9px;color:#2e7d32;font-weight:700;margin-bottom:2px">FILTERS</div>
+          <div style="background:#c8e6c9;border-radius:2px;padding:2px 4px;font-size:10px;color:#1b5e20">Year</div>
+        </div>
+        <div style="background:#e3f2fd;border:1px solid #64b5f6;border-radius:3px;padding:4px">
+          <div style="font-size:9px;color:#1565c0;font-weight:700;margin-bottom:2px">COLUMNS</div>
+          <div style="background:#bbdefb;border-radius:2px;padding:2px 4px;font-size:10px;color:#0d47a1">Product</div>
+        </div>
+        <div style="background:#fff3e0;border:1px solid #ffb74d;border-radius:3px;padding:4px">
+          <div style="font-size:9px;color:#e65100;font-weight:700;margin-bottom:2px">ROWS</div>
+          <div style="background:#ffe0b2;border-radius:2px;padding:2px 4px;font-size:10px;color:#bf360c">Region</div>
+        </div>
+        <div style="background:#f3e5f5;border:1px solid #ce93d8;border-radius:3px;padding:4px">
+          <div style="font-size:9px;color:#6a1b9a;font-weight:700;margin-bottom:2px">VALUES</div>
+          <div style="background:#e1bee7;border-radius:2px;padding:2px 4px;font-size:10px;color:#4a148c">Sum of Revenue</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:10px;color:#666;margin-bottom:4px">Year: 2024 (Filter applied)</div>
+      <div class="sheet-grid" style="display:grid;grid-template-columns:80px 70px 70px 70px 70px;border:1px solid #d0d0d0">
+        <div class="sh">Region ↓ / Product →</div><div class="sh" style="background:#bbdefb">Alpha</div><div class="sh" style="background:#bbdefb">Beta</div><div class="sh" style="background:#bbdefb">Gamma</div><div class="sh" style="background:#bbdefb">Total</div>
+        <div class="sc head" style="background:#ffe0b2">North</div><div class="sc">12,400</div><div class="sc">8,200</div><div class="sc">5,600</div><div class="sc head">26,200</div>
+        <div class="sc head" style="background:#ffe0b2">South</div><div class="sc">9,100</div><div class="sc">11,300</div><div class="sc">7,400</div><div class="sc head">27,800</div>
+        <div class="sc head" style="background:#ffe0b2">West</div><div class="sc">6,500</div><div class="sc">4,800</div><div class="sc">9,200</div><div class="sc head">20,500</div>
+        <div class="sc head">Grand Total</div><div class="sc head">28,000</div><div class="sc head">24,300</div><div class="sc head">22,200</div><div class="sc head">74,500</div>
+      </div>
+    </div>
+  </div>
+</div>
+<table class="ct">
+<tr><th>Area</th><th>Controls</th><th>Example</th></tr>
+<tr><td><strong style="color:#fde68a">FILTERS</strong></td><td class="ca">The dropdown filter above the pivot — limits ALL data in the table</td><td class="cb">Year = 2024 (only shows 2024 data)</td></tr>
+<tr><td><strong style="color:#e0f2fe">COLUMNS</strong></td><td class="ca">Each unique value becomes a column header</td><td class="cb">Product names become column headers</td></tr>
+<tr><td><strong style="color:#ffedd5">ROWS</strong></td><td class="ca">Each unique value becomes a row</td><td class="cb">Regions become row labels</td></tr>
+<tr><td><strong style="color:#f3e8ff">VALUES</strong></td><td class="ca">The numeric field being aggregated (SUM, COUNT, AVG, etc.)</td><td class="cb">Sum of Revenue fills each cell</td></tr>
+</table>
+</div>
+</div>
+
+<div class="sdiv"></div>
+
+<!-- ══════ SQL ══════ -->
+<div class="sec"><span class="stag sql">SQL</span><h2>SQL Interface & Query Reading Questions</h2><span class="pri p-hi">HIGH PRIORITY</span></div>
+
+<!-- S1 -->
+<div class="card" data-cat="sql">
+<div class="ch" onclick="tog(this)">
+  <span class="qn sql">S1</span>
+  <div class="qi">
+    <div class="qt">Read this query — what does it output? Identify every clause and what each does.</div>
+    <div class="qm"><span class="qc">Query Reading · Core skill for all SQL interviews</span><span class="pri p-must">MUST KNOW</span></div>
+  </div>
+  <div class="qr"><button class="db" onclick="done(event,this)">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ab">
+<div class="mock-wrap">
+  <div class="mock-title">Read and explain this query</div>
+  <div class="sql-ed">
+<span class="s-kw">SELECT</span>   c.CompanyName,
+         <span class="s-fn">COUNT</span>(o.OrderID)               <span class="s-kw">AS</span> TotalOrders,
+         <span class="s-fn">ROUND</span>(<span class="s-fn">AVG</span>(od.UnitPrice),<span class="s-num">2</span>)    <span class="s-kw">AS</span> AvgPrice,
+         <span class="s-fn">SUM</span>(od.Quantity)               <span class="s-kw">AS</span> TotalQty
+<span class="s-kw">FROM</span>     Customers c
+<span class="s-kw">JOIN</span>     Orders o    <span class="s-kw">ON</span> c.CustomerID = o.CustomerID
+<span class="s-kw">JOIN</span>     OrderDetails od <span class="s-kw">ON</span> o.OrderID = od.OrderID
+<span class="s-kw">WHERE</span>    c.Country = <span class="s-str">'Germany'</span>
+<span class="s-kw">GROUP BY</span> c.CompanyName
+<span class="s-kw">HAVING</span>   <span class="s-fn">COUNT</span>(o.OrderID) > <span class="s-num">5</span>
+<span class="s-kw">ORDER BY</span> TotalOrders <span class="s-kw">DESC</span>
+<span class="s-kw">LIMIT</span>    <span class="s-num">10</span>;
+  </div>
+</div>
+<table class="ct">
+<tr><th>Clause</th><th>What it does</th></tr>
+<tr><td><code>SELECT</code></td><td class="ca">Returns 4 columns: company name, count of orders, average unit price, total quantity</td></tr>
+<tr><td><code>FROM + 2 JOINs</code></td><td class="ca">Connects 3 tables: Customers → Orders → OrderDetails (standard Northwind chain)</td></tr>
+<tr><td><code>WHERE Country='Germany'</code></td><td class="ca">Filters ROWS before grouping — only includes German customers</td></tr>
+<tr><td><code>GROUP BY CompanyName</code></td><td class="ca">Collapses all rows per company into one summary row</td></tr>
+<tr><td><code>HAVING COUNT > 5</code></td><td class="ca">Filters GROUPS after aggregation — only companies with more than 5 orders</td></tr>
+<tr><td><code>ORDER BY TotalOrders DESC</code></td><td class="ca">Sorts results — highest order count first</td></tr>
+<tr><td><code>LIMIT 10</code></td><td class="ca">Returns only top 10 rows</td></tr>
+</table>
+<div class="hl green"><strong>Plain English:</strong> "Show me the top 10 German customers by order volume, but only show those with more than 5 orders, including their average unit price and total quantity ordered."</div>
+</div>
+</div>
+
+<!-- S2 -->
+<div class="card" data-cat="sql">
+<div class="ch" onclick="tog(this)">
+  <span class="qn sql">S2</span>
+  <div class="qi">
+    <div class="qt">Identify the error in this SQL query — it runs but gives wrong results. What's the bug?</div>
+    <div class="qm"><span class="qc">Query Debugging · Silent errors are the hardest</span><span class="pri p-must">MUST KNOW</span></div>
+  </div>
+  <div class="qr"><button class="db" onclick="done(event,this)">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ab">
+<div class="mock-wrap">
+  <div class="mock-title">Find the silent bug</div>
+  <div class="sql-ed">
+<span class="s-kw">SELECT</span> c.CustomerName, <span class="s-fn">SUM</span>(o.Revenue) <span class="s-kw">AS</span> TotalRevenue
+<span class="s-kw">FROM</span>   Customers c
+<span class="s-kw">LEFT JOIN</span> Orders o <span class="s-kw">ON</span> c.CustomerID = o.CustomerID
+<span class="s-kw">WHERE</span>  o.Status = <span class="s-str">'Completed'</span>   <span class="s-cm">← BUG IS HERE</span>
+<span class="s-kw">GROUP BY</span> c.CustomerName;
+  </div>
+</div>
+<div class="hl red"><strong>Bug:</strong> The WHERE filter on the right table (o.Status) converts the LEFT JOIN into an INNER JOIN — silently! Customers with no completed orders will have o.Status = NULL after the LEFT JOIN, and NULL = 'Completed' evaluates to FALSE (not NULL), removing those rows.<br><br>
+<strong>Intent was:</strong> Show ALL customers, even those with no completed orders (show NULL for them).<br>
+<strong>Actual result:</strong> Only shows customers who have at least one completed order — same as INNER JOIN.<br><br>
+<strong>Fix — move filter into ON clause:</strong></div>
+  <div class="sql-ed">
+<span class="s-kw">SELECT</span> c.CustomerName, <span class="s-fn">SUM</span>(o.Revenue) <span class="s-kw">AS</span> TotalRevenue
+<span class="s-kw">FROM</span>   Customers c
+<span class="s-kw">LEFT JOIN</span> Orders o
+    <span class="s-kw">ON</span>  c.CustomerID = o.CustomerID
+    <span class="s-kw">AND</span> o.Status = <span class="s-str">'Completed'</span>  <span class="s-cm">← filter in ON preserves NULL rows</span>
+<span class="s-kw">GROUP BY</span> c.CustomerName;
+  </div>
+</div>
+</div>
+
+<!-- S3 -->
+<div class="card" data-cat="sql">
+<div class="ch" onclick="tog(this)">
+  <span class="qn sql">S3</span>
+  <div class="qi">
+    <div class="qt">Read this window function query — explain what each window function returns for the sample data shown.</div>
+    <div class="qm"><span class="qc">Window Functions Reading</span><span class="pri p-must">MUST KNOW</span></div>
+  </div>
+  <div class="qr"><button class="db" onclick="done(event,this)">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ab">
+<div class="mock-wrap">
+  <div class="mock-title">Trace through this — what are the values?</div>
+  <div class="sql-ed">
+<span class="s-kw">SELECT</span>
+  Name, Dept, Salary,
+  <span class="s-fn">ROW_NUMBER</span>() <span class="s-kw">OVER</span> (<span class="s-kw">PARTITION BY</span> Dept <span class="s-kw">ORDER BY</span> Salary <span class="s-kw">DESC</span>) <span class="s-kw">AS</span> rn,
+  <span class="s-fn">RANK</span>()       <span class="s-kw">OVER</span> (<span class="s-kw">PARTITION BY</span> Dept <span class="s-kw">ORDER BY</span> Salary <span class="s-kw">DESC</span>) <span class="s-kw">AS</span> rnk,
+  <span class="s-fn">LAG</span>(Salary,<span class="s-num">1</span>,<span class="s-num">0</span>) <span class="s-kw">OVER</span> (<span class="s-kw">PARTITION BY</span> Dept <span class="s-kw">ORDER BY</span> Salary <span class="s-kw">DESC</span>) <span class="s-kw">AS</span> prev,
+  <span class="s-fn">SUM</span>(Salary) <span class="s-kw">OVER</span> (<span class="s-kw">PARTITION BY</span> Dept) <span class="s-kw">AS</span> dept_total
+<span class="s-kw">FROM</span> Employees;
+  </div>
+</div>
+<div class="sheet-grid" style="display:grid;grid-template-columns:80px 60px 70px 30px 35px 55px 70px;border:1px solid #d0d0d0;background:#fff;font-size:11px">
+  <div class="sc head">Name</div><div class="sc head">Dept</div><div class="sc head">Salary</div><div class="sc head">rn</div><div class="sc head">rnk</div><div class="sc head">prev</div><div class="sc head">dept_total</div>
+  <div class="sc">Alice</div><div class="sc">Eng</div><div class="sc">90000</div><div class="sc formula">1</div><div class="sc formula">1</div><div class="sc formula">0</div><div class="sc formula">210000</div>
+  <div class="sc">Bob</div><div class="sc">Eng</div><div class="sc">80000</div><div class="sc formula">2</div><div class="sc formula">2</div><div class="sc formula">90000</div><div class="sc formula">210000</div>
+  <div class="sc">Carol</div><div class="sc">Eng</div><div class="sc">80000</div><div class="sc formula">3</div><div class="sc formula">2</div><div class="sc formula">80000</div><div class="sc formula">210000</div>
+  <div class="sc">Dan</div><div class="sc">Eng</div><div class="sc">40000</div><div class="sc formula">4</div><div class="sc formula">4</div><div class="sc formula">80000</div><div class="sc formula">210000</div>
+  <div class="sc">Eve</div><div class="sc">HR</div><div class="sc">70000</div><div class="sc formula">1</div><div class="sc formula">1</div><div class="sc formula">0</div><div class="sc formula">120000</div>
+  <div class="sc">Frank</div><div class="sc">HR</div><div class="sc">50000</div><div class="sc formula">2</div><div class="sc formula">2</div><div class="sc formula">70000</div><div class="sc formula">120000</div>
+</div>
+<div class="hl yellow"><strong>Key observations:</strong> PARTITION BY Dept resets the window for each department — rn restarts at 1. Bob and Carol tie at 80000: ROW_NUMBER still gives 2 and 3 (arbitrary). RANK gives them both 2, then skips to 4. LAG(Salary,1,0) = previous row's salary within dept (default=0 for first row). dept_total is same for all rows in same dept — no ORDER BY means full partition window.</div>
+</div>
+</div>
+
+<div class="sdiv"></div>
+
+<!-- ══════ PYTHON ══════ -->
+<div class="sec"><span class="stag py">Python</span><h2>Python / Pandas Interface Questions</h2><span class="pri p-hi">SCORED 4.1 — gaps in NumPy + output reading</span></div>
+
+<!-- PY1 -->
+<div class="card" data-cat="py">
+<div class="ch" onclick="tog(this)">
+  <span class="qn py">Y1</span>
+  <div class="qi">
+    <div class="qt">What does this Pandas code output? Trace through step by step.</div>
+    <div class="qm"><span class="qc">Code Reading · Must trace output mentally</span><span class="pri p-must">MUST KNOW</span></div>
+  </div>
+  <div class="qr"><button class="db" onclick="done(event,this)">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ab">
+<div class="mock-wrap">
+  <div class="mock-title">Trace the output</div>
+  <div class="py-ed">
+<span class="p-kw">import</span> pandas <span class="p-kw">as</span> pd
+
+data = {<span class="p-str">'Name'</span>:[<span class="p-str">'Alice'</span>,<span class="p-str">'Bob'</span>,<span class="p-str">'Carol'</span>,<span class="p-str">'Dan'</span>],
+        <span class="p-str">'Score'</span>:[<span class="p-nm">85</span>,<span class="p-nm">92</span>,<span class="p-nm">78</span>,<span class="p-nm">92</span>],
+        <span class="p-str">'Dept'</span>:[<span class="p-str">'IT'</span>,<span class="p-str">'HR'</span>,<span class="p-str">'IT'</span>,<span class="p-str">'HR'</span>]}
+df = pd.DataFrame(data)
+
+result = df.groupby(<span class="p-str">'Dept'</span>)[<span class="p-str">'Score'</span>]\
+           .agg([<span class="p-str">'mean'</span>,<span class="p-str">'max'</span>,<span class="p-str">'count'</span>])\
+           .reset_index()
+<span class="p-fn">print</span>(result)
+  </div>
+</div>
+<div style="background:#050810;border:1px solid #30363d;border-radius:6px;padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#c9d1d9;margin:10px 0">
+<span style="color:#3d4f6b"># Output:</span><br>
+  Dept   mean  max  count<br>
+0   HR   92.0   92      2<br>
+1   IT   81.5   85      2
+</div>
+<table class="ct">
+<tr><th>Line</th><th>What happens</th></tr>
+<tr><td>groupby('Dept')</td><td class="ca">Groups rows by Dept: IT group = [Alice 85, Carol 78]. HR group = [Bob 92, Dan 92]</td></tr>
+<tr><td>['Score']</td><td class="ca">Select only the Score column within each group</td></tr>
+<tr><td>.agg(['mean','max','count'])</td><td class="ca">For each group: compute mean, max, and count of Score. Returns a DataFrame with those 3 columns.</td></tr>
+<tr><td>.reset_index()</td><td class="ca">Moves Dept from being the index back to a regular column (index becomes 0, 1...)</td></tr>
+</table>
+<div class="hl yellow"><strong>HR:</strong> Bob=92, Dan=92 → mean=92.0, max=92, count=2. <strong>IT:</strong> Alice=85, Carol=78 → mean=81.5, max=85, count=2.</div>
+</div>
+</div>
+
+<!-- PY2 -->
+<div class="card" data-cat="py">
+<div class="ch" onclick="tog(this)">
+  <span class="qn py">Y2</span>
+  <div class="qi">
+    <div class="qt">What does this NumPy code output? Explain what axis=0 vs axis=1 means visually.</div>
+    <div class="qm"><span class="qc">NumPy 2D · Direct from your feedback</span><span class="pri p-must">MUST KNOW</span></div>
+  </div>
+  <div class="qr"><button class="db" onclick="done(event,this)">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ab">
+<div class="mock-wrap">
+  <div class="mock-title">NumPy axis operations — trace the output</div>
+  <div class="py-ed">
+<span class="p-kw">import</span> numpy <span class="p-kw">as</span> np
+
+a = np.array([[<span class="p-nm">1</span>, <span class="p-nm">2</span>, <span class="p-nm">3</span>],
+              [<span class="p-nm">4</span>, <span class="p-nm">5</span>, <span class="p-nm">6</span>]])  <span class="p-cm"># shape: (2, 3)</span>
+
+<span class="p-fn">print</span>(a.sum(axis=<span class="p-nm">0</span>))  <span class="p-cm"># ?</span>
+<span class="p-fn">print</span>(a.sum(axis=<span class="p-nm">1</span>))  <span class="p-cm"># ?</span>
+<span class="p-fn">print</span>(a[<span class="p-nm">0</span>, <span class="p-nm">2</span>])       <span class="p-cm"># ?</span>
+<span class="p-fn">print</span>(a[:, <span class="p-nm">1</span>])       <span class="p-cm"># ?</span>
+  </div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0">
+  <div>
+    <div style="font-size:10px;color:var(--sql);font-family:'JetBrains Mono',monospace;margin-bottom:6px">axis=0 → sum DOWN columns ↓</div>
+    <div style="background:#050810;border:1px solid #30363d;border-radius:4px;padding:6px 10px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#c9d1d9">
+      <div style="display:inline-grid;grid-template-columns:repeat(3,36px);gap:2px;margin-bottom:4px">
+        <div style="background:#1e1e38;border:1px solid rgba(34,211,238,.2);color:#a5f3fc;text-align:center;padding:3px;border-radius:3px">1</div>
+        <div style="background:#1e1e38;border:1px solid rgba(34,211,238,.2);color:#a5f3fc;text-align:center;padding:3px;border-radius:3px">2</div>
+        <div style="background:#1e1e38;border:1px solid rgba(34,211,238,.2);color:#a5f3fc;text-align:center;padding:3px;border-radius:3px">3</div>
+        <div style="background:#1e1e38;border:1px solid rgba(34,211,238,.2);color:#a5f3fc;text-align:center;padding:3px;border-radius:3px">4</div>
+        <div style="background:#1e1e38;border:1px solid rgba(34,211,238,.2);color:#a5f3fc;text-align:center;padding:3px;border-radius:3px">5</div>
+        <div style="background:#1e1e38;border:1px solid rgba(34,211,238,.2);color:#a5f3fc;text-align:center;padding:3px;border-radius:3px">6</div>
+      </div><br>
+      <span style="color:#22d3ee">↓  ↓  ↓</span><br>
+      [<span style="color:#34d399">5, 7, 9</span>]
+    </div>
+  </div>
+  <div>
+    <div style="font-size:10px;color:var(--py);font-family:'JetBrains Mono',monospace;margin-bottom:6px">axis=1 → sum ACROSS rows →</div>
+    <div style="background:#050810;border:1px solid #30363d;border-radius:4px;padding:6px 10px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#c9d1d9">
+      <div style="display:inline-grid;grid-template-columns:repeat(3,36px) 20px 30px;gap:2px;margin-bottom:4px;align-items:center">
+        <div style="background:#1e1e38;border:1px solid rgba(167,139,250,.2);color:#c4b5fd;text-align:center;padding:3px;border-radius:3px">1</div>
+        <div style="background:#1e1e38;border:1px solid rgba(167,139,250,.2);color:#c4b5fd;text-align:center;padding:3px;border-radius:3px">2</div>
+        <div style="background:#1e1e38;border:1px solid rgba(167,139,250,.2);color:#c4b5fd;text-align:center;padding:3px;border-radius:3px">3</div>
+        <div style="color:#a78bfa;text-align:center">→</div>
+        <div style="color:#34d399;font-weight:700">6</div>
+        <div style="background:#1e1e38;border:1px solid rgba(167,139,250,.2);color:#c4b5fd;text-align:center;padding:3px;border-radius:3px">4</div>
+        <div style="background:#1e1e38;border:1px solid rgba(167,139,250,.2);color:#c4b5fd;text-align:center;padding:3px;border-radius:3px">5</div>
+        <div style="background:#1e1e38;border:1px solid rgba(167,139,250,.2);color:#c4b5fd;text-align:center;padding:3px;border-radius:3px">6</div>
+        <div style="color:#a78bfa;text-align:center">→</div>
+        <div style="color:#34d399;font-weight:700">15</div>
+      </div>
+      [<span style="color:#34d399">6, 15</span>]
+    </div>
+  </div>
+</div>
+<div style="background:#050810;border:1px solid #30363d;border-radius:6px;padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#c9d1d9;margin:4px 0">
+a[0, 2]   <span style="color:#3d4f6b"># row 0, col 2 → </span><span style="color:#34d399">3</span><br>
+a[:, 1]   <span style="color:#3d4f6b"># all rows, col 1 → </span><span style="color:#34d399">[2, 5]</span>
+</div>
+<div class="mn"><strong>Axis memory trick:</strong> axis=0 means "sum/collapse in the 0th dimension (rows) — the rows disappear, you get one value per column." axis=1 means "collapse columns — you get one value per row."</div>
+</div>
+</div>
+
+<!-- PY3 -->
+<div class="card" data-cat="py">
+<div class="ch" onclick="tog(this)">
+  <span class="qn py">Y3</span>
+  <div class="qi">
+    <div class="qt">Identify the error in this Pandas code — what warning or wrong result will it produce?</div>
+    <div class="qm"><span class="qc">SettingWithCopyWarning · Classic pandas trap</span><span class="pri p-must">MUST KNOW</span></div>
+  </div>
+  <div class="qr"><button class="db" onclick="done(event,this)">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ab">
+<div class="mock-wrap">
+  <div class="mock-title">Find the bug</div>
+  <div class="py-ed">
+<span class="p-cm"># BUG CODE:</span>
+it_df = df[df[<span class="p-str">'Dept'</span>] <span class="p-op">==</span> <span class="p-str">'IT'</span>]
+it_df[<span class="p-str">'Bonus'</span>] <span class="p-op">=</span> it_df[<span class="p-str">'Score'</span>] <span class="p-op">*</span> <span class="p-nm">0.1</span>
+<span class="p-cm"># ⚠️ SettingWithCopyWarning!</span>
+<span class="p-cm"># df['Bonus'] might NOT be updated</span>
+
+<span class="p-cm"># FIX 1: use .loc on original df</span>
+df.loc[df[<span class="p-str">'Dept'</span>] <span class="p-op">==</span> <span class="p-str">'IT'</span>, <span class="p-str">'Bonus'</span>] <span class="p-op">=</span> df.loc[df[<span class="p-str">'Dept'</span>] <span class="p-op">==</span> <span class="p-str">'IT'</span>, <span class="p-str">'Score'</span>] <span class="p-op">*</span> <span class="p-nm">0.1</span>
+
+<span class="p-cm"># FIX 2: explicit copy if you want a separate df</span>
+it_df = df[df[<span class="p-str">'Dept'</span>] <span class="p-op">==</span> <span class="p-str">'IT'</span>].copy()
+it_df[<span class="p-str">'Bonus'</span>] <span class="p-op">=</span> it_df[<span class="p-str">'Score'</span>] <span class="p-op">*</span> <span class="p-nm">0.1</span>  <span class="p-cm"># safe — modifying a true copy</span>
+  </div>
+</div>
+<div class="hl red"><strong>Why it happens:</strong> Boolean indexing <code>df[condition]</code> may return a view OR a copy depending on pandas internals — you can't predict which. Assigning to a view modifies the original. Assigning to a copy does nothing to the original. The warning tells you "I can't guarantee which one this is."</div>
+</div>
+</div>
+
+<!-- PY4 -->
+<div class="card" data-cat="py">
+<div class="ch" onclick="tog(this)">
+  <span class="qn py">Y4</span>
+  <div class="qi">
+    <div class="qt">What is the output of this code? Explain why — many candidates get this wrong.</div>
+    <div class="qm"><span class="qc">Python Mutability · Classic interview trap</span><span class="pri p-must">MUST KNOW</span></div>
+  </div>
+  <div class="qr"><button class="db" onclick="done(event,this)">✓</button><span class="arr">▼</span></div>
+</div>
+<div class="ab">
+<div class="mock-wrap">
+  <div class="mock-title">What prints?</div>
+  <div class="py-ed">
+a = [<span class="p-nm">1</span>, <span class="p-nm">2</span>, <span class="p-nm">3</span>]
+b = a
+b.append(<span class="p-nm">4</span>)
+<span class="p-fn">print</span>(a)   <span class="p-cm"># ?</span>
+<span class="p-fn">print</span>(b)   <span class="p-cm"># ?</span>
+<span class="p-fn">print</span>(a <span class="p-kw">is</span> b)  <span class="p-cm"># ?</span>
+
+c = a.copy()
+c.append(<span class="p-nm">5</span>)
+<span class="p-fn">print</span>(a)   <span class="p-cm"># ?</span>
+<span class="p-fn">print</span>(c)   <span class="p-cm"># ?</span>
+  </div>
+</div>
+<div style="background:#050810;border:1px solid #30363d;border-radius:6px;padding:10px 12px;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#c9d1d9;margin:10px 0">
+print(a)      → <span style="color:#34d399">[1, 2, 3, 4]</span>   <span style="color:#3d4f6b"># changed! b and a point to same list</span><br>
+print(b)      → <span style="color:#34d399">[1, 2, 3, 4]</span>   <span style="color:#3d4f6b"># same object</span><br>
+print(a is b) → <span style="color:#34d399">True</span>           <span style="color:#3d4f6b"># same memory address</span><br>
+print(a)      → <span style="color:#34d399">[1, 2, 3, 4]</span>   <span style="color:#3d4f6b"># .copy() made new object — a unchanged</span><br>
+print(c)      → <span style="color:#34d399">[1, 2, 3, 4, 5]</span> <span style="color:#3d4f6b"># c has the 5, a doesn't</span>
+</div>
+<div class="mn"><strong>Key rule:</strong> In Python, = assigns a reference, NOT a copy. For lists, dicts, DataFrames — always use .copy() when you need an independent copy.</div>
+</div>
+</div>
+
+</main>
+
+<button class="back" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+const cards=document.querySelectorAll('.card');
+let done_set=new Set(JSON.parse(localStorage.getItem('ifDone')||'[]'));
+
+function tog(h){const b=h.nextElementSibling,a=h.querySelector('.arr');b.classList.toggle('show');a.classList.toggle('open')}
+
+function done(e,btn){
+  e.stopPropagation();
+  const id=btn.closest('.card').querySelector('.qn').textContent;
+  btn.classList.toggle('on');
+  btn.classList.contains('on')?done_set.add(id):done_set.delete(id);
+  try{localStorage.setItem('ifDone',JSON.stringify([...done_set]))}catch(x){}
+  upd();
+}
+
+function fil(cat,btn){
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  cards.forEach(c=>{c.style.display=(cat==='all'||c.dataset.cat===cat)?'':'none'});
+  upd();
+}
+
+function upd(){
+  const vis=[...cards].filter(c=>c.style.display!=='none');
+  const tot=vis.length;
+  const dn=vis.filter(c=>done_set.has(c.querySelector('.qn').textContent)).length;
+  document.getElementById('st').textContent=tot;
+  document.getElementById('sd').textContent=dn;
+  document.getElementById('sl').textContent=tot-dn;
+  document.getElementById('sp').textContent=tot?Math.round(dn/tot*100)+'%':'0%';
+  document.getElementById('pf').style.width=tot?Math.round(dn/tot*100)+'%':'0%';
+}
+
+done_set.forEach(id=>{cards.forEach(c=>{const n=c.querySelector('.qn');if(n&&n.textContent===id)c.querySelector('.db').classList.add('on')})});
+upd();
+</script>
+</body>
+</html>
